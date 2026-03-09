@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Student enrollment status categories (persistent, per student record) -->
+    <record id="vocab_student_status" model="esmis.vocabulary">
+        <field name="name">Student Status</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:student-status</field>
+        <field name="description">Persistent classification of a student's standing within the institution, aligned with CHED MORPHE reporting categories.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">student</field>
+    </record>
+
+    <record id="code_student_status_regular" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">regular</field>
+        <field name="display">Regular</field>
+        <field name="definition">A student carrying the prescribed full load for their year level and program, following the standard curriculum sequence.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_student_status_irregular" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">irregular</field>
+        <field name="display">Irregular</field>
+        <field name="definition">A student whose course load does not match the standard curriculum sequence, typically due to failed or dropped subjects.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_student_status_transferee" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">transferee</field>
+        <field name="display">Transferee</field>
+        <field name="definition">A student who was previously enrolled at another institution and has been admitted with evaluated transfer credits.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_student_status_cross_enrollee" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">cross_enrollee</field>
+        <field name="display">Cross Enrollee</field>
+        <field name="definition">A student currently enrolled at another institution who is taking specific subjects at this institution with an approved cross-enrollment permit.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_student_status_returnee" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">returnee</field>
+        <field name="display">Returnee</field>
+        <field name="definition">A former student of this institution who has been readmitted after a period of non-enrollment.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_student_status_probationary" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">probationary</field>
+        <field name="display">Probationary</field>
+        <field name="definition">A student placed on academic probation due to failure to meet minimum GPA or academic performance requirements.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_student_status_dismissed" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">dismissed</field>
+        <field name="display">Dismissed</field>
+        <field name="definition">A student who has been academically or disciplinarily dismissed and is no longer eligible to enroll.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_student_status_graduated" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">graduated</field>
+        <field name="display">Graduated</field>
+        <field name="definition">A student who has completed all program requirements and has been conferred their degree or credential.</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_student_status_leave_of_absence" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_student_status"/>
+        <field name="code">leave_of_absence</field>
+        <field name="display">Leave of Absence</field>
+        <field name="definition">A student who has been granted a formal leave of absence and is temporarily not enrolled, with the intention to return.</field>
+        <field name="sequence">90</field>
+    </record>
+</odoo>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Degree/credential type classification per PQF (RA 10968) and CHED program classifications -->
+    <record id="vocab_degree_type" model="esmis.vocabulary">
+        <field name="name">Degree Type</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:degree-type</field>
+        <field name="description">Classification of academic credentials and qualifications aligned with the Philippine Qualifications Framework (PQF) under RA 10968 and CHED program classification standards.</field>
+        <field name="reference_url">https://www.tesda.gov.ph/pqf</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">academic</field>
+    </record>
+
+    <record id="code_degree_type_certificate" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">certificate</field>
+        <field name="display">Certificate</field>
+        <field name="definition">A credential awarded upon completion of a short-term program or course that does not require a full degree. Corresponds to PQF Levels 3–5.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_degree_type_diploma" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">diploma</field>
+        <field name="display">Diploma</field>
+        <field name="definition">A credential awarded for completion of a structured program, typically less than a bachelor's degree. Corresponds to PQF Level 5.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_degree_type_associate" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">associate</field>
+        <field name="display">Associate Degree</field>
+        <field name="definition">A two-year undergraduate credential that may serve as a pathway to a bachelor's degree program. Corresponds to PQF Level 5.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_degree_type_bachelor" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">bachelor</field>
+        <field name="display">Bachelor's Degree</field>
+        <field name="definition">An undergraduate degree awarded upon completion of a four- to five-year program. Corresponds to PQF Level 6.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_degree_type_post_baccalaureate" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">post_baccalaureate</field>
+        <field name="display">Post-Baccalaureate Certificate</field>
+        <field name="definition">A credential awarded for advanced study completed after a bachelor's degree but below the master's level.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_degree_type_master" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">master</field>
+        <field name="display">Master's Degree</field>
+        <field name="definition">A graduate credential awarded upon completion of advanced study beyond the bachelor's level, typically requiring a thesis or professional project. Corresponds to PQF Level 7.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_degree_type_post_master" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">post_master</field>
+        <field name="display">Post-Master's Certificate</field>
+        <field name="definition">A credential awarded for advanced graduate study completed after a master's degree but below the doctoral level.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_degree_type_doctoral" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">doctoral</field>
+        <field name="display">Doctoral Degree</field>
+        <field name="definition">The highest academic credential, awarded upon completion of original research, a dissertation, and defense. Corresponds to PQF Level 8.</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_degree_type_post_doctoral" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_degree_type"/>
+        <field name="code">post_doctoral</field>
+        <field name="display">Post-Doctoral</field>
+        <field name="definition">Advanced research or study undertaken after the award of a doctoral degree, typically to develop independent research expertise.</field>
+        <field name="sequence">90</field>
+    </record>
+</odoo>

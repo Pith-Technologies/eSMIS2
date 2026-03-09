@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- PWD disability categories per RA 7277 (Magna Carta for Disabled Persons) as amended by RA 10754 -->
+    <record id="vocab_disability_type" model="esmis.vocabulary">
+        <field name="name">Disability Type</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:disability-type</field>
+        <field name="description">Classification of disability types as defined by RA 7277 (Magna Carta for Disabled Persons), as amended by RA 10754, used for PWD benefit eligibility and CHED accessibility reporting.</field>
+        <field name="reference_url">https://www.ncda.gov.ph/disability-laws/republic-acts/republic-act-7277/</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">identity</field>
+    </record>
+
+    <record id="code_disability_type_visual" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">visual</field>
+        <field name="display">Visual Impairment</field>
+        <field name="definition">A limitation of visual function including blindness and low vision that is not correctable by standard means.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_disability_type_hearing" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">hearing</field>
+        <field name="display">Hearing Impairment</field>
+        <field name="definition">A limitation of hearing function including deafness and hard of hearing, affecting one or both ears.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_disability_type_speech" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">speech</field>
+        <field name="display">Speech or Language Impairment</field>
+        <field name="definition">A limitation affecting the ability to produce or comprehend spoken language, including conditions such as stuttering, aphasia, or voice disorders.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_disability_type_physical" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">physical</field>
+        <field name="display">Physical or Orthopedic Impairment</field>
+        <field name="definition">A limitation of physical function or mobility affecting the musculoskeletal or neuromuscular system.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_disability_type_intellectual" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">intellectual</field>
+        <field name="display">Intellectual Disability</field>
+        <field name="definition">A significant limitation in intellectual functioning and adaptive behavior, originating before the age of 18.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_disability_type_psychosocial" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">psychosocial</field>
+        <field name="display">Psychosocial Disability</field>
+        <field name="definition">A disability arising from a mental health condition, including but not limited to depression, bipolar disorder, and schizophrenia.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_disability_type_learning" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">learning</field>
+        <field name="display">Learning Disability</field>
+        <field name="definition">A neurological condition that affects the ability to acquire, process, or express information, including conditions such as dyslexia, dyscalculia, and dysgraphia.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_disability_type_chronic_illness" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">chronic_illness</field>
+        <field name="display">Chronic Illness</field>
+        <field name="definition">A long-term health condition that substantially limits one or more major life activities, such as cancer, diabetes, or epilepsy.</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_disability_type_multiple" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_disability_type"/>
+        <field name="code">multiple</field>
+        <field name="display">Multiple Disabilities</field>
+        <field name="definition">The presence of two or more co-occurring disabilities that together result in substantial limitations in multiple functional areas.</field>
+        <field name="sequence">90</field>
+    </record>
+</odoo>
