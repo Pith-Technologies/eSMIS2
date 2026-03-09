@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esmis_consent_form" model="ir.ui.view">
+        <field name="name">esmis.consent.form</field>
+        <field name="model">esmis.consent</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        string="Withdraw Consent"
+                        type="object"
+                        name="action_withdraw"
+                        class="btn-danger"
+                        invisible="not is_active"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="partner_id" placeholder="e.g. Juan dela Cruz"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="purpose"/>
+                            <field name="lawful_basis"/>
+                            <field name="evidence_type"/>
+                            <field name="evidence_ref"/>
+                        </group>
+                        <group>
+                            <field name="date_given"/>
+                            <field name="date_withdrawn"/>
+                            <field name="is_active" readonly="1"/>
+                            <field name="is_parent_consent"/>
+                        </group>
+                    </group>
+                    <group string="Capture Details" name="capture_details">
+                        <field name="captured_by"/>
+                        <field name="ip_address"/>
+                        <field name="form_version"/>
+                    </group>
+                    <notebook>
+                        <page string="Scopes" name="scopes">
+                            <field name="scope_ids">
+                                <list editable="bottom">
+                                    <field name="resource_type"/>
+                                    <field name="purpose"/>
+                                    <field name="third_party_id"/>
+                                    <field name="valid_until"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_esmis_consent_list" model="ir.ui.view">
+        <field name="name">esmis.consent.list</field>
+        <field name="model">esmis.consent</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="partner_id"/>
+                <field name="purpose"/>
+                <field name="lawful_basis"/>
+                <field name="date_given"/>
+                <field name="is_active"/>
+                <field name="date_withdrawn"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_esmis_consent_search" model="ir.ui.view">
+        <field name="name">esmis.consent.search</field>
+        <field name="model">esmis.consent</field>
+        <field name="arch" type="xml">
+            <search string="Search Consent Records">
+                <field name="partner_id"/>
+                <field name="purpose"/>
+                <separator/>
+                <filter name="active" string="Active" domain="[('is_active', '=', True)]"/>
+                <filter name="withdrawn" string="Withdrawn" domain="[('date_withdrawn', '!=', False)]"/>
+                <filter name="parent_consent" string="Parent Consent" domain="[('is_parent_consent', '=', True)]"/>
+                <separator/>
+                <group name="group_by">
+                    <filter name="group_purpose" string="Purpose" context="{'group_by': 'purpose'}"/>
+                    <filter name="group_lawful_basis" string="Lawful Basis" context="{'group_by': 'lawful_basis'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_esmis_consent" model="ir.actions.act_window">
+        <field name="name">Consent Records</field>
+        <field name="res_model">esmis.consent</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

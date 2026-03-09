@@ -1,0 +1,20 @@
+{
+    "name": "Approval Workflows",
+    "version": "19.0.1.0.0",
+    "category": "eSMIS/Core",
+    "summary": "Standardized approval state machine and workflow definitions",
+    "author": "Your Organization",
+    "website": "",
+    "license": "LGPL-3",
+    "development_status": "Alpha",
+    "maintainers": [],
+    "depends": ["base", "esmis_security"],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/approval_definition_views.xml",
+        "views/menus.xml",
+    ],
+    "auto_install": False,
+    "application": False,
+    "installable": True,
+}

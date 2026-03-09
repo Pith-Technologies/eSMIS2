@@ -8,7 +8,7 @@
     "license": "LGPL-3",
     "development_status": "Alpha",
     "maintainers": [],
-    "depends": ["base"],
+    "depends": ["base", "esmis_base"],
     "data": [
         "security/security_groups.xml",
         "security/ir.model.access.csv",

@@ -36,7 +36,12 @@ Layer 1: FOUNDATION
 ├── esmis_student (Student profiles & records)
 ├── esmis_academic_term (School year & semester)
 ├── esmis_vocabulary (Vocabulary & identifiers)
-└── esmis_security (Access control & groups)
+├── esmis_security (Access control & groups)
+├── esmis_consent (RA 10173 consent management)
+└── esmis_approval (Approval workflows)
+
+Layer 0: BASE
+└── esmis_base (Common infrastructure & configuration menu)
 ```
 
 > All domain models include `company_id` for multi-campus isolation. See [multi-campus-architecture.md](multi-campus-architecture.md).
@@ -266,10 +271,52 @@ class Enrollment(models.Model):
 
 ## Dependency Guidelines
 
+- **All eSMIS modules must depend on `esmis_base`** (directly or transitively)
+- `esmis_base` is the lowest-level eSMIS module — it depends only on Odoo `base`
 - Minimize dependencies between peer modules
-- Dependencies should flow downward (Layer 3 → 2 → 1)
+- Dependencies should flow downward (Layer 3 → 2 → 1 → 0)
 - Avoid circular dependencies
 - Use soft dependencies when possible
+
+## Configuration Menu Convention
+
+All eSMIS configuration interfaces live under a single **eSMIS** menu in Odoo's Settings. The root menu is defined by `esmis_base`:
+
+```
+Settings (base.menu_administration)
+└── eSMIS (esmis_base.menu_esmis_root)
+    ├── Vocabularies (esmis_vocabulary, seq 50)
+    ├── Consent (esmis_consent, seq 61)
+    ├── Approvals (esmis_approval, seq 62)
+    └── ... (future modules)
+```
+
+### Adding a configuration menu
+
+Modules that need a configuration interface should add their menus as children of `esmis_base.menu_esmis_root` in their own `views/menus.xml`:
+
+```xml
+<menuitem
+    id="menu_esmis_myfeature_root"
+    name="My Feature"
+    parent="esmis_base.menu_esmis_root"
+    groups="esmis_security.group_esmis_security_officer"
+    sequence="70"
+/>
+<menuitem
+    id="menu_esmis_myfeature_config"
+    name="Configuration"
+    parent="menu_esmis_myfeature_root"
+    action="action_esmis_myfeature_config"
+    sequence="10"
+/>
+```
+
+**Rules:**
+- Each module owns its own sub-menu — never modify another module's menu definitions
+- Use `groups` to control visibility based on eSMIS security groups
+- Pick a `sequence` that places your menu in a logical position among siblings
+- The root `esmis_base.menu_esmis_root` is restricted to `base.group_system` (Settings access)
 
 ## Partner Abstraction
 

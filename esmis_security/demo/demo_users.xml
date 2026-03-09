@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo users for testing esmis_security groups.
+         All names are fictional. No real PII. -->
+
+    <record id="demo_user_security_officer" model="res.users">
+        <field name="name">Maria Santos (Security Officer)</field>
+        <field name="login">demo_security_officer</field>
+        <field name="password">demo_security_officer</field>
+        <field name="group_ids" eval="[
+            Command.link(ref('esmis_security.group_esmis_security_officer')),
+        ]"/>
+    </record>
+
+    <record id="demo_user_security_manager" model="res.users">
+        <field name="name">Jose Reyes (Security Manager)</field>
+        <field name="login">demo_security_manager</field>
+        <field name="password">demo_security_manager</field>
+        <field name="group_ids" eval="[
+            Command.link(ref('esmis_security.group_esmis_security_manager')),
+        ]"/>
+    </record>
+
+    <record id="demo_user_dpo" model="res.users">
+        <field name="name">Ana Cruz (DPO)</field>
+        <field name="login">demo_dpo</field>
+        <field name="password">demo_dpo</field>
+        <field name="group_ids" eval="[
+            Command.link(ref('esmis_security.group_esmis_dpo')),
+        ]"/>
+    </record>
+
+    <record id="demo_user_audit_viewer" model="res.users">
+        <field name="name">Carlos Mendoza (Audit Viewer)</field>
+        <field name="login">demo_audit_viewer</field>
+        <field name="password">demo_audit_viewer</field>
+        <field name="group_ids" eval="[
+            Command.link(ref('esmis_security.group_esmis_audit_viewer')),
+        ]"/>
+    </record>
+
+    <record id="demo_user_system_admin" model="res.users">
+        <field name="name">Pedro Ramos (System Admin)</field>
+        <field name="login">demo_system_admin</field>
+        <field name="password">demo_system_admin</field>
+        <field name="group_ids" eval="[
+            Command.link(ref('esmis_security.group_esmis_system_admin')),
+        ]"/>
+    </record>
+</odoo>

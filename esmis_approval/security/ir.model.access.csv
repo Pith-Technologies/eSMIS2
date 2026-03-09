@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_esmis_approval_definition_system,esmis.approval.definition / System,model_esmis_approval_definition,base.group_system,1,1,1,1
+access_esmis_approval_definition_security_officer,esmis.approval.definition / Security Officer,model_esmis_approval_definition,esmis_security.group_esmis_security_officer,1,1,1,0
+access_esmis_approval_definition_security_viewer,esmis.approval.definition / Security Viewer,model_esmis_approval_definition,esmis_security.group_esmis_security_viewer,1,0,0,0

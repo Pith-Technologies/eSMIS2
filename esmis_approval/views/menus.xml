@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_esmis_approval_root"
+        name="Approvals"
+        parent="esmis_base.menu_esmis_root"
+        groups="esmis_security.group_esmis_security_officer"
+        sequence="62"
+    />
+    <menuitem
+        id="menu_esmis_approval_definitions"
+        name="Approval Definitions"
+        parent="menu_esmis_approval_root"
+        action="action_esmis_approval_definition"
+        sequence="10"
+    />
+</odoo>

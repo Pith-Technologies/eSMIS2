@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Privileges act as the "license key" that controls which users
+         can be assigned to groups in their respective category.
+         Each privilege maps to one functional area. -->
+
+    <record id="privilege_esmis_security_officer" model="res.groups.privilege">
+        <field name="name">Security Officer</field>
+        <field name="category_id" ref="category_esmis_security"/>
+    </record>
+
+    <record id="privilege_esmis_data_protection_officer" model="res.groups.privilege">
+        <field name="name">Data Protection Officer</field>
+        <field name="category_id" ref="category_esmis_data_protection"/>
+    </record>
+
+    <record id="privilege_esmis_audit_officer" model="res.groups.privilege">
+        <field name="name">Audit Officer</field>
+        <field name="category_id" ref="category_esmis_audit"/>
+    </record>
+</odoo>

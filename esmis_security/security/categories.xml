@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cross-cutting module categories for esmis_security.
+         Per Decision 5 (distributed groups), domain-specific categories
+         live in their respective modules. These four categories cover
+         system administration, security, data protection, and audit. -->
+
+    <record id="category_esmis_admin" model="ir.module.category">
+        <field name="name">eSMIS / Administration</field>
+        <field name="description">System administration</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="category_esmis_security" model="ir.module.category">
+        <field name="name">eSMIS / Security</field>
+        <field name="description">Security and access control</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="category_esmis_data_protection" model="ir.module.category">
+        <field name="name">eSMIS / Data Protection</field>
+        <field name="description">DPO and privacy compliance</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="category_esmis_audit" model="ir.module.category">
+        <field name="name">eSMIS / Audit</field>
+        <field name="description">Audit logging and compliance</field>
+        <field name="sequence">4</field>
+    </record>
+</odoo>

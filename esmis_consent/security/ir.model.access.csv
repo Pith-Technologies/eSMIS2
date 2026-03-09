@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_esmis_consent_system,esmis.consent / System,model_esmis_consent,base.group_system,1,1,1,1
+access_esmis_consent_security_officer,esmis.consent / Security Officer,model_esmis_consent,esmis_security.group_esmis_security_officer,1,1,1,0
+access_esmis_consent_security_viewer,esmis.consent / Security Viewer,model_esmis_consent,esmis_security.group_esmis_security_viewer,1,0,0,0
+access_esmis_consent_dpo,esmis.consent / DPO,model_esmis_consent,esmis_security.group_esmis_dpo,1,1,0,0
+access_esmis_consent_user,esmis.consent / Internal User,model_esmis_consent,base.group_user,1,0,0,0
+access_esmis_consent_scope_system,esmis.consent.scope / System,model_esmis_consent_scope,base.group_system,1,1,1,1
+access_esmis_consent_scope_security_officer,esmis.consent.scope / Security Officer,model_esmis_consent_scope,esmis_security.group_esmis_security_officer,1,1,1,0
+access_esmis_consent_scope_security_viewer,esmis.consent.scope / Security Viewer,model_esmis_consent_scope,esmis_security.group_esmis_security_viewer,1,0,0,0
+access_esmis_consent_scope_user,esmis.consent.scope / Internal User,model_esmis_consent_scope,base.group_user,1,0,0,0

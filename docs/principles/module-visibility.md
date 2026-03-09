@@ -47,6 +47,7 @@ Country-specific modules (`esmis_{domain}_{country}`) are **never** installed vi
 | Set `application=True` | Set `application=False` |
 |------------------------|-------------------------|
 | Starter modules (`esmis_starter_{country}`) | All `esmis_*` domain modules |
+| | Base module (`esmis_base`) |
 | | Foundation modules (esmis_vocabulary, esmis_contact) |
 | | Capability modules (esmis_order, esmis_inventory) |
 | | Bridge/glue modules |
