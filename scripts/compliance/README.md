@@ -15,7 +15,7 @@ This framework provides:
 
 ```bash
 # Check a single module
-python -m scripts.compliance.checker tpl_vocabulary
+python -m scripts.compliance.checker esmis_vocabulary
 
 # Check all modules with compliance.yaml
 python -m scripts.compliance.checker --all
@@ -24,7 +24,7 @@ python -m scripts.compliance.checker --all
 python -m scripts.compliance.checker --all --report --format markdown
 
 # Generate runtime tests
-python -m scripts.compliance.test_generator tpl_vocabulary
+python -m scripts.compliance.test_generator esmis_vocabulary
 ```
 
 ## Creating a compliance.yaml
@@ -32,7 +32,7 @@ python -m scripts.compliance.test_generator tpl_vocabulary
 Create `security/compliance.yaml` in your module:
 
 ```yaml
-module: tpl_my_module
+module: esmis_my_module
 domain: my_domain
 version: "1.0"
 
@@ -260,10 +260,10 @@ Generate tests and run them regularly:
 
 ```bash
 # Generate tests
-python -m scripts.compliance.test_generator tpl_my_module
+python -m scripts.compliance.test_generator esmis_my_module
 
 # Run tests
-pytest tpl_my_module/tests/test_compliance_generated.py -v
+pytest esmis_my_module/tests/test_compliance_generated.py -v
 ```
 
 ### 5. Review Reports
@@ -311,7 +311,7 @@ scripts/compliance/
   test_generator.py    # Runtime test generator
   README.md            # This documentation
 
-tpl_*/security/
+esmis_*/security/
   compliance.yaml      # Module-specific compliance spec
   groups.xml           # Actual group definitions
   privileges.xml       # Privilege definitions

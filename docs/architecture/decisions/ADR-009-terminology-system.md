@@ -6,8 +6,8 @@
 **Deciders:** Architecture Team
 
 > **Scope note:** This ADR was written for a prior vocabulary system. The current
-> `tpl_vocabulary` module (v19.0.1.0.0) implements a simplified subset: `tpl.vocabulary` and
-> `tpl.vocabulary.code` with URI computation, system protection, and cached lookups. Hierarchy,
+> `esmis_vocabulary` module (v19.0.1.0.0) implements a simplified subset: `esmis.vocabulary` and
+> `esmis.vocabulary.code` with URI computation, system protection, and cached lookups. Hierarchy,
 > mappings, concept groups, and deployment profiles described here are deferred features. Module
 > references updated to current names below.
 
@@ -15,16 +15,16 @@
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| tpl.vocabulary | ✅ Complete | With namespace_uri, is_system |
-| tpl.vocabulary.code | ✅ Complete | With URI field (`namespace#code`) |
-| tpl.vocabulary.mapping | ⏭️ Deferred | Not in v1 |
-| tpl.vocabulary.concept.group | ⏭️ Deferred | Not in v1 |
-| tpl.deployment.profile | ⏭️ Deferred | Not in v1 |
-| tpl.vocabulary.selection | ⏭️ Deferred | Not in v1 |
+| esmis.vocabulary | ✅ Complete | With namespace_uri, is_system |
+| esmis.vocabulary.code | ✅ Complete | With URI field (`namespace#code`) |
+| esmis.vocabulary.mapping | ⏭️ Deferred | Not in v1 |
+| esmis.vocabulary.concept.group | ⏭️ Deferred | Not in v1 |
+| esmis.deployment.profile | ⏭️ Deferred | Not in v1 |
+| esmis.vocabulary.selection | ⏭️ Deferred | Not in v1 |
 | Standard vocabularies | ✅ Complete | Gender (ISO 5218), civil status, blood type, identifier types |
 | Cached lookups | ✅ Complete | O(1) by namespace+code and URI |
 
-**Code Location:** `tpl_vocabulary/` module (v19.0.1.0.0)
+**Code Location:** `esmis_vocabulary/` module (v19.0.1.0.0)
 
 ## Context
 
@@ -41,7 +41,7 @@ The system aims to support multiple domains:
 
 **Current approach:** Coded values are scattered across modules as:
 1. `fields.Selection` with hardcoded choices in Python
-2. Some `Many2one` to configurable models (e.g., `tpl.gender.type`)
+2. Some `Many2one` to configurable models (e.g., `esmis.gender.type`)
 3. No standardization or mapping to international standards
 
 **Problems:**
@@ -83,7 +83,7 @@ Implement a unified vocabulary system with:
 ### Module Structure
 
 ```
-tpl_vocabulary/
+esmis_vocabulary/
 ├── __manifest__.py
 ├── models/
 │   ├── __init__.py
@@ -105,7 +105,7 @@ tpl_vocabulary/
 
 ### 1. Vocabulary Model
 
-**File:** `tpl_vocabulary/models/vocabulary.py`
+**File:** `esmis_vocabulary/models/vocabulary.py`
 
 ```python
 from odoo import api, fields, models
@@ -113,7 +113,7 @@ from odoo import api, fields, models
 
 class Vocabulary(models.Model):
     """A collection of codes with a namespace"""
-    _name = "tpl.vocabulary"
+    _name = "esmis.vocabulary"
     _description = "Vocabulary"
     _order = "name"
 
@@ -158,7 +158,7 @@ class Vocabulary(models.Model):
         ("education", "Education"),
     ], default="core", required=True, index=True)
 
-    code_ids = fields.One2many("tpl.vocabulary.code", "vocabulary_id", string="Codes")
+    code_ids = fields.One2many("esmis.vocabulary.code", "vocabulary_id", string="Codes")
     code_count = fields.Integer(compute="_compute_code_count")
     active = fields.Boolean(default=True)
 
@@ -177,7 +177,7 @@ class Vocabulary(models.Model):
         return {
             "type": "ir.actions.act_window",
             "name": f"Codes: {self.name}",
-            "res_model": "tpl.vocabulary.code",
+            "res_model": "esmis.vocabulary.code",
             "view_mode": "list,form",
             "domain": [("vocabulary_id", "=", self.id)],
             "context": {"default_vocabulary_id": self.id},
@@ -186,7 +186,7 @@ class Vocabulary(models.Model):
 
 ### 2. Vocabulary Code Model
 
-**File:** `tpl_vocabulary/models/vocabulary_code.py`
+**File:** `esmis_vocabulary/models/vocabulary_code.py`
 
 ```python
 from odoo import api, fields, models, tools
@@ -195,13 +195,13 @@ from odoo.exceptions import UserError
 
 class VocabularyCode(models.Model):
     """A single code within a vocabulary"""
-    _name = "tpl.vocabulary.code"
+    _name = "esmis.vocabulary.code"
     _description = "Vocabulary Code"
     _order = "sequence, code"
     _rec_name = "display"
 
     vocabulary_id = fields.Many2one(
-        "tpl.vocabulary",
+        "esmis.vocabulary",
         required=True,
         ondelete="cascade",
         index=True,
@@ -230,12 +230,12 @@ class VocabularyCode(models.Model):
 
     # Hierarchy (optional)
     parent_id = fields.Many2one(
-        "tpl.vocabulary.code",
+        "esmis.vocabulary.code",
         string="Parent",
         ondelete="cascade",
         domain="[('vocabulary_id', '=', vocabulary_id)]",
     )
-    child_ids = fields.One2many("tpl.vocabulary.code", "parent_id", string="Children")
+    child_ids = fields.One2many("esmis.vocabulary.code", "parent_id", string="Children")
     level = fields.Integer(compute="_compute_level", store=True)
 
     # Lifecycle
@@ -243,14 +243,14 @@ class VocabularyCode(models.Model):
     deprecated = fields.Boolean(default=False)
     deprecated_date = fields.Date()
     replaced_by_id = fields.Many2one(
-        "tpl.vocabulary.code",
+        "esmis.vocabulary.code",
         string="Replaced By",
         help="If deprecated, the code that supersedes this one",
     )
 
     # Mapping to other vocabularies
     mapping_ids = fields.One2many(
-        "tpl.vocabulary.mapping",
+        "esmis.vocabulary.mapping",
         "source_id",
         string="Mappings",
     )
@@ -301,7 +301,7 @@ class VocabularyCode(models.Model):
                 )
             return existing
 
-        vocab = self.env["tpl.vocabulary"].search([
+        vocab = self.env["esmis.vocabulary"].search([
             ("namespace_uri", "=", namespace_uri)
         ], limit=1)
         if not vocab:
@@ -333,7 +333,7 @@ class VocabularyCode(models.Model):
 
 ### 3. Vocabulary Mapping Model
 
-**File:** `tpl_vocabulary/models/vocabulary_mapping.py`
+**File:** `esmis_vocabulary/models/vocabulary_mapping.py`
 
 ```python
 from odoo import api, fields, models
@@ -341,18 +341,18 @@ from odoo import api, fields, models
 
 class VocabularyMapping(models.Model):
     """Maps codes between different vocabularies"""
-    _name = "tpl.vocabulary.mapping"
+    _name = "esmis.vocabulary.mapping"
     _description = "Vocabulary Code Mapping"
     _rec_name = "display_name"
 
     source_id = fields.Many2one(
-        "tpl.vocabulary.code",
+        "esmis.vocabulary.code",
         required=True,
         ondelete="cascade",
         index=True,
     )
     target_id = fields.Many2one(
-        "tpl.vocabulary.code",
+        "esmis.vocabulary.code",
         required=True,
         ondelete="cascade",
         index=True,
@@ -391,12 +391,12 @@ class VocabularyMapping(models.Model):
 
 ### 4. Core Vocabularies (Seed Data)
 
-**File:** `tpl_vocabulary/data/vocabulary_gender.xml`
+**File:** `esmis_vocabulary/data/vocabulary_gender.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <record id="vocab_gender" model="tpl.vocabulary">
+    <record id="vocab_gender" model="esmis.vocabulary">
         <field name="name">Gender</field>
         <field name="namespace_uri">urn:iso:std:iso:5218</field>
         <field name="version">2004</field>
@@ -405,25 +405,25 @@ class VocabularyMapping(models.Model):
         <field name="reference_url">https://www.iso.org/standard/36266.html</field>
     </record>
 
-    <record id="code_gender_unknown" model="tpl.vocabulary.code">
+    <record id="code_gender_unknown" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_gender"/>
         <field name="code">0</field>
         <field name="display">Not Known</field>
         <field name="sequence">1</field>
     </record>
-    <record id="code_gender_male" model="tpl.vocabulary.code">
+    <record id="code_gender_male" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_gender"/>
         <field name="code">1</field>
         <field name="display">Male</field>
         <field name="sequence">2</field>
     </record>
-    <record id="code_gender_female" model="tpl.vocabulary.code">
+    <record id="code_gender_female" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_gender"/>
         <field name="code">2</field>
         <field name="display">Female</field>
         <field name="sequence">3</field>
     </record>
-    <record id="code_gender_na" model="tpl.vocabulary.code">
+    <record id="code_gender_na" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_gender"/>
         <field name="code">9</field>
         <field name="display">Not Applicable</field>
@@ -432,67 +432,67 @@ class VocabularyMapping(models.Model):
 </odoo>
 ```
 
-**File:** `tpl_vocabulary/data/vocabulary_relationship.xml`
+**File:** `esmis_vocabulary/data/vocabulary_relationship.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <record id="vocab_relationship" model="tpl.vocabulary">
+    <record id="vocab_relationship" model="esmis.vocabulary">
         <field name="name">Relationship Type</field>
         <field name="namespace_uri">urn:tpl:vocab:relationship</field>
         <field name="is_system">True</field>
         <field name="domain">core</field>
     </record>
 
-    <record id="code_rel_head" model="tpl.vocabulary.code">
+    <record id="code_rel_head" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">head</field>
         <field name="display">Head of Household</field>
         <field name="sequence">1</field>
     </record>
-    <record id="code_rel_spouse" model="tpl.vocabulary.code">
+    <record id="code_rel_spouse" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">spouse</field>
         <field name="display">Spouse/Partner</field>
         <field name="sequence">2</field>
     </record>
-    <record id="code_rel_child" model="tpl.vocabulary.code">
+    <record id="code_rel_child" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">child</field>
         <field name="display">Child</field>
         <field name="sequence">3</field>
     </record>
-    <record id="code_rel_parent" model="tpl.vocabulary.code">
+    <record id="code_rel_parent" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">parent</field>
         <field name="display">Parent</field>
         <field name="sequence">4</field>
     </record>
-    <record id="code_rel_sibling" model="tpl.vocabulary.code">
+    <record id="code_rel_sibling" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">sibling</field>
         <field name="display">Sibling</field>
         <field name="sequence">5</field>
     </record>
-    <record id="code_rel_grandparent" model="tpl.vocabulary.code">
+    <record id="code_rel_grandparent" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">grandparent</field>
         <field name="display">Grandparent</field>
         <field name="sequence">6</field>
     </record>
-    <record id="code_rel_grandchild" model="tpl.vocabulary.code">
+    <record id="code_rel_grandchild" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">grandchild</field>
         <field name="display">Grandchild</field>
         <field name="sequence">7</field>
     </record>
-    <record id="code_rel_other" model="tpl.vocabulary.code">
+    <record id="code_rel_other" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">other_relative</field>
         <field name="display">Other Relative</field>
         <field name="sequence">8</field>
     </record>
-    <record id="code_rel_non_relative" model="tpl.vocabulary.code">
+    <record id="code_rel_non_relative" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_relationship"/>
         <field name="code">non_relative</field>
         <field name="display">Non-Relative</field>
@@ -501,44 +501,44 @@ class VocabularyMapping(models.Model):
 </odoo>
 ```
 
-**File:** `tpl_vocabulary/data/vocabulary_marital_status.xml`
+**File:** `esmis_vocabulary/data/vocabulary_marital_status.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <record id="vocab_marital" model="tpl.vocabulary">
+    <record id="vocab_marital" model="esmis.vocabulary">
         <field name="name">Marital Status</field>
         <field name="namespace_uri">urn:un:unsd:pop-census:marital-status</field>
         <field name="is_system">True</field>
         <field name="domain">core</field>
     </record>
 
-    <record id="code_marital_single" model="tpl.vocabulary.code">
+    <record id="code_marital_single" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_marital"/>
         <field name="code">S</field>
         <field name="display">Single</field>
     </record>
-    <record id="code_marital_married" model="tpl.vocabulary.code">
+    <record id="code_marital_married" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_marital"/>
         <field name="code">M</field>
         <field name="display">Married</field>
     </record>
-    <record id="code_marital_widowed" model="tpl.vocabulary.code">
+    <record id="code_marital_widowed" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_marital"/>
         <field name="code">W</field>
         <field name="display">Widowed</field>
     </record>
-    <record id="code_marital_divorced" model="tpl.vocabulary.code">
+    <record id="code_marital_divorced" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_marital"/>
         <field name="code">D</field>
         <field name="display">Divorced</field>
     </record>
-    <record id="code_marital_separated" model="tpl.vocabulary.code">
+    <record id="code_marital_separated" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_marital"/>
         <field name="code">L</field>
         <field name="display">Separated</field>
     </record>
-    <record id="code_marital_civil_union" model="tpl.vocabulary.code">
+    <record id="code_marital_civil_union" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_marital"/>
         <field name="code">C</field>
         <field name="display">Civil Union</field>
@@ -565,7 +565,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     gender_id = fields.Many2one(
-        "tpl.vocabulary.code",
+        "esmis.vocabulary.code",
         string="Gender",
         domain="[('namespace_uri', '=', 'urn:iso:std:iso:5218')]",
         tracking=True,
@@ -574,13 +574,13 @@ class ResPartner(models.Model):
 
 ### 6. Domain-Specific Vocabularies (Other Modules)
 
-**File:** `tpl_disability/data/vocabulary_disability.xml` (planned)
+**File:** `esmis_disability/data/vocabulary_disability.xml` (planned)
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- WHO ICF Body Functions (b codes) -->
-    <record id="vocab_icf_body_functions" model="tpl.vocabulary">
+    <record id="vocab_icf_body_functions" model="esmis.vocabulary">
         <field name="name">WHO ICF - Body Functions</field>
         <field name="namespace_uri">urn:who:icf:b</field>
         <field name="is_system">True</field>
@@ -590,24 +590,24 @@ class ResPartner(models.Model):
         <field name="description">WHO International Classification of Functioning - Body Functions component</field>
     </record>
 
-    <record id="code_icf_b2" model="tpl.vocabulary.code">
+    <record id="code_icf_b2" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_icf_body_functions"/>
         <field name="code">b2</field>
         <field name="display">Sensory functions and pain</field>
     </record>
-    <record id="code_icf_b210" model="tpl.vocabulary.code">
+    <record id="code_icf_b210" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_icf_body_functions"/>
         <field name="code">b210</field>
         <field name="display">Seeing functions</field>
         <field name="parent_id" ref="code_icf_b2"/>
     </record>
-    <record id="code_icf_b230" model="tpl.vocabulary.code">
+    <record id="code_icf_b230" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_icf_body_functions"/>
         <field name="code">b230</field>
         <field name="display">Hearing functions</field>
         <field name="parent_id" ref="code_icf_b2"/>
     </record>
-    <record id="code_icf_b7" model="tpl.vocabulary.code">
+    <record id="code_icf_b7" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_icf_body_functions"/>
         <field name="code">b7</field>
         <field name="display">Neuromusculoskeletal and movement-related functions</field>
@@ -615,36 +615,36 @@ class ResPartner(models.Model):
 </odoo>
 ```
 
-**File:** `tpl_clinical/data/vocabulary_encounter_type.xml`
+**File:** `esmis_clinical/data/vocabulary_encounter_type.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- Order types (project-defined) -->
-    <record id="vocab_order_type" model="tpl.vocabulary">
+    <record id="vocab_order_type" model="esmis.vocabulary">
         <field name="name">Order Type</field>
         <field name="namespace_uri">urn:tpl:vocab:order-type</field>
         <field name="domain">operations</field>
     </record>
 
-    <record id="code_order_standard" model="tpl.vocabulary.code">
+    <record id="code_order_standard" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_order_type"/>
         <field name="code">standard</field>
         <field name="display">Standard Order</field>
     </record>
-    <record id="code_order_express" model="tpl.vocabulary.code">
+    <record id="code_order_express" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_order_type"/>
         <field name="code">express</field>
         <field name="display">Express Order</field>
     </record>
-    <record id="code_order_bulk" model="tpl.vocabulary.code">
+    <record id="code_order_bulk" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_order_type"/>
         <field name="code">bulk</field>
         <field name="display">Bulk Order</field>
     </record>
 
     <!-- Priority levels vocabulary -->
-    <record id="vocab_priority" model="tpl.vocabulary">
+    <record id="vocab_priority" model="esmis.vocabulary">
         <field name="name">Priority Level</field>
         <field name="namespace_uri">urn:tpl:vocab:priority</field>
         <field name="is_system">True</field>
@@ -653,17 +653,17 @@ class ResPartner(models.Model):
     </record>
 
     <!-- Example ICD-10 codes (subset) -->
-    <record id="code_icd10_j06" model="tpl.vocabulary.code">
+    <record id="code_icd10_j06" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_icd10"/>
         <field name="code">J06.9</field>
         <field name="display">Acute upper respiratory infection, unspecified</field>
     </record>
-    <record id="code_icd10_e11" model="tpl.vocabulary.code">
+    <record id="code_icd10_e11" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_icd10"/>
         <field name="code">E11</field>
         <field name="display">Type 2 diabetes mellitus</field>
     </record>
-    <record id="code_icd10_i10" model="tpl.vocabulary.code">
+    <record id="code_icd10_i10" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_icd10"/>
         <field name="code">I10</field>
         <field name="display">Essential (primary) hypertension</field>
@@ -681,17 +681,17 @@ For V2, existing modules need to migrate from Selection fields to vocabulary-bas
 
 | Module | Current Field | New Field | Vocabulary | Standard |
 |--------|---------------|-----------|------------|----------|
-| `tpl_contact` | `gender` (Selection) | `gender_id` | `urn:iso:std:iso:5218` | ISO 5218 |
-| `tpl_contact` | `civil_status` (Selection) | `civil_status_id` | `urn:un:unsd:pop-census:marital-status` | UN Pop Census |
-| `tpl_contact` | `blood_type` (Selection) | `blood_type_id` | `urn:tpl:vocab:blood-type` | (none) |
-| `tpl_clinical` | `encounter_type` (Selection) | `encounter_type_id` | `urn:tpl:vocab:encounter-type` | (none) |
-| `tpl_clinical` | `diagnosis` (Selection) | `diagnosis_ids` | `urn:who:icd:10` | WHO ICD-10 |
-| `tpl_disability` (planned) | `disability_type` (Selection) | `disability_ids` | `urn:who:icf:b` | WHO ICF |
+| `esmis_contact` | `gender` (Selection) | `gender_id` | `urn:iso:std:iso:5218` | ISO 5218 |
+| `esmis_contact` | `civil_status` (Selection) | `civil_status_id` | `urn:un:unsd:pop-census:marital-status` | UN Pop Census |
+| `esmis_contact` | `blood_type` (Selection) | `blood_type_id` | `urn:tpl:vocab:blood-type` | (none) |
+| `esmis_clinical` | `encounter_type` (Selection) | `encounter_type_id` | `urn:tpl:vocab:encounter-type` | (none) |
+| `esmis_clinical` | `diagnosis` (Selection) | `diagnosis_ids` | `urn:who:icd:10` | WHO ICD-10 |
+| `esmis_disability` (planned) | `disability_type` (Selection) | `disability_ids` | `urn:who:icf:b` | WHO ICF |
 
 ### Phase 2: Update Model Definitions
 
 ```python
-# tpl_contact/models/contact.py
+# esmis_contact/models/contact.py
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
@@ -701,13 +701,13 @@ class ResPartner(models.Model):
 
     # Add vocabulary-based fields
     gender_id = fields.Many2one(
-        "tpl.vocabulary.code",
+        "esmis.vocabulary.code",
         string="Gender",
         domain="[('namespace_uri', '=', 'urn:iso:std:iso:5218')]",
     )
 
     marital_status_id = fields.Many2one(
-        "tpl.vocabulary.code",
+        "esmis.vocabulary.code",
         string="Marital Status",
         domain="[('vocabulary_id.namespace_uri', '=', 'urn:un:unsd:pop-census:marital-status')]",
     )
@@ -745,7 +745,7 @@ if partner.gender_id.code == '2':
 
 # Or with helper constant
 GENDER_FEMALE = 'urn:iso:std:iso:5218', '2'
-if partner.gender_id == self.env['tpl.vocabulary.code'].get_code(*GENDER_FEMALE):
+if partner.gender_id == self.env['esmis.vocabulary.code'].get_code(*GENDER_FEMALE):
     ...
 ```
 
@@ -779,14 +779,14 @@ if partner.gender_id == self.env['tpl.vocabulary.code'].get_code(*GENDER_FEMALE)
 
 ## Implementation Checklist
 
-- [x] Create `tpl_vocabulary` module
-- [x] Implement `tpl.vocabulary` model
-- [x] Implement `tpl.vocabulary.code` model with caching
-- [x] Implement `tpl.vocabulary.mapping` model
+- [x] Create `esmis_vocabulary` module
+- [x] Implement `esmis.vocabulary` model
+- [x] Implement `esmis.vocabulary.code` model with caching
+- [x] Implement `esmis.vocabulary.mapping` model
 - [x] Create core vocabulary data (gender, relationship, marital)
-- [x] Update `tpl_contact` to use `gender_id`, `civil_status_id`, `blood_type_id`
+- [x] Update `esmis_contact` to use `gender_id`, `civil_status_id`, `blood_type_id`
 - [x] Update vocabulary seed data (gender, civil status, blood type, identifier types)
-- [ ] Create disability vocabulary in `tpl_disability` (planned)
+- [ ] Create disability vocabulary in `esmis_disability` (planned)
 - [ ] Create domain-specific vocabularies in appropriate modules
 - [x] Update views and search filters
 - [x] Add tests for vocabulary lookups and mappings

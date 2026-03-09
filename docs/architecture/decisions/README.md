@@ -29,7 +29,7 @@ This directory contains Architecture Decision Records documenting significant ar
 
 ## Context
 
-The remaining ADRs (004, 007, 009-012, 018, 020, 022) cover cross-cutting concerns (security, identifiers, terminology, data classification, encryption, document management, API audit/auth) that apply to any Odoo 19 project using the `tpl_*` module convention.
+The remaining ADRs (004, 007, 009-012, 018, 020, 022) cover cross-cutting concerns (security, identifiers, terminology, data classification, encryption, document management, API audit/auth) that apply to any Odoo 19 project using the `esmis_*` module convention.
 
 ## Creating New ADRs
 

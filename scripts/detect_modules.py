@@ -25,8 +25,8 @@ import sys
 from pathlib import Path
 
 # Critical modules that should always be tested on PRs
-# Replace tpl with your actual module prefix (e.g. "myapp")
-CRITICAL_MODULES = {"tpl_vocabulary"}
+# Replace esmis with your actual module prefix (e.g. "myapp")
+CRITICAL_MODULES = {"esmis_vocabulary"}
 
 
 def parse_manifest(manifest_path: Path) -> dict:

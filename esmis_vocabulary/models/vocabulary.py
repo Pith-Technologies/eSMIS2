@@ -14,7 +14,7 @@ class Vocabulary(models.Model):
     project-specific definitions.
     """
 
-    _name = "tpl.vocabulary"
+    _name = "esmis.vocabulary"
     _description = "Vocabulary"
     _order = "name"
 
@@ -61,7 +61,7 @@ class Vocabulary(models.Model):
         help="Domain area this vocabulary belongs to",
     )
     code_ids = fields.One2many(
-        comodel_name="tpl.vocabulary.code",
+        comodel_name="esmis.vocabulary.code",
         inverse_name="vocabulary_id",
         string="Codes",
         help="All codes within this vocabulary",
@@ -120,7 +120,7 @@ class Vocabulary(models.Model):
                 rec.code_count = 0
             return
 
-        code_data = self.env["tpl.vocabulary.code"]._read_group(
+        code_data = self.env["esmis.vocabulary.code"]._read_group(
             domain=[("vocabulary_id", "in", self.ids)],
             groupby=["vocabulary_id"],
             aggregates=["__count"],
@@ -135,7 +135,7 @@ class Vocabulary(models.Model):
         return {
             "type": "ir.actions.act_window",
             "name": _("Codes: %s") % self.name,
-            "res_model": "tpl.vocabulary.code",
+            "res_model": "esmis.vocabulary.code",
             "view_mode": "list,form",
             "domain": [("vocabulary_id", "=", self.id)],
             "context": {"default_vocabulary_id": self.id},

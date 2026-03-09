@@ -4,7 +4,7 @@
 #
 # Usage:
 #   ./scripts/audit-security.sh                      # Audit all modules
-#   ./scripts/audit-security.sh tpl_api         # Audit single module
+#   ./scripts/audit-security.sh esmis_api         # Audit single module
 #   ./scripts/audit-security.sh --summary            # Show summary only
 #   ./scripts/audit-security.sh --json               # Output as JSON
 #   ./scripts/audit-security.sh --check=acl          # Check only ACL files
@@ -254,23 +254,23 @@ check_security_groups() {
         fi
 
         # Check if module defines ir.module.category (should only be in the project's security module)
-        # Replace tpl_security with your project's security module name
-        if [[ "$module" != "tpl_security" ]]; then
+        # Replace esmis_security with your project's security module name
+        if [[ "$module" != "esmis_security" ]]; then
             if grep -q 'model="ir.module.category"' "$xml_file"; then
-                log_issue "WARNING" "$module" "GROUPS-CATEGORY-DEF" "$xml_file" "Defines ir.module.category (should only be in tpl_security)"
+                log_issue "WARNING" "$module" "GROUPS-CATEGORY-DEF" "$xml_file" "Defines ir.module.category (should only be in esmis_security)"
             fi
         fi
     done
 
     # Check if module depends on the project's security module
-    # Replace tpl_security with your project's security module name
+    # Replace esmis_security with your project's security module name
     local manifest="$module_path/__manifest__.py"
     if [[ -f "$manifest" ]]; then
-        if [[ "$module" != "tpl_security" ]]; then
-            if ! grep -q "tpl_security" "$manifest"; then
+        if [[ "$module" != "esmis_security" ]]; then
+            if ! grep -q "esmis_security" "$manifest"; then
                 # Check if it has security files
                 if ls "$module_path"/security/*.xml 2>/dev/null | head -1 | grep -q .; then
-                    log_issue "WARNING" "$module" "GROUPS-DEPENDENCY" "$manifest" "Has security files but doesn't depend on tpl_security"
+                    log_issue "WARNING" "$module" "GROUPS-DEPENDENCY" "$manifest" "Has security files but doesn't depend on esmis_security"
                 fi
             fi
         fi

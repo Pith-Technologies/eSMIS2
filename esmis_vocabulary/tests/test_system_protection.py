@@ -8,9 +8,9 @@ class TestSystemProtection(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.Code = cls.env["tpl.vocabulary.code"]
+        cls.Code = cls.env["esmis.vocabulary.code"]
         # Gender is a system vocabulary from seed data
-        cls.gender_vocab = cls.env["tpl.vocabulary"].search([("namespace_uri", "=", "urn:iso:std:iso:5218")])
+        cls.gender_vocab = cls.env["esmis.vocabulary"].search([("namespace_uri", "=", "urn:iso:std:iso:5218")])
         cls.gender_male = cls.Code.get_code("urn:iso:std:iso:5218", "1")
 
     def test_system_vocab_blocks_code_create(self):
@@ -48,7 +48,7 @@ class TestSystemProtection(TransactionCase):
 
     def test_non_system_vocab_allows_crud(self):
         """Non-system vocabularies allow full CRUD on codes."""
-        vocab = self.env["tpl.vocabulary"].create(
+        vocab = self.env["esmis.vocabulary"].create(
             {
                 "name": "Custom Vocab",
                 "namespace_uri": "urn:test:vocab:custom-crud",

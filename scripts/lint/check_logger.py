@@ -202,10 +202,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s tpl_vocabulary/models/*.py
-  %(prog)s --check-print tpl_vocabulary/models/vocabulary.py
+  %(prog)s esmis_vocabulary/models/*.py
+  %(prog)s --check-print esmis_vocabulary/models/vocabulary.py
   %(prog)s --no-pii-check file.py
-  %(prog)s --format json tpl_vocabulary/models/*.py
+  %(prog)s --format json esmis_vocabulary/models/*.py
 
 Checks:
   - Logger setup: _logger = logging.getLogger(__name__)

@@ -41,16 +41,16 @@ class DynamicSecurityAuditor:
         self.stats[severity] += 1
 
     def check_model_acl_coverage(self):
-        """Find tpl.* models without ACL rules."""
+        """Find esmis.* models without ACL rules."""
         print("\n[MODEL ACL COVERAGE]")
         print("=" * 60)
 
         IrModel = self.env["ir.model"]
         IrModelAccess = self.env["ir.model.access"]
 
-        # Get all tpl.* models
+        # Get all esmis.* models
         try:
-            custom_models = IrModel.search([("model", "=like", "tpl.%")])
+            custom_models = IrModel.search([("model", "=like", "esmis.%")])
             self.stats["models_total"] = len(custom_models)
         except Exception as e:
             print(f"  [ERROR] Could not query models: {e}")
@@ -78,7 +78,7 @@ class DynamicSecurityAuditor:
         print(f"    Models without ACL: {self.stats['models_without_acl']}")
 
         if self.stats["models_without_acl"] == 0:
-            print("    [OK] All tpl.* models have ACL rules")
+            print("    [OK] All esmis.* models have ACL rules")
 
     def check_group_usage(self):
         """Find unused security groups."""
@@ -90,9 +90,9 @@ class DynamicSecurityAuditor:
         IrRule = self.env["ir.rule"]
         IrModuleModule = self.env["ir.module.module"]
 
-        # Get all installed tpl_* modules
+        # Get all installed esmis_* modules
         try:
-            custom_modules = IrModuleModule.search([("name", "=like", "tpl_%"), ("state", "=", "installed")])
+            custom_modules = IrModuleModule.search([("name", "=like", "esmis_%"), ("state", "=", "installed")])
             module_names = custom_modules.mapped("name")
         except Exception as e:
             print(f"  [ERROR] Could not query modules: {e}")
@@ -178,7 +178,7 @@ class DynamicSecurityAuditor:
 
             # Also get by module
             IrModuleModule = self.env["ir.module.module"]
-            custom_modules = IrModuleModule.search([("name", "=like", "tpl_%"), ("state", "=", "installed")])
+            custom_modules = IrModuleModule.search([("name", "=like", "esmis_%"), ("state", "=", "installed")])
             module_names = custom_modules.mapped("name")
 
             IrModelData = self.env["ir.model.data"]
@@ -258,7 +258,7 @@ class DynamicSecurityAuditor:
         try:
             # Get key custom module groups
             IrModuleModule = self.env["ir.module.module"]
-            custom_modules = IrModuleModule.search([("name", "=like", "tpl_%"), ("state", "=", "installed")])
+            custom_modules = IrModuleModule.search([("name", "=like", "esmis_%"), ("state", "=", "installed")])
             module_names = custom_modules.mapped("name")
 
             IrModelData = self.env["ir.model.data"]
@@ -283,8 +283,8 @@ class DynamicSecurityAuditor:
             create_count = sum(1 for acl in acls if acl.perm_create)
             delete_count = sum(1 for acl in acls if acl.perm_unlink)
 
-            # Check for tpl.* models
-            custom_acls = acls.filtered(lambda a: a.model_id.model.startswith("tpl."))
+            # Check for esmis.* models
+            custom_acls = acls.filtered(lambda a: a.model_id.model.startswith("esmis."))
             custom_write_count = sum(1 for acl in custom_acls if acl.perm_write)
 
             print(f"\n  {group.complete_name}:")
@@ -298,10 +298,10 @@ class DynamicSecurityAuditor:
                     "WARN",
                     "GROUP-OVERLY-PERMISSIVE",
                     group.complete_name,
-                    f"Group has write access to {custom_write_count} tpl.* models",
+                    f"Group has write access to {custom_write_count} esmis.* models",
                     "Review if this group needs write access to so many models",
                 )
-                print(f"    [WARN] Write access to {custom_write_count} tpl.* models (high)")
+                print(f"    [WARN] Write access to {custom_write_count} esmis.* models (high)")
 
         if len(custom_groups) > 10:
             print(f"\n  ... and {len(custom_groups) - 10} more groups")
@@ -316,8 +316,8 @@ class DynamicSecurityAuditor:
         IrRule = self.env["ir.rule"]
 
         try:
-            # Get all record rules for tpl.* models
-            custom_rules = IrRule.search([("model_id.model", "=like", "tpl.%")])
+            # Get all record rules for esmis.* models
+            custom_rules = IrRule.search([("model_id.model", "=like", "esmis.%")])
             self.stats["rules_total"] = len(custom_rules)
         except Exception as e:
             print(f"  [ERROR] Could not query record rules: {e}")
@@ -377,7 +377,7 @@ class DynamicSecurityAuditor:
         try:
             # Get all custom module groups
             IrModuleModule = self.env["ir.module.module"]
-            custom_modules = IrModuleModule.search([("name", "=like", "tpl_%"), ("state", "=", "installed")])
+            custom_modules = IrModuleModule.search([("name", "=like", "esmis_%"), ("state", "=", "installed")])
             module_names = custom_modules.mapped("name")
 
             IrModelData = self.env["ir.model.data"]

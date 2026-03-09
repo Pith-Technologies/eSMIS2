@@ -1,6 +1,6 @@
 # Module Architecture Principles
 
-Guidelines for organizing, consolidating, and extending {Project} modules.
+Guidelines for organizing, consolidating, and extending eSMIS modules.
 
 ## Core Principles
 
@@ -14,24 +14,24 @@ Guidelines for organizing, consolidating, and extending {Project} modules.
 
 ```
 Layer 3: COUNTRY/DOMAIN EXTENSIONS
-├── tpl_reporting (Reporting integration)
-└── tpl_workflow (Workflow management)
+├── esmis_reporting (Reporting integration)
+└── esmis_workflow (Workflow management)
 
 Layer 2: CAPABILITIES
-├── tpl_order (Order management)
-├── tpl_inventory (Inventory tracking)
-└── tpl_procurement (Procurement orders)
+├── esmis_order (Order management)
+├── esmis_inventory (Inventory tracking)
+└── esmis_procurement (Procurement orders)
 
 Layer 1: FOUNDATION
-├── tpl_contact (Contact management)
-├── tpl_vocabulary (Vocabulary & identifiers)
-├── tpl_security (Access control)
-└── tpl_area (Geographic management)
+├── esmis_contact (Contact management)
+├── esmis_vocabulary (Vocabulary & identifiers)
+├── esmis_security (Access control)
+└── esmis_area (Geographic management)
 ```
 
 ## Three-Tier Customization Model
 
-For configurable features (like Change Request Types, Variables, Events), {Project} supports three levels of customization:
+For configurable features (like Change Request Types, Variables, Events), eSMIS supports three levels of customization:
 
 | Tier | User | Tools | Use Case |
 |------|------|-------|----------|
@@ -91,9 +91,9 @@ Fields and logic specific to a single country belong in a country-suffixed modul
 
 | Base module | Country module | Contains |
 |-------------|----------------|----------|
-| `tpl_contact` | `tpl_contact_us` | Country-specific fields, validation rules |
-| `tpl_order` | `tpl_order_us` | Country-specific order types, regulatory codes |
-| `tpl_integration` | `tpl_integration_us` | Country-specific API profiles, identifier mappings |
+| `esmis_contact` | `esmis_contact_us` | Country-specific fields, validation rules |
+| `esmis_order` | `esmis_order_us` | Country-specific order types, regulatory codes |
+| `esmis_integration` | `esmis_integration_us` | Country-specific API profiles, identifier mappings |
 
 **Rule:** If a field, constraint, or method only applies to one country's regulations, it goes in the `_us` (or `_ke`, `_ng`, etc.) module. The base module must remain country-agnostic.
 
@@ -104,38 +104,38 @@ Country-specific modules **must declare exclusions** against all other country v
 Odoo's `excludes` manifest key enforces this at install time — attempting to install an excluded module raises a `UserError`.
 
 ```python
-# tpl_contact_us/__manifest__.py
+# esmis_contact_us/__manifest__.py
 {
-    "name": "{Project} Contact - United States",
-    "depends": ["tpl_contact", "tpl_vocabulary"],
-    "excludes": ["tpl_contact_ke", "tpl_contact_ng"],
-    "auto_install": False,  # installed via tpl_starter_us
+    "name": "eSMIS Contact - United States",
+    "depends": ["esmis_contact", "esmis_vocabulary"],
+    "excludes": ["esmis_contact_ke", "esmis_contact_ng"],
+    "auto_install": False,  # installed via esmis_starter_us
     ...
 }
 ```
 
-**Convention:** Every `tpl_{domain}_{country}` module must list all other `tpl_{domain}_{other_country}` modules in its `excludes`. When adding a new country, update all existing country modules to exclude the new one.
+**Convention:** Every `esmis_{domain}_{country}` module must list all other `esmis_{domain}_{other_country}` modules in its `excludes`. When adding a new country, update all existing country modules to exclude the new one.
 
-Country modules never use `auto_install`. They are installed exclusively through a country starter module (`tpl_starter_{country}`), which is the only `application=True` entry point in the Apps menu. This prevents country-specific data from leaking into non-country deployments.
+Country modules never use `auto_install`. They are installed exclusively through a country starter module (`esmis_starter_{country}`), which is the only `application=True` entry point in the Apps menu. This prevents country-specific data from leaking into non-country deployments.
 
 ### Starter Module Localization
 
 Beyond aggregating country module dependencies, each starter module configures the Odoo database for the target country's locale via `data/res_company_data.xml` (`noupdate="1"`). This includes activating the country's currency, setting the main company's country and currency, and configuring the default timezone. See [Module Visibility — Localization Defaults](module-visibility.md#localization-defaults) for the full checklist.
 
 This applies to all layers:
-- `tpl_contact_us` excludes `tpl_contact_ke`, `tpl_contact_ng`, etc.
-- `tpl_order_us` excludes `tpl_order_ke`, etc.
+- `esmis_contact_us` excludes `esmis_contact_ke`, `esmis_contact_ng`, etc.
+- `esmis_order_us` excludes `esmis_order_ke`, etc.
 
 Country modules use `_inherit` to extend the base model:
 
 ```python
-# tpl_contact_us/models/res_partner.py
+# esmis_contact_us/models/res_partner.py
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
     tax_id_number = fields.Char(string="Tax ID Number")
     membership_type_id = fields.Many2one(
-        "tpl.vocabulary.code",
+        "esmis.vocabulary.code",
         domain="[('namespace_uri', '=', 'urn:gov:us:irs:membership-type')]",
     )
 ```
@@ -146,8 +146,8 @@ External identifiers (tax IDs, national IDs, passport numbers, etc.) are stored 
 
 ```
 res.partner
-    └── identifier_ids (One2many → tpl.identifier)
-            ├── type_id → tpl.vocabulary.code (display, uri)
+    └── identifier_ids (One2many → esmis.identifier)
+            ├── type_id → esmis.vocabulary.code (display, uri)
             ├── system_uri → (related from type_id.uri, stored, indexed)
             └── value → "123-45-6789"
 ```
@@ -158,13 +158,13 @@ res.partner
 - Validating format per type via regex patterns
 - Standardized mapping to external identifier formats
 
-The identifier type definitions are seeded as data in the appropriate country module (e.g., `tpl_contact_us`).
+The identifier type definitions are seeded as data in the appropriate country module (e.g., `esmis_contact_us`).
 
-**Exception: High-frequency convenience fields.** A country module may add a direct `Char` field (e.g., `tax_id_number`) for an identifier that appears on most forms and is entered frequently. The field must sync bidirectionally with `tpl.identifier` via overridden `create()` and `write()`. This is a UX shortcut, not a replacement — the identifier model remains the canonical store.
+**Exception: High-frequency convenience fields.** A country module may add a direct `Char` field (e.g., `tax_id_number`) for an identifier that appears on most forms and is entered frequently. The field must sync bidirectionally with `esmis.identifier` via overridden `create()` and `write()`. This is a UX shortcut, not a replacement — the identifier model remains the canonical store.
 
 ## Vocabulary Pattern
 
-Avoid hardcoding selection values for fields like status, category, type, or any classification that could vary by deployment. Instead, use a vocabulary model (`tpl_vocabulary`) that stores code lists as configurable records.
+Avoid hardcoding selection values for fields like status, category, type, or any classification that could vary by deployment. Instead, use a vocabulary model (`esmis_vocabulary`) that stores code lists as configurable records.
 
 **Instead of this:**
 ```python
@@ -174,17 +174,17 @@ priority = fields.Selection([("low", "Low"), ("medium", "Medium"), ("high", "Hig
 **Do this:**
 ```python
 priority_id = fields.Many2one(
-    "tpl.vocabulary.code",
+    "esmis.vocabulary.code",
     domain="[('namespace_uri', '=', 'urn:example:priority')]",
 )
 ```
 
-The `tpl_vocabulary` module provides:
+The `esmis_vocabulary` module provides:
 
 | Model | Purpose |
 |-------|---------|
-| `tpl.vocabulary` | A named code list with a namespace URI (e.g., `urn:example:priority` for priority levels) |
-| `tpl.vocabulary.code` | Individual code within a vocabulary (code, display label, sequence, URI) |
+| `esmis.vocabulary` | A named code list with a namespace URI (e.g., `urn:example:priority` for priority levels) |
+| `esmis.vocabulary.code` | Individual code within a vocabulary (code, display label, sequence, URI) |
 
 **When to use vocabulary vs. static selection:**
 - **Use vocabulary** for values that follow external standards, vary by deployment, or need to be extended without code changes.
@@ -210,14 +210,14 @@ class ResPartner(models.Model):
 ```python
 # Core defines interface
 class ProcessPlugin(models.AbstractModel):
-    _name = "tpl.process.plugin"
+    _name = "esmis.process.plugin"
 
     def apply_changes(self, record):
         raise NotImplementedError
 
 # Extensions implement
 class ApprovalPlugin(models.AbstractModel):
-    _inherit = "tpl.process.plugin"
+    _inherit = "esmis.process.plugin"
 
     def apply_changes(self, record):
         # Implementation
@@ -251,10 +251,10 @@ Build on Odoo's `res.partner`, not custom models:
 
 ```
 res.partner (Odoo)
-    └── is_contact (tpl_contact)
-        ├── identifier_ids → tpl.identifier (domain module)
-        ├── category_id → tpl.vocabulary.code (tpl_vocabulary)
-        └── status_id → tpl.vocabulary.code (tpl_vocabulary)
+    └── is_contact (esmis_contact)
+        ├── identifier_ids → esmis.identifier (domain module)
+        ├── category_id → esmis.vocabulary.code (esmis_vocabulary)
+        └── status_id → esmis.vocabulary.code (esmis_vocabulary)
 ```
 
 **Benefits:** Leverage Odoo's contact management, deduplication, relationships.

@@ -1,24 +1,24 @@
 # Naming Conventions
 
-Consistent naming across all {Project} development.
+Consistent naming across all eSMIS development.
 
 ## Modules
 
 | Pattern | Example |
 |---------|---------|
-| `tpl_{domain}` | `tpl_vocabulary` |
-| `tpl_{domain}_{feature}` | `tpl_inventory` |
+| `esmis_{domain}` | `esmis_vocabulary` |
+| `esmis_{domain}_{feature}` | `esmis_inventory` |
 
-All modules use the `tpl_*` prefix.
+All modules use the `esmis_*` prefix.
 
 ## Models
 
 | Pattern | Example |
 |---------|---------|
-| `tpl.{domain}` | `tpl.inventory` |
-| `tpl.{domain}.{entity}` | `tpl.vocabulary.code` |
+| `esmis.{domain}` | `esmis.inventory` |
+| `esmis.{domain}.{entity}` | `esmis.vocabulary.code` |
 
-All models use the `tpl.*` prefix.
+All models use the `esmis.*` prefix.
 
 ## Fields
 
@@ -87,7 +87,7 @@ Use consistently across modules:
 
 | Type | Pattern | Example |
 |------|---------|---------|
-| Category | `category_tpl_{domain}` | `category_tpl_inventory` |
+| Category | `category_esmis_{domain}` | `category_esmis_inventory` |
 | Privilege | `privilege_{domain}_{level}` | `privilege_inventory_officer` |
 | User Group | `group_{domain}_{level}` | `group_inventory_officer` |
 | Technical Group | `group_{domain}_{action}` | `group_inventory_read` |
@@ -121,11 +121,11 @@ Menu items follow a hierarchical naming convention that reflects their position 
 
 | Menu level | Pattern | Example |
 |---|---|---|
-| App root | `menu_{app}_root` | `menu_tpl_root` |
+| App root | `menu_{app}_root` | `menu_esmis_root` |
 | Domain menu | `menu_{domain}` | `menu_inventory` |
 | Domain item | `menu_{domain}_{action}` | `menu_inventory_all` |
-| App configuration | `menu_{app}_configuration` | `menu_tpl_configuration` |
-| Config child | `menu_{app}_configuration_{feature}` | `menu_tpl_configuration_vocabularies` |
+| App configuration | `menu_{app}_configuration` | `menu_esmis_configuration` |
+| Config child | `menu_{app}_configuration_{feature}` | `menu_esmis_configuration_vocabularies` |
 
 Use `configuration` not `config` — no abbreviations.
 
@@ -146,13 +146,13 @@ Models created dynamically by Studio use the `x_` prefix per Odoo convention:
 
 ### Non-Studio Dynamic Models
 
-Some modules create models programmatically (not via Studio). These follow standard `tpl.*` naming, not `x_*` prefix. The `x_` prefix is reserved exclusively for user-created content via Studio UI.
+Some modules create models programmatically (not via Studio). These follow standard `esmis.*` naming, not `x_*` prefix. The `x_` prefix is reserved exclusively for user-created content via Studio UI.
 
 ## API Endpoints
 
 ```
-/api/v{version}/tpl/{resource}
-/api/v{version}/tpl/{resource}/{id}
+/api/v{version}/esmis/{resource}
+/api/v{version}/esmis/{resource}/{id}
 ```
 
 ## Identifier URIs
@@ -195,7 +195,7 @@ to enable cross-module references:
 
 These XML IDs are scoped to the module that defines them. To reference a record from
 another module, use the fully qualified form: `{module}.{xml_id}`
-(e.g., `tpl_vocabulary.code_gender_male`).
+(e.g., `esmis_vocabulary.code_gender_male`).
 
 ---
 

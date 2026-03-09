@@ -13,7 +13,7 @@
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| tpl_security core module | ✅ Complete | 26 domain categories defined |
+| esmis_security core module | ✅ Complete | 26 domain categories defined |
 | Odoo 19 privilege system | ✅ Complete | Uses `res.groups.privilege` |
 | Three-tier architecture | ✅ Complete | Technical → Functional → Roles |
 | Core domain modules | ✅ Complete | 13 modules fully implemented |
@@ -24,13 +24,13 @@
 
 | Category | Modules | Status |
 |----------|---------|--------|
-| **Fully implemented** | tpl_contact, tpl_vocabulary + others | Complete |
+| **Fully implemented** | esmis_contact, esmis_vocabulary + others | Complete |
 | **Not yet migrated** | Remaining modules | Future scope |
 
 **Key Code Locations:**
-- `tpl_security/security/categories.xml` - All 26 domain categories
-- `tpl_security/security/groups_admin.xml` - Admin group + Odoo system admin link
-- `tpl_contact/security/` - Reference implementation (groups.xml, privileges.xml)
+- `esmis_security/security/categories.xml` - All 26 domain categories
+- `esmis_security/security/groups_admin.xml` - Admin group + Odoo system admin link
+- `esmis_contact/security/` - Reference implementation (groups.xml, privileges.xml)
 
 **Note:** The architecture is strategically sound. Not all modules require domain-specific security roles.
 
@@ -46,7 +46,7 @@ The project currently has a fragmented access rights implementation:
 
 ### Problems Identified
 
-1. **Inconsistent Naming**: Groups use mixed patterns (`group_tpl_admin` vs `read_registry` vs `group_user`)
+1. **Inconsistent Naming**: Groups use mixed patterns (`group_esmis_admin` vs `read_registry` vs `group_user`)
 2. **Odoo 19 Incompatibility**: Most groups don't use the new `res.groups.privilege` model
 3. **No Central Definition**: Each module defines groups independently, causing duplication
 4. **Role Confusion**: Users must be assigned to multiple scattered groups
@@ -71,7 +71,7 @@ The project currently has a fragmented access rights implementation:
 4. **Consistent Naming**: Strict naming conventions enforced
 5. **Flexible Extension**: Modules can extend, not override
 6. **Documentation First**: Every group has `comment` field documentation
-7. **Categories Centralized, Groups Distributed**: Category hierarchy in `tpl_security`, groups in domain modules
+7. **Categories Centralized, Groups Distributed**: Category hierarchy in `esmis_security`, groups in domain modules
 
 ### Key Design Constraint: Modular Installations
 
@@ -95,7 +95,7 @@ active.
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    TIER 1: USER ROLES (optional)                    │
-│  Defined in: tpl_roles module (optional)                            │
+│  Defined in: esmis_roles module (optional)                            │
 │  Example: "Operations Staff" = Contact Officer + Order Officer       │
 │  NOTE: Only available when multiple domain modules installed        │
 └─────────────────────────────────────────────────────────────────────┘
@@ -103,7 +103,7 @@ active.
                                   ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    TIER 2: FUNCTIONAL PRIVILEGES                    │
-│  Defined in: Each domain module (tpl_contact, tpl_order, etc.)         │
+│  Defined in: Each domain module (esmis_contact, esmis_order, etc.)         │
 │  Example: Contact Viewer, Contact Officer, Contact Manager           │
 │  NOTE: Groups only exist when domain module is installed            │
 └─────────────────────────────────────────────────────────────────────┘
@@ -118,7 +118,7 @@ active.
                                   │
                                   ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    tpl_security (Core)                              │
+│                    esmis_security (Core)                              │
 │  - Category hierarchy (ir.module.category)                          │
 │  - Admin group (always needed)                                      │
 │  - Base multi-company record rules                                  │
@@ -130,11 +130,11 @@ active.
 
 | Type                     | Pattern                      | Example                               |
 | ------------------------ | ---------------------------- | ------------------------------------- |
-| Module Category          | `category_tpl_{domain}`      | `category_tpl_contact`                |
+| Module Category          | `category_esmis_{domain}`      | `category_esmis_contact`                |
 | Privilege                | `privilege_{domain}_{level}` | `privilege_contact_officer`           |
 | User Group (Tier 2)      | `group_{domain}_{level}`     | `group_contact_officer`               |
 | Technical Group (Tier 3) | `group_{domain}_{action}`    | `group_contact_read`                  |
-| Role (Tier 1)            | `role_tpl_{name}`            | `role_tpl_clinical_staff`             |
+| Role (Tier 1)            | `role_esmis_{name}`            | `role_esmis_clinical_staff`             |
 | Access CSV ID            | `access_{model}_{group}`     | `access_res_partner_patient_officer`  |
 | Record Rule ID           | `rule_{model}_{purpose}`     | `rule_partner_company`                |
 
@@ -142,13 +142,13 @@ active.
 
 | Domain          | Category ID                   | Description                  |
 | --------------- | ----------------------------- | ---------------------------- |
-| Contact         | `category_tpl_contact`        | Contact management           |
-| Order           | `category_tpl_order`          | Order management             |
-| Inventory       | `category_tpl_inventory`      | Inventory management         |
-| Approvals       | `category_tpl_approvals`      | Approval workflow            |
-| Payments        | `category_tpl_payments`       | Payment processing           |
-| API             | `category_tpl_api`            | API access                   |
-| Admin           | `category_tpl_admin`          | System administration        |
+| Contact         | `category_esmis_contact`        | Contact management           |
+| Order           | `category_esmis_order`          | Order management             |
+| Inventory       | `category_esmis_inventory`      | Inventory management         |
+| Approvals       | `category_esmis_approvals`      | Approval workflow            |
+| Payments        | `category_esmis_payments`       | Payment processing           |
+| API             | `category_esmis_api`            | API access                   |
+| Admin           | `category_esmis_admin`          | System administration        |
 
 ### Permission Levels
 
@@ -163,7 +163,7 @@ Each domain should define up to 4 levels:
 
 ## Implementation
 
-### New Module: `tpl_security`
+### New Module: `esmis_security`
 
 Central module that defines:
 
@@ -175,7 +175,7 @@ Central module that defines:
 ### Module Structure
 
 ```
-tpl_security/
+esmis_security/
 ├── __manifest__.py
 ├── __init__.py
 ├── security/
@@ -195,14 +195,14 @@ tpl_security/
 
 Each existing module should:
 
-1. Depend on `tpl_security`
+1. Depend on `esmis_security`
 2. Remove duplicate group definitions
-3. Reference groups from `tpl_security`
+3. Reference groups from `esmis_security`
 4. Add domain-specific groups if needed (following conventions)
 
 ### Migration Strategy
 
-**Phase 1: Create `tpl_security` module**
+**Phase 1: Create `esmis_security` module**
 
 - Define all categories and privileges
 - Define base technical groups
@@ -210,9 +210,9 @@ Each existing module should:
 
 **Phase 2: Update core modules**
 
-- `tpl_contact` → use `tpl_security` groups
-- `tpl_vocabulary` → use `tpl_security` groups
-- `tpl_order` (planned) → use `tpl_security` groups
+- `esmis_contact` → use `esmis_security` groups
+- `esmis_vocabulary` → use `esmis_security` groups
+- `esmis_order` (planned) → use `esmis_security` groups
 
 **Phase 3: Update remaining modules**
 
@@ -239,7 +239,7 @@ Each existing module should:
 ### Negative
 
 1. **Migration Effort**: All 82 modules need updates
-2. **New Dependency**: All modules depend on `tpl_security`
+2. **New Dependency**: All modules depend on `esmis_security`
 3. **Learning Curve**: Team must learn new conventions
 4. **Potential Breakage**: Existing customizations may need updates
 

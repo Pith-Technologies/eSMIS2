@@ -1,8 +1,8 @@
 # Audit & Compliance Principles
 
-> **Note:** The `tpl_audit` module is planned but not yet implemented. The principles below describe the target architecture.
+> **Note:** The `esmis_audit` module is planned but not yet implemented. The principles below describe the target architecture.
 
-Requirements for audit trails, data integrity, and regulatory compliance in {Project}.
+Requirements for audit trails, data integrity, and regulatory compliance in eSMIS.
 
 ## Core Principles
 
@@ -13,7 +13,7 @@ Requirements for audit trails, data integrity, and regulatory compliance in {Pro
 
 ## Audit Log Module
 
-{Project} uses `tpl_audit` for comprehensive audit tracking.
+eSMIS uses `esmis_audit` for comprehensive audit tracking.
 
 ### Enabling Audit for a Model
 
@@ -21,7 +21,7 @@ Configure via UI: Settings → Audit Rules → Create
 
 ```python
 # Or programmatically
-self.env['tpl.audit.rule'].create({
+self.env['esmis.audit.rule'].create({
     'name': 'Partner Audit',
     'model_id': self.env.ref('base.model_res_partner').id,
     'log_create': True,
@@ -42,7 +42,7 @@ self.env['tpl.audit.rule'].create({
 ### Audit Log Structure
 
 ```python
-tpl.audit.log:
+esmis.audit.log:
     audit_rule_id   # Link to rule configuration
     user_id         # Who made the change
     create_date     # When
@@ -59,17 +59,17 @@ tpl.audit.log:
 | Model/Action | Reason |
 |--------------|--------|
 | `res.partner` | Contact data integrity |
-| `tpl.order` | Order history |
-| `tpl.document` | Document integrity |
+| `esmis.order` | Order history |
+| `esmis.document` | Document integrity |
 | Approval state changes | Decision trail |
 | Access right changes | Security |
 
 ### Approval Audit Fields
 
-Models using `tpl.approval.mixin` automatically get these fields:
+Models using `esmis.approval.mixin` automatically get these fields:
 
 ```python
-# Provided by tpl.approval.mixin (no need to add manually)
+# Provided by esmis.approval.mixin (no need to add manually)
 submitted_by_id = fields.Many2one("res.users", readonly=True)
 submitted_date = fields.Datetime(readonly=True)
 approved_by_id = fields.Many2one("res.users", readonly=True)
@@ -79,7 +79,7 @@ rejected_date = fields.Datetime(readonly=True)
 rejection_reason = fields.Text(readonly=True)
 ```
 
-To use: inherit `tpl.approval.mixin` in your model (see [Approval Workflows](approval-workflows.md)).
+To use: inherit `esmis.approval.mixin` in your model (see [Approval Workflows](approval-workflows.md)).
 
 ## Data Integrity
 
@@ -87,7 +87,7 @@ To use: inherit `tpl.approval.mixin` in your model (see [Approval Workflows](app
 
 ```python
 class Order(models.Model):
-    _name = "tpl.order"
+    _name = "esmis.order"
 
     def unlink(self):
         if any(rec.state == 'completed' for rec in self):
@@ -124,7 +124,7 @@ Inherit `mail.thread` for automatic change tracking:
 
 ```python
 class Order(models.Model):
-    _name = "tpl.order"
+    _name = "esmis.order"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(tracking=True)
@@ -152,7 +152,7 @@ This automatically logs:
 
 ```python
 def generate_audit_report(self, date_from, date_to):
-    return self.env['tpl.audit.log'].search([
+    return self.env['esmis.audit.log'].search([
         ('create_date', '>=', date_from),
         ('create_date', '<=', date_to),
         ('model_id.model', '=', 'res.partner'),
@@ -169,7 +169,7 @@ def generate_audit_report(self, date_from, date_to):
 | Error logs | 90 days | Delete |
 
 > **Implementation Status:** Retention policy cleanup is not yet automated.
-> Manual archival processes should be used until `tpl_audit` includes scheduled cleanup jobs.
+> Manual archival processes should be used until `esmis_audit` includes scheduled cleanup jobs.
 
 ## Checklist
 
@@ -183,6 +183,6 @@ def generate_audit_report(self, date_from, date_to):
 ---
 
 **Authoritative Sources:**
-- `tpl_audit` module (planned) — Audit implementation and configuration
+- `esmis_audit` module (planned) — Audit implementation and configuration
 
 **See also:** [Access Rights](access-rights.md), [Error Handling](error-handling.md), [Approval Workflows](approval-workflows.md)

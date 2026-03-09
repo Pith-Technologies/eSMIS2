@@ -14,16 +14,16 @@ Prerequisites:
 
 Usage:
     # Translate a single module
-    ./scripts/translate_agent.py --module tpl_vocabulary --lang fr
+    ./scripts/translate_agent.py --module esmis_vocabulary --lang fr
 
     # Translate with dependencies
-    ./scripts/translate_agent.py --module tpl_vocabulary --lang fr --with-deps
+    ./scripts/translate_agent.py --module esmis_vocabulary --lang fr --with-deps
 
     # Skip POT update (assume already updated)
-    ./scripts/translate_agent.py --module tpl_vocabulary --lang fr --skip-pot-update
+    ./scripts/translate_agent.py --module esmis_vocabulary --lang fr --skip-pot-update
 
     # Dry run (check status only)
-    ./scripts/translate_agent.py --module tpl_vocabulary --lang fr --dry-run
+    ./scripts/translate_agent.py --module esmis_vocabulary --lang fr --dry-run
 
 Target Languages:
     - fr: French (primary)
@@ -592,7 +592,7 @@ def main():
         epilog=__doc__,
     )
 
-    parser.add_argument("--module", "-m", required=True, help="Module name to translate (e.g., tpl_vocabulary)")
+    parser.add_argument("--module", "-m", required=True, help="Module name to translate (e.g., esmis_vocabulary)")
     parser.add_argument("--lang", "-l", default="fr", help="Target language code (fr, es, ar, lo). Default: fr")
     parser.add_argument("--with-deps", action="store_true", help="Include module dependencies in translation")
     parser.add_argument("--skip-pot-update", action="store_true", help="Skip POT file update (assume already updated)")

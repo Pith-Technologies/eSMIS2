@@ -1,6 +1,6 @@
-# {Project} Development Principles
+# eSMIS Development Principles
 
-This directory contains the core principles and standards that guide {Project} development. These principles ensure consistency, maintainability, and quality across all modules.
+This directory contains the core principles and standards that guide eSMIS development. These principles ensure consistency, maintainability, and quality across all modules.
 
 ## Principle Documents
 

@@ -10,7 +10,7 @@ Naming standards:
 - Actions: action_{model}
 - Menus: menu_{model}
 - Security groups: group_{domain}_{level}
-- Categories: category_tpl_{domain} (prefix configurable)
+- Categories: category_esmis_{domain} (prefix configurable)
 - Privileges: privilege_{domain}_{level}
 - Record rules: rule_{model}_{purpose}
 
@@ -62,7 +62,7 @@ NAMING_RULES = {
             r"^[a-z0-9_]+_(view_)?(form|list|tree|kanban|search|graph|pivot|calendar|gantt|activity|gis)$",
         ],
         "description": "View IDs should follow 'view_{model}_{type}' or '{model}_{type}' pattern",
-        "examples": ["view_tpl_entity_form", "res_partner_tree", "ticket_view_form"],
+        "examples": ["view_esmis_entity_form", "res_partner_tree", "ticket_view_form"],
     },
     "ir.actions.act_window": {
         "patterns": [
@@ -72,14 +72,14 @@ NAMING_RULES = {
             r"^[a-z0-9_]+_action_[a-z0-9_]+$",  # Also accept {model}_action_{purpose}
         ],
         "description": "Action IDs should follow 'action_{model}' or '{model}_action' pattern",
-        "examples": ["action_tpl_entity", "tpl_task_action"],
+        "examples": ["action_esmis_entity", "esmis_task_action"],
     },
     "ir.actions.act_window.view": {
         "patterns": [
             r"^action_[a-z0-9_]+_(form|list|tree|kanban|graph|pivot|calendar|gantt|activity|gis)_view$",
         ],
         "description": "Action view IDs should follow 'action_{model}_{type}_view' pattern",
-        "examples": ["action_generate_program_form_view", "action_tpl_entity_list_view"],
+        "examples": ["action_generate_program_form_view", "action_esmis_entity_list_view"],
     },
     "ir.ui.menu": {
         "patterns": [
@@ -87,7 +87,7 @@ NAMING_RULES = {
             r"^menu_[a-z0-9_]+_[a-z0-9_]+$",
         ],
         "description": "Menu IDs should follow 'menu_{model}' or 'menu_{model}_{purpose}' pattern",
-        "examples": ["menu_tpl_entity", "menu_tpl_task"],
+        "examples": ["menu_esmis_entity", "menu_esmis_task"],
     },
     "res.groups": {
         "patterns": [
@@ -99,7 +99,7 @@ NAMING_RULES = {
             r"^category_[a-z0-9_]+$",
         ],
         "description": "Group IDs should follow 'group_{domain}_{level}' or 'category_{domain}' pattern",
-        "examples": ["group_entity_officer", "group_task_approver", "category_tpl_entity"],
+        "examples": ["group_entity_officer", "group_task_approver", "category_esmis_entity"],
         "allowed_deprecated": True,  # Allow deprecated groups for backward compatibility
     },
     "ir.module.category": {
@@ -108,8 +108,8 @@ NAMING_RULES = {
             r"^module_[a-z0-9_]+_category$",  # Alternate pattern: module_{name}_category
             r"^[a-z0-9_]+_category$",  # Generic {name}_category
         ],
-        "description": "Category IDs should follow 'category_tpl_{domain}' or '{module}_category' pattern",
-        "examples": ["category_tpl", "category_tpl_entity", "module_tpl_category"],
+        "description": "Category IDs should follow 'category_esmis_{domain}' or '{module}_category' pattern",
+        "examples": ["category_tpl", "category_esmis_entity", "module_esmis_category"],
     },
     "res.groups.privilege": {
         "patterns": [
@@ -123,7 +123,7 @@ NAMING_RULES = {
             r"^rule_[a-z0-9_]+_[a-z0-9_]+$",
         ],
         "description": "Rule IDs should follow 'rule_{model}_{purpose}' pattern",
-        "examples": ["rule_tpl_task_viewer", "rule_partner_company"],
+        "examples": ["rule_esmis_task_viewer", "rule_partner_company"],
     },
 }
 
@@ -175,13 +175,13 @@ class XMLValidator:
             # Update ir.module.category patterns with the configured prefix
             NAMING_RULES["ir.module.category"]["patterns"] = [
                 r"^category_tpl$",  # Main category
-                r"^category_tpl_[a-z0-9_]+$",
+                r"^category_esmis_[a-z0-9_]+$",
                 r"^module_[a-z0-9_]+_category$",  # Alternate pattern
                 r"^[a-z0-9_]+_category$",  # Generic {name}_category
             ]
             NAMING_RULES["ir.module.category"]["examples"] = [
                 "category_tpl",
-                "category_tpl_entity",
+                "category_esmis_entity",
                 "module_tplbase_category",
             ]
         else:
@@ -398,23 +398,23 @@ def main():
         epilog="""
 Examples:
   # Check specific files
-  %(prog)s tpl_vocabulary/views/vocabulary_views.xml
+  %(prog)s esmis_vocabulary/views/vocabulary_views.xml
 
   # Check all XML files in a module
-  %(prog)s --module tpl_vocabulary
+  %(prog)s --module esmis_vocabulary
 
   # Check with strict mode (warns about unknown models)
-  %(prog)s --strict --module tpl_appointment
+  %(prog)s --strict --module esmis_appointment
 
   # Output in JSON format
-  %(prog)s --format json --module tpl_appointment
+  %(prog)s --format json --module esmis_appointment
 
 Naming Conventions:
   - Views:       view_{model}_form, view_{model}_list/tree
   - Actions:     action_{model}
   - Menus:       menu_{model}
   - Groups:      group_{domain}_{level}
-  - Categories:  category_tpl_{domain}
+  - Categories:  category_esmis_{domain}
   - Privileges:  privilege_{domain}_{level}
   - Rules:       rule_{model}_{purpose}
 

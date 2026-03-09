@@ -512,16 +512,16 @@ def main():
         epilog="""
 Examples:
   # Check Python files
-  python check_odoo19.py tpl_vocabulary/models/*.py
+  python check_odoo19.py esmis_vocabulary/models/*.py
 
   # Check XML files
-  python check_odoo19.py --xml tpl_vocabulary/views/*.xml
+  python check_odoo19.py --xml esmis_vocabulary/views/*.xml
 
   # Auto-fix Command API tuples
-  python check_odoo19.py --fix tpl_vocabulary/models/*.py
+  python check_odoo19.py --fix esmis_vocabulary/models/*.py
 
   # Dry-run to preview fixes
-  python check_odoo19.py --fix --dry-run tpl_vocabulary/models/*.py
+  python check_odoo19.py --fix --dry-run esmis_vocabulary/models/*.py
         """,
     )
 

@@ -891,10 +891,10 @@ This transforms the template:
 
 | From                   | To                           |
 | ---------------------- | ---------------------------- |
-| `tpl_vocabulary/`      | `sis_vocabulary/`            |
-| `tpl.vocabulary`       | `sis.vocabulary`             |
-| `model_tpl_vocabulary` | `model_sis_vocabulary`       |
-| `{Project}`            | `Student Information System` |
+| `esmis_vocabulary/`      | `sis_vocabulary/`            |
+| `esmis.vocabulary`       | `sis.vocabulary`             |
+| `model_esmis_vocabulary` | `model_sis_vocabulary`       |
+| `eSMIS`            | `Student Information System` |
 
 - Renames directories, updates all references in `.py`, `.xml`, `.csv`, `.md`
 - Run once — then build your own modules on top

@@ -165,7 +165,7 @@ COMPLIANCE_YAML_SCHEMA = """
 #
 # Example:
 # --------
-# module: tpl_entity
+# module: esmis_entity
 # domain: entity
 # version: "1.0"
 #
@@ -207,7 +207,7 @@ COMPLIANCE_YAML_SCHEMA = """
 #     officer: [read, write, create]
 #     manager: [read, write, create, unlink]
 #
-#   - model: tpl.registry.relationship
+#   - model: esmis.registry.relationship
 #     viewer: [read]
 #     officer: [read, write, create]
 #     manager: [read, write, create, unlink]

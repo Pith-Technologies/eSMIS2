@@ -28,7 +28,7 @@ Usage:
 
     # Translate and write to PO files (REQUIRES ANTHROPIC_API_KEY)
     export ANTHROPIC_API_KEY=your_key
-    ./scripts/translate_verify.py --translate --lang fr --module tpl_vocabulary
+    ./scripts/translate_verify.py --translate --lang fr --module esmis_vocabulary
 
     # Translate all modules (use haiku for speed/cost efficiency)
     ./scripts/translate_verify.py --translate --lang fr --all --model claude-haiku
@@ -349,7 +349,7 @@ def check_placeholders(msgid: str, msgstr: str) -> list[str]:
     return errors
 
 
-def find_modules(root_dir: Path, pattern: str = "tpl_*") -> list[Path]:
+def find_modules(root_dir: Path, pattern: str = "esmis_*") -> list[Path]:
     """Find all custom modules."""
     modules = []
     for path in root_dir.glob(pattern):
@@ -1069,8 +1069,8 @@ def main():
     )
 
     parser.add_argument("--lang", "-l", default="fr", help="Target language code (fr, es, ar, lo)")
-    parser.add_argument("--module", "-m", help="Specific module to process (e.g., tpl_vocabulary)")
-    parser.add_argument("--all", "-a", action="store_true", help="Process all tpl_* modules")
+    parser.add_argument("--module", "-m", help="Specific module to process (e.g., esmis_vocabulary)")
+    parser.add_argument("--all", "-a", action="store_true", help="Process all esmis_* modules")
     parser.add_argument("--report", action="store_true", help="Generate coverage report only")
     parser.add_argument("--verify", action="store_true", help="Verify existing translations against glossary")
     parser.add_argument(
@@ -1116,7 +1116,7 @@ def main():
         parser.print_help()
         print("\nExamples:")
         print("  ./scripts/translate_verify.py --report --lang fr --all")
-        print("  ./scripts/translate_verify.py --translate --lang fr --module tpl_vocabulary")
+        print("  ./scripts/translate_verify.py --translate --lang fr --module esmis_vocabulary")
         sys.exit(0)
 
     _logger.info(f"Processing {len(modules)} modules for language: {args.lang}")

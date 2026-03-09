@@ -150,7 +150,7 @@ services:
       PROXY_MODE: "True"
 
       # Modules to initialize on first boot
-      ODOO_INIT_MODULES: ${ODOO_INIT_MODULES:-tpl_vocabulary}
+      ODOO_INIT_MODULES: ${ODOO_INIT_MODULES:-esmis_vocabulary}
 
       # Logging
       LOG_LEVEL: ${LOG_LEVEL:-warn}
@@ -324,7 +324,7 @@ services:
   #   - Compliance requirements mandate antivirus scanning
   #
   # Resource usage: ~500MB-1GB RAM for virus definitions
-  # Install tpl_attachment_av_scan module in Odoo to use this service
+  # Install esmis_attachment_av_scan module in Odoo to use this service
   clamav:
     image: clamav/clamav:stable
     profiles:

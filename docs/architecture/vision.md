@@ -18,10 +18,10 @@ accounting, inventory) while adding domain-specific modules for business operati
 
 | Layer              | Modules                                                          | Purpose                                      |
 | ------------------ | ---------------------------------------------------------------- | -------------------------------------------- |
-| **Domain Core**    | `tpl_project`, `tpl_task`, `tpl_note`            | Core business records and workflows          |
-| **Operations**     | `tpl_warehouse`, `tpl_service`, `tpl_reporting`  | Operational workflows and reporting          |
-| **Integration**    | `tpl_api`, `tpl_import`                               | External API facade, data import             |
-| **Foundation**     | `tpl_security`, `tpl_vocabulary`                      | Security, terminology, shared infrastructure |
+| **Domain Core**    | `esmis_project`, `esmis_task`, `esmis_note`            | Core business records and workflows          |
+| **Operations**     | `esmis_warehouse`, `esmis_service`, `esmis_reporting`  | Operational workflows and reporting          |
+| **Integration**    | `esmis_api`, `esmis_import`                               | External API facade, data import             |
+| **Foundation**     | `esmis_security`, `esmis_vocabulary`                      | Security, terminology, shared infrastructure |
 | **Odoo Core**      | `hr`, `stock`, `account`                                        | Staff, inventory, accounting                 |
 
 ## Implementation Phases

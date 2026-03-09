@@ -4,10 +4,10 @@ Guidelines for `application`, `auto_install`, and `category` in module manifests
 
 ## Core Principles
 
-1. **Starter Module Entry Point** - Only `tpl_starter_{country}` modules are `application=True`
-2. **Domain Modules are Hidden** - All `tpl_*` domain modules are `application=False`
+1. **Starter Module Entry Point** - Only `esmis_starter_{country}` modules are `application=True`
+2. **Domain Modules are Hidden** - All `esmis_*` domain modules are `application=False`
 3. **Auto-Install Bridges** - Non-country modules connecting two features should auto-install
-4. **Consistent Categories** - Use hierarchy: `{Project}/{Domain}`
+4. **Consistent Categories** - Use hierarchy: `eSMIS/{Domain}`
 5. **Clean Apps Menu** - Users see one starter module per country, not 50+ modules
 
 ## Starter Module Pattern
@@ -15,15 +15,15 @@ Guidelines for `application`, `auto_install`, and `category` in module manifests
 The **only** modules with `application=True` are country-specific starter modules:
 
 ```python
-# tpl_starter_us/__manifest__.py
+# esmis_starter_us/__manifest__.py
 {
-    "name": "{Project} United States",
+    "name": "eSMIS United States",
     "application": True,  # appears in Apps menu
-    "depends": ["tpl_contact_us", "tpl_integration_us"],
+    "depends": ["esmis_contact_us", "esmis_integration_us"],
 }
 ```
 
-Starter modules are the single entry point for installing {Project} in a specific country. They pull in the appropriate foundation, capability, and country-specific modules via their dependency chain.
+Starter modules are the single entry point for installing eSMIS in a specific country. They pull in the appropriate foundation, capability, and country-specific modules via their dependency chain.
 
 ### Localization Defaults
 
@@ -36,19 +36,19 @@ In addition to aggregating dependencies, starter modules configure the Odoo data
 
 These are applied once on install and will not overwrite admin customizations on upgrade.
 
-All `tpl_*` domain modules (foundation, capabilities, extensions) set `application=False`.
+All `esmis_*` domain modules (foundation, capabilities, extensions) set `application=False`.
 
 ### Country Module Installation
 
-Country-specific modules (`tpl_{domain}_{country}`) are **never** installed via `auto_install`. They are only installed as dependencies of a country starter module. This ensures a fresh Odoo database has zero `tpl_*` modules until an administrator explicitly installs a starter from the Apps menu.
+Country-specific modules (`esmis_{domain}_{country}`) are **never** installed via `auto_install`. They are only installed as dependencies of a country starter module. This ensures a fresh Odoo database has zero `esmis_*` modules until an administrator explicitly installs a starter from the Apps menu.
 
 ## Application Flag
 
 | Set `application=True` | Set `application=False` |
 |------------------------|-------------------------|
-| Starter modules (`tpl_starter_{country}`) | All `tpl_*` domain modules |
-| | Foundation modules (tpl_vocabulary, tpl_contact) |
-| | Capability modules (tpl_order, tpl_inventory) |
+| Starter modules (`esmis_starter_{country}`) | All `esmis_*` domain modules |
+| | Foundation modules (esmis_vocabulary, esmis_contact) |
+| | Capability modules (esmis_order, esmis_inventory) |
 | | Bridge/glue modules |
 | | Extensions, API modules, technical infra |
 
@@ -59,13 +59,13 @@ Use `auto_install` for modules that **only make sense when dependencies coexist*
 ```python
 # Bridge module - installs when BOTH dependencies present
 # Use list syntax to specify which deps trigger auto-install
-"depends": ["tpl_order", "tpl_procurement"],
-"auto_install": ["tpl_order", "tpl_procurement"],
+"depends": ["esmis_order", "esmis_procurement"],
+"auto_install": ["esmis_order", "esmis_procurement"],
 "application": False,
 
 # Extension module - installs when ANY dependency present
 # Use True only for single-dependency extensions
-"depends": ["tpl_vocabulary"],
+"depends": ["esmis_vocabulary"],
 "auto_install": True,
 "application": False,
 ```
@@ -74,50 +74,50 @@ Use `auto_install` for modules that **only make sense when dependencies coexist*
 > instead of `auto_install: True`. This ensures the module only installs when ALL
 > listed dependencies are present, not just one.
 
-> **Country modules:** `tpl_{domain}_{country}` modules must always set `auto_install=False`.
-> They are installed exclusively through country starter modules (`tpl_starter_{country}`).
+> **Country modules:** `esmis_{domain}_{country}` modules must always set `auto_install=False`.
+> They are installed exclusively through country starter modules (`esmis_starter_{country}`).
 
 ## Categories
 
 | Category | Use For |
 |----------|---------|
-| `{Project}/Core` | base, contact, area |
-| `{Project}/Operations` | order, inventory, procurement |
-| `{Project}/Identity` | identifiers, authentication |
-| `{Project}/Billing` | invoicing, payments |
-| `{Project}/Integration` | api, import_*, connectors |
-| `{Project}/Configuration` | studio, custom_field |
-| `{Project}/Reporting` | reports, dashboards |
+| `eSMIS/Core` | base, contact, area |
+| `eSMIS/Operations` | order, inventory, procurement |
+| `eSMIS/Identity` | identifiers, authentication |
+| `eSMIS/Billing` | invoicing, payments |
+| `eSMIS/Integration` | api, import_*, connectors |
+| `eSMIS/Configuration` | studio, custom_field |
+| `eSMIS/Reporting` | reports, dashboards |
 
-> **Note:** Some modules still use the top-level `{Project}` category without hierarchy.
+> **Note:** Some modules still use the top-level `eSMIS` category without hierarchy.
 > New modules should always use the hierarchical categories above.
-> Starter modules use the top-level `{Project}` category (no sub-hierarchy).
+> Starter modules use the top-level `eSMIS` category (no sub-hierarchy).
 
 ## Country Module Exclusions
 
 Country-specific modules must use Odoo's `excludes` manifest key to prevent conflicting country implementations from coexisting:
 
 ```python
-# tpl_contact_us/__manifest__.py
+# esmis_contact_us/__manifest__.py
 {
-    "excludes": ["tpl_contact_ke", "tpl_contact_ng"],
+    "excludes": ["esmis_contact_ke", "esmis_contact_ng"],
     ...
 }
 ```
 
 When Odoo encounters an `excludes` conflict at install time, it raises a `UserError`: *"Modules 'A' and 'B' are incompatible."*
 
-**Rule:** Every `tpl_{domain}_{country}` module must exclude all other `tpl_{domain}_{other_country}` modules. When adding a new country, update all existing country modules to exclude it.
+**Rule:** Every `esmis_{domain}_{country}` module must exclude all other `esmis_{domain}_{other_country}` modules. When adding a new country, update all existing country modules to exclude it.
 
 ## Decision Checklist
 
 When creating a module:
 
-- [ ] Is this a **country starter module** (`tpl_starter_{country}`)? → `application=True`
-- [ ] Is this any other `tpl_*` module? → `application=False`
+- [ ] Is this a **country starter module** (`esmis_starter_{country}`)? → `application=True`
+- [ ] Is this any other `esmis_*` module? → `application=False`
 - [ ] Does this **connect two existing non-country features**? → `auto_install=["dep1", "dep2"]`
 - [ ] Does this **extend a single non-country feature**? → `auto_install=True`
-- [ ] Is this a **country-specific module** (`tpl_{domain}_{country}`)? → `auto_install=False`, add `excludes` for other countries
+- [ ] Is this a **country-specific module** (`esmis_{domain}_{country}`)? → `auto_install=False`, add `excludes` for other countries
 
 ---
 

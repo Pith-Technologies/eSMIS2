@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-The API V2 (`tpl_api_v2`, planned) will provide machine-to-machine access to data for external systems
+The API V2 (`esmis_api_v2`, planned) will provide machine-to-machine access to data for external systems
 (partner organizations, integrating systems). It will run on Odoo 19 using FastAPI.
 
 Odoo provides built-in authorization via groups and record rules (`ir.rule`). The question is whether the API should
@@ -18,7 +18,7 @@ use Odoo's native authorization or implement its own.
    consented to share their data with the requesting organization. This consent can be:
    - Specific to an organization (`recipient_ids`)
    - Category-based (e.g., "all NGOs" via `organization_type`)
-   - Scoped to resource types and field sets (`tpl.consent.scope`)
+   - Scoped to resource types and field sets (`esmis.consent.scope`)
 
 2. **API clients are not Odoo users**: External systems authenticate via OAuth 2.0 (client credentials flow), not
    Odoo user sessions. The API runs as the Public user (uid=3).

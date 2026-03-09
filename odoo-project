@@ -135,7 +135,7 @@ DRY_RUN = False
 
 # Demo profiles available
 DEMO_PROFILES = {
-    "base": "tpl_vocabulary",
+    "base": "esmis_vocabulary",
 }
 
 
@@ -290,8 +290,8 @@ def cmd_test(args):
     if not args.module:
         print("Usage: ./odoo-project test <module> [--tags=...] [--local|--docker]")
         print("\nExamples:")
-        print("  ./odoo-project test tpl_vocabulary")
-        print("  ./odoo-project test tpl_vocabulary --tags=post_install")
+        print("  ./odoo-project test esmis_vocabulary")
+        print("  ./odoo-project test esmis_vocabulary --tags=post_install")
         sys.exit(1)
 
     module = args.module
@@ -836,7 +836,7 @@ def cmd_resetdb(args):
         sys.exit(1)
 
     db_name = args.db or "odoo"
-    modules = "tpl_vocabulary"
+    modules = "esmis_vocabulary"
 
     # Validate database name to prevent SQL injection
     if not _validate_db_name(db_name):
@@ -1172,13 +1172,13 @@ def cmd_help(_args):
         print(f"  {key:12} -> {modules}")
     print("")
     print("Examples:")
-    print("  ./odoo-project t tpl_vocabulary          # Run tests (using alias)")
+    print("  ./odoo-project t esmis_vocabulary          # Run tests (using alias)")
     print("  ./odoo-project s                         # Start with auto-reload")
     print("  ./odoo-project start --demo=base         # Start with base demo")
     print("  ./odoo-project start --wipe              # Wipe all data and start fresh")
     print("  ./odoo-project resetdb --demo=base start # Reset DB and start with base demo")
     print("  ./odoo-project r                         # Restart Odoo container")
-    print("  ./odoo-project u tpl_vocabulary          # Update a module")
+    print("  ./odoo-project u esmis_vocabulary          # Update a module")
     print("  ./odoo-project l -f                      # Follow Odoo logs")
     print("  ./odoo-project url --open                # Open in browser")
     print("")
@@ -1600,7 +1600,7 @@ def cmd_audit_modules(args):
     audit_prompt = (
         "Audit this Odoo module for compliance with project principles.\n\n"
         "Check for:\n"
-        "1. Naming: module/model/field names follow tpl_*/tpl.* conventions\n"
+        "1. Naming: module/model/field names follow esmis_*/esmis.* conventions\n"
         "2. Security: ir.model.access.csv exists and is complete\n"
         "3. No print() statements — should use _logger\n"
         "4. No bare except: clauses\n"
@@ -1732,18 +1732,18 @@ def cmd_init(args):
         sys.exit(1)
 
     # Check that template hasn't already been initialized
-    tpl_dirs = sorted(p for p in PROJECT_ROOT.iterdir() if p.is_dir() and p.name.startswith("tpl_"))
-    if not tpl_dirs:
-        error("No tpl_* directories found — this template appears to be already initialized")
+    esmis_dirs = sorted(p for p in PROJECT_ROOT.iterdir() if p.is_dir() and p.name.startswith("esmis_"))
+    if not esmis_dirs:
+        error("No esmis_* directories found — this template appears to be already initialized")
         sys.exit(1)
 
     # --- Build replacement map (most specific patterns first) ---
     replacements = [
-        ("tpl_", f"{prefix}_"),  # module names, XML IDs, CSV entries
-        ("tpl.", f"{prefix}."),  # Python model names (tpl.vocabulary)
-        ("tpl/", f"{prefix}/"),  # Odoo categories (tpl/Core)
-        ("tpl ", f"{prefix} "),  # display names (tpl Vocabulary)
-        ("{Project}", project_name),
+        ("esmis_", f"{prefix}_"),  # module names, XML IDs, CSV entries
+        ("esmis.", f"{prefix}."),  # Python model names (esmis.vocabulary)
+        ("esmis/", f"{prefix}/"),  # Odoo categories (esmis/Core)
+        ("esmis ", f"{prefix} "),  # display names (esmis Vocabulary)
+        ("eSMIS", project_name),
     ]
 
     # --- Collect files to process ---
@@ -1791,16 +1791,16 @@ def cmd_init(args):
                 filepath.write_text(new_content, encoding="utf-8")
             files_modified += 1
 
-    # --- Rename tpl_* directories ---
+    # --- Rename esmis_* directories ---
     # Sort by depth (deepest first) to avoid renaming parents before children
-    tpl_dirs_to_rename = sorted(
-        (p for p in PROJECT_ROOT.rglob("tpl_*") if p.is_dir() and ".git" not in p.parts),
+    esmis_dirs_to_rename = sorted(
+        (p for p in PROJECT_ROOT.rglob("esmis_*") if p.is_dir() and ".git" not in p.parts),
         key=lambda p: len(p.parts),
         reverse=True,
     )
 
-    for dir_path in tpl_dirs_to_rename:
-        new_name = dir_path.name.replace("tpl_", f"{prefix}_", 1)
+    for dir_path in esmis_dirs_to_rename:
+        new_name = dir_path.name.replace("esmis_", f"{prefix}_", 1)
         new_path = dir_path.parent / new_name
         rel_old = dir_path.relative_to(PROJECT_ROOT)
         rel_new = new_path.relative_to(PROJECT_ROOT)
@@ -2010,7 +2010,7 @@ def build_parser():
     subparsers.add_parser("doctor", help="Check prerequisites and environment")
 
     # init
-    p = subparsers.add_parser("init", help="Initialize from template (replace tpl_ prefix)")
+    p = subparsers.add_parser("init", help="Initialize from template (replace esmis_ prefix)")
     p.add_argument("prefix", help="Your project prefix (e.g., eh, myapp)")
     p.add_argument("project_name", help="Your project name (e.g., EHealth, MyApp)")
     p.add_argument("--dry-run", "-n", action="store_true", help="Show what would change without modifying files")
@@ -2095,7 +2095,7 @@ def interactive_mode():
 def expand_aliases(argv: list) -> list:
     """Expand command aliases in argv.
 
-    Example: ['t', 'tpl_vocabulary'] -> ['test', 'tpl_vocabulary']
+    Example: ['t', 'esmis_vocabulary'] -> ['test', 'esmis_vocabulary']
     """
     result = []
     for arg in argv:

@@ -17,7 +17,7 @@ How Claude Code is configured for this project and how to get the most out of it
 | `views/*.xml`, `data/*.xml` | `odoo-xml.md` | Odoo 19 view syntax, form layout, accessibility |
 | `security/*` | `security.md` | ACLs, groups, record rules, anti-patterns |
 | `tests/*.py` | `testing.md` | Coverage targets, Odoo test quirks, approval flows |
-| `tpl_*/*` domain modules | Domain-specific rules | Domain-specific patterns and constraints |
+| `esmis_*/*` domain modules | Domain-specific rules | Domain-specific patterns and constraints |
 | `__manifest__.py`, `readme/*` | `module-setup.md` | Module visibility, architecture, descriptions |
 
 ### NOT loaded automatically (read on demand)

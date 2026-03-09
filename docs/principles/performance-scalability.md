@@ -106,11 +106,11 @@ for record in records:
 ```python
 # When ORM is too slow
 self.env.cr.execute("""
-    UPDATE tpl_order
+    UPDATE esmis_order
     SET state = 'completed', completed_date = NOW()
     WHERE id = ANY(%s)
 """, (list(ids),))
-self.env['tpl.order'].invalidate_model()
+self.env['esmis.order'].invalidate_model()
 ```
 
 ## CEL Expression Scalability

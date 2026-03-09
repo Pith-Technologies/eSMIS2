@@ -24,7 +24,7 @@
 | Tests | ✅ Complete | 169 tests (~95% coverage), 23 test files |
 | Rate limiting | ❌ Not enforced | Model defined, middleware not implemented |
 
-**Code Location:** `tpl_api_v2/` module (planned)
+**Code Location:** `esmis_api_v2/` module (planned)
 
 ## Context
 
@@ -39,9 +39,9 @@ The system needs a robust API layer that:
 
 | Module | Purpose | Technology |
 |--------|---------|------------|
-| `tpl_api` | Base API with bearer tokens | JSON-RPC |
-| `tpl_api` | Resource CRUD | FastAPI + Pydantic |
-| `tpl_fhir_api_server` | FHIR-compliant registry access | Odoo HTTP Controller |
+| `esmis_api` | Base API with bearer tokens | JSON-RPC |
+| `esmis_api` | Resource CRUD | FastAPI + Pydantic |
+| `esmis_fhir_api_server` | FHIR-compliant registry access | Odoo HTTP Controller |
 | `fastapi` | OCA FastAPI integration | FastAPI + a2wsgi |
 | `extendable_fastapi` | Schema extension support | extendable-pydantic |
 
@@ -112,7 +112,7 @@ Adopt these patterns from FHIR without full compliance:
 #### 3.1 Capability Statement
 
 ```json
-GET /api/v2/tpl/metadata
+GET /api/v2/esmis/metadata
 
 {
   "resourceType": "CapabilityStatement",
@@ -143,7 +143,7 @@ GET /api/v2/tpl/metadata
   ],
   "extensions": [
     {
-      "module": "tpl_custom",
+      "module": "esmis_custom",
       "fields": ["custom_category", "tags", "priority"]
     }
   ]
@@ -155,7 +155,7 @@ GET /api/v2/tpl/metadata
 #### 3.2 Bundle Transactions
 
 ```json
-POST /api/v2/tpl/$batch
+POST /api/v2/esmis/$batch
 
 {
   "resourceType": "Bundle",
@@ -214,13 +214,13 @@ Per existing ADR-007, never expose database IDs:
 
 #### 4.1 Consent Model Enhancement
 
-Extend `tpl.consent` to support field-level consent:
+Extend `esmis.consent` to support field-level consent:
 
 ```python
 class ConsentScope(models.Model):
-    _name = "tpl.consent.scope"
+    _name = "esmis.consent.scope"
 
-    consent_id = fields.Many2one("tpl.consent")
+    consent_id = fields.Many2one("esmis.consent")
     resource_type = fields.Selection([
         ("individual", "Individual"),
         ("group", "Group"),
@@ -243,16 +243,16 @@ Each API client gets explicit scopes:
 
 ```python
 class ApiClientScope(models.Model):
-    _name = "tpl.api.client.scope"
+    _name = "esmis.api.client.scope"
 
-    client_id = fields.Many2one("tpl.api.client")
+    client_id = fields.Many2one("esmis.api.client")
     resource = fields.Selection([...])
     actions = fields.Selection([
         ("read", "Read"),
         ("search", "Search"),
         ("write", "Write"),
     ], multiple=True)
-    field_filter_id = fields.Many2one("tpl.api.field.filter")
+    field_filter_id = fields.Many2one("esmis.api.field.filter")
     require_consent = fields.Boolean(default=True)
 ```
 
@@ -263,7 +263,7 @@ def filter_response_by_consent(individual, api_client, response_data):
     """Filter response fields based on consent and client scope."""
 
     # Get active consent for this individual + client
-    consent = env["tpl.consent"].search([
+    consent = env["esmis.consent"].search([
         ("partner_id", "=", individual.id),
         ("third_party_id", "=", api_client.partner_id.id),
         ("expiry", ">", fields.Date.today()),
@@ -286,7 +286,7 @@ Handle modules that add fields to resources:
 
 ```python
 class ApiExtension(models.Model):
-    _name = "tpl.api.extension"
+    _name = "esmis.api.extension"
     _description = "API Extension Registry"
 
     name = fields.Char(required=True)
@@ -314,7 +314,7 @@ class ApiExtension(models.Model):
 ```python
 # In a domain module
 class CustomExtension(models.Model):
-    _inherit = "tpl.api.extension"
+    _inherit = "esmis.api.extension"
 
     @api.model
     def _register_extension(self):
@@ -322,8 +322,8 @@ class CustomExtension(models.Model):
             "name": "Custom Extension",
             "base_resource": "individual",
             "field_ids": [(6, 0, [
-                self.env.ref("tpl_custom.field_category").id,
-                self.env.ref("tpl_custom.field_tags").id,
+                self.env.ref("esmis_custom.field_category").id,
+                self.env.ref("esmis_custom.field_tags").id,
             ])],
         })
 ```
@@ -331,7 +331,7 @@ class CustomExtension(models.Model):
 #### 5.3 Response with Extensions
 
 ```json
-GET /api/v2/tpl/individual/ID-123456789?_extensions=extra_fields
+GET /api/v2/esmis/individual/ID-123456789?_extensions=extra_fields
 
 {
   "identifier": [...],
@@ -355,7 +355,7 @@ GET /api/v2/tpl/individual/ID-123456789?_extensions=extra_fields
 ### 6. API Module Structure (planned)
 
 ```
-tpl_api_v2/                       # Planned module
+esmis_api_v2/                       # Planned module
 ├── models/
 │   ├── api_client.py            # Client credentials + scopes
 │   ├── api_extension.py         # Extension registry
@@ -378,9 +378,9 @@ tpl_api_v2/                       # Planned module
 ### 7. Versioning Strategy
 
 ```
-/api/v2/tpl/...          # Current stable
-/api/v3/tpl/...          # Next major (when needed)
-/api/v2-beta/tpl/...     # Preview features
+/api/v2/esmis/...          # Current stable
+/api/v3/esmis/...          # Next major (when needed)
+/api/v2-beta/esmis/...     # Preview features
 
 Response headers:
 X-API-Version: 2.0.0

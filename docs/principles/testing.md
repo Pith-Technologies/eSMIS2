@@ -13,7 +13,7 @@ Quality requirements for Odoo 19 module development.
 
 ### Current Coverage Gaps
 
-> **Note:** Foundation modules (`tpl_vocabulary`) should
+> **Note:** Foundation modules (`esmis_vocabulary`) should
 > maintain comprehensive test coverage as reference implementations.
 
 ### Enforcing Coverage
@@ -23,7 +23,7 @@ targets per module type (see table above). CI fails the build if any module fall
 its threshold. Locally, use `--coverage` with the test script:
 
 ```bash
-./scripts/test_single_module.sh tpl_vocabulary --coverage
+./scripts/test_single_module.sh esmis_vocabulary --coverage
 ```
 
 ## Test Types
@@ -171,7 +171,7 @@ This is enforced by pre-commit hook `no-assertraises-tuple`.
 
 ```bash
 # Single module
-odoo-bin -d test_db -u tpl_vocabulary --test-enable --stop-after-init
+odoo-bin -d test_db -u esmis_vocabulary --test-enable --stop-after-init
 
 # With coverage
 coverage run odoo-bin ... && coverage report -m

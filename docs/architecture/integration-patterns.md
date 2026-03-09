@@ -20,37 +20,37 @@ validations on top of Odoo's proven ERP foundation.
 
 ## Custom Models
 
-These have no Odoo base equivalent and are purely `tpl.*`:
+These have no Odoo base equivalent and are purely `esmis.*`:
 
 | Model                       | Purpose                                      |
 | --------------------------- | -------------------------------------------- |
-| `tpl.project`          | Core project/record tracking, workflows      |
-| `tpl.task`             | Task management with assignments             |
-| `tpl.note`             | Documentation with signing/approval          |
-| `tpl.observation`      | Measurements, readings, data points          |
-| `tpl.request`          | Requests and order management                |
-| `tpl.review`           | Review and approval records                  |
+| `esmis.project`          | Core project/record tracking, workflows      |
+| `esmis.task`             | Task management with assignments             |
+| `esmis.note`             | Documentation with signing/approval          |
+| `esmis.observation`      | Measurements, readings, data points          |
+| `esmis.request`          | Requests and order management                |
+| `esmis.review`           | Review and approval records                  |
 
 ## Odoo Module Dependencies
 
 ```
-tpl_vocabulary → base (res.partner)
-tpl_project → tpl_vocabulary
-tpl_note → tpl_project
-tpl_warehouse → tpl_project, stock
-tpl_service → tpl_project
-tpl_billing → tpl_project, account
-tpl_api → tpl_vocabulary, tpl_project (+ all domain modules)
+esmis_vocabulary → base (res.partner)
+esmis_project → esmis_vocabulary
+esmis_note → esmis_project
+esmis_warehouse → esmis_project, stock
+esmis_service → esmis_project
+esmis_billing → esmis_project, account
+esmis_api → esmis_vocabulary, esmis_project (+ all domain modules)
 ```
 
 ## Security Integration
 
 Custom access control layers on top of Odoo's group-based security:
 
-- `group_tpl_viewer` — read records
-- `group_tpl_officer` — create/edit records (operators, staff)
-- `group_tpl_manager` — full access including configuration
-- `group_tpl_admin` — manage system configuration
+- `group_esmis_viewer` — read records
+- `group_esmis_officer` — create/edit records (operators, staff)
+- `group_esmis_manager` — full access including configuration
+- `group_esmis_admin` — manage system configuration
 - Emergency override with audit trail (when applicable)
 
 Record rules ensure users only see records in their assigned scope (company, department, team).
@@ -61,7 +61,7 @@ Principles for maintaining Odoo upgrade compatibility:
 
 - Never modify Odoo core files — only extend via `_inherit`
 - Use `hook` methods for customization points
-- Store custom fields in `tpl_*` modules, not in Odoo module data
+- Store custom fields in `esmis_*` modules, not in Odoo module data
 - Test against Odoo nightlies periodically
 
 ## Related Documents

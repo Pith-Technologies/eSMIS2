@@ -19,7 +19,7 @@ on:
         options:
           - all
           # Add demo modules here as they are created
-          - tpl_vocabulary
+          - esmis_vocabulary
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -79,7 +79,7 @@ jobs:
       matrix:
         include:
           # Add demo modules here as they are created
-          - demo: tpl_vocabulary
+          - demo: esmis_vocabulary
             name: "Vocabulary"
 
     name: ${{ matrix.name }}

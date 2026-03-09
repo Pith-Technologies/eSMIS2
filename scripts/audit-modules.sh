@@ -8,7 +8,7 @@
 #
 # Usage:
 #   ./scripts/audit-modules.sh                   # Audit all modules (report only)
-#   ./scripts/audit-modules.sh tpl_api      # Audit single module
+#   ./scripts/audit-modules.sh esmis_api      # Audit single module
 #   ./scripts/audit-modules.sh --fix             # Auto-fix simple issues
 #   ./scripts/audit-modules.sh --commit          # Auto-fix and commit each module
 
@@ -63,7 +63,7 @@ Use ONLY this inlined material for the principles; do not open or read any addit
 documentation files from disk.
 
 Check for:
-1. Naming: module/model/field names follow tpl_*/tpl.* conventions
+1. Naming: module/model/field names follow esmis_*/esmis.* conventions
 2. Security: ir.model.access.csv exists and is complete
 3. No print() statements - should use _logger
 4. No bare except: clauses

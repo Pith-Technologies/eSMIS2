@@ -3,12 +3,12 @@
 # Embeds audit logic directly to avoid subprocess parsing issues.
 #
 # Usage:
-#   ./scripts/fix-security.sh tpl_api                    # Fix single module
-#   ./scripts/fix-security.sh tpl_api tpl_vocabulary # Fix multiple modules
+#   ./scripts/fix-security.sh esmis_api                    # Fix single module
+#   ./scripts/fix-security.sh esmis_api esmis_vocabulary # Fix multiple modules
 #   ./scripts/fix-security.sh --all                            # Fix all modules with issues
-#   ./scripts/fix-security.sh --dry-run tpl_api          # Show what would be fixed
-#   ./scripts/fix-security.sh --mechanical-only tpl_api  # Only do mechanical fixes (no AI)
-#   ./scripts/fix-security.sh --details tpl_api          # Show detailed output
+#   ./scripts/fix-security.sh --dry-run esmis_api          # Show what would be fixed
+#   ./scripts/fix-security.sh --mechanical-only esmis_api  # Only do mechanical fixes (no AI)
+#   ./scripts/fix-security.sh --details esmis_api          # Show detailed output
 
 set -euo pipefail
 
@@ -201,20 +201,20 @@ audit_security_groups() {
             log_audit_issue "ERROR" "MENU-GROUPS-FIELD" "$xml_file" "Uses 'groups_id' instead of 'group_ids' (Odoo 19)"
         fi
 
-        # Replace tpl_security with your project's security module name
-        if [[ "$module" != "tpl_security" ]]; then
+        # Replace esmis_security with your project's security module name
+        if [[ "$module" != "esmis_security" ]]; then
             if grep -q 'model="ir.module.category"' "$xml_file"; then
-                log_audit_issue "WARNING" "GROUPS-CATEGORY-DEF" "$xml_file" "Defines ir.module.category (should only be in tpl_security)"
+                log_audit_issue "WARNING" "GROUPS-CATEGORY-DEF" "$xml_file" "Defines ir.module.category (should only be in esmis_security)"
             fi
         fi
     done
 
     local manifest="$module_path/__manifest__.py"
-    # Replace tpl_security with your project's security module name
-    if [[ -f "$manifest" && "$module" != "tpl_security" ]]; then
-        if ! grep -q "tpl_security" "$manifest"; then
+    # Replace esmis_security with your project's security module name
+    if [[ -f "$manifest" && "$module" != "esmis_security" ]]; then
+        if ! grep -q "esmis_security" "$manifest"; then
             if ls "$module_path"/security/*.xml 2>/dev/null | head -1 | grep -q .; then
-                log_audit_issue "WARNING" "GROUPS-DEPENDENCY" "$manifest" "Has security files but doesn't depend on tpl_security"
+                log_audit_issue "WARNING" "GROUPS-DEPENDENCY" "$manifest" "Has security files but doesn't depend on esmis_security"
             fi
         fi
     fi
@@ -362,8 +362,8 @@ Goal: Fix the access rights compliance issues reported for this module while pre
 ### Three-Tier Architecture
 ```
 TIER 1: ROLES (Composite)           ← Cross-domain, optional
-├── role_tpl_field_officer
-└── role_tpl_supervisor
+├── role_esmis_field_officer
+└── role_esmis_supervisor
 
 TIER 2: FUNCTIONAL PRIVILEGES       ← User-facing, per domain
 ├── group_{domain}_viewer
@@ -385,19 +385,19 @@ TIER 3: BASE PERMISSIONS            ← Technical, granular
 
 ### ACL Entry ID Naming Convention
 ACL entry IDs MUST follow the pattern: `access_{model}_{group}`
-- `{model}` - Model name with underscores (e.g., `tpl_program`, `res_partner`)
+- `{model}` - Model name with underscores (e.g., `esmis_program`, `res_partner`)
 - `{group}` - Short group identifier (e.g., `viewer`, `officer`, `manager`, `admin`)
 
 Examples:
 ```csv
-access_tpl_{domain}_officer,tpl.{domain} officer,tpl_{domain}.model_tpl_{domain},group_{domain}_officer,1,1,1,0
+access_esmis_{domain}_officer,esmis.{domain} officer,esmis_{domain}.model_esmis_{domain},group_{domain}_officer,1,1,1,0
 access_res_partner_{domain}_viewer,res.partner viewer,base.model_res_partner,group_{domain}_viewer,1,0,0,0
 ```
 
 Anti-patterns to fix:
-- `user_access_tpl_api_log` → `access_tpl_api_log_user` (no prefix)
-- `tpl_area_admin` → `access_tpl_area_admin`
-- `attendance_subscriber_manager` → `access_tpl_attendance_subscriber_manager`
+- `user_access_esmis_api_log` → `access_esmis_api_log_user` (no prefix)
+- `esmis_area_admin` → `access_esmis_area_admin`
+- `attendance_subscriber_manager` → `access_esmis_attendance_subscriber_manager`
 
 ### Record Rules Requirements
 1. Never use empty domains `[]` with write/create/unlink permissions
@@ -406,8 +406,8 @@ Anti-patterns to fix:
 4. Wrap ir.rule records in `<data noupdate="1">`
 
 ### Namespace Requirements
-- All XML IDs must use `tpl_*` prefix
-- All model references must use `tpl.*`
+- All XML IDs must use `esmis_*` prefix
+- All model references must use `esmis.*`
 
 ## Instructions
 
@@ -449,7 +449,7 @@ Anti-patterns to fix:
   ```xml
   <record id="privilege_module_officer" model="res.groups.privilege">
       <field name="name">Module Officer</field>
-      <field name="category_id" ref="tpl_security.module_category_tpl"/>
+      <field name="category_id" ref="esmis_security.module_category_tpl"/>
   </record>
   <record id="group_module_officer" model="res.groups">
       <field name="name">Officer</field>

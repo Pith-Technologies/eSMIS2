@@ -16,7 +16,7 @@ A batteries-included template for building Odoo 19 projects with consistent modu
 | Placeholder  | Where                                  | Replace With         | Example              |
 | ------------ | -------------------------------------- | -------------------- | -------------------- |
 | `tpl`        | Module names, model names, code        | Your project prefix  | `eh`, `myapp`        |
-| `{Project}`  | Documentation, manifest categories     | Your project name    | `EHealth`, `MyApp`   |
+| `eSMIS`  | Documentation, manifest categories     | Your project name    | `EHealth`, `MyApp`   |
 
 Use `--dry-run` to preview: `./odoo-project init --dry-run eh EHealth`
 
@@ -45,7 +45,7 @@ A single entry point for running, testing, and managing your Odoo project locall
 ./odoo-project doctor                    # check prerequisites
 ./odoo-project build                     # build Docker image
 ./odoo-project start                     # start Odoo at http://localhost:8069
-./odoo-project test tpl_vocabulary       # run tests
+./odoo-project test esmis_vocabulary       # run tests
 ./odoo-project stop                      # stop all services
 ```
 
@@ -93,7 +93,7 @@ Every command has a short alias shown in parentheses.
 ./odoo-project start
 # ... make code changes ...
 ./odoo-project update                    # auto-detect changed modules
-./odoo-project test tpl_vocabulary       # run tests
+./odoo-project test esmis_vocabulary       # run tests
 ./odoo-project lint                      # lint changed files
 ```
 
@@ -108,7 +108,7 @@ Every command has a short alias shown in parentheses.
 **Before a PR:**
 
 ```bash
-./odoo-project test tpl_vocabulary
+./odoo-project test esmis_vocabulary
 ./odoo-project lint
 ```
 
@@ -191,7 +191,7 @@ See [Claude Code for Developers](docs/guides/claude-code-for-developers.md) for 
 │   └── zap/                 # OWASP ZAP security scanning
 ├── tests/                   # Cross-module integration tests
 ├── tools/                   # Developer tooling and utilities
-├── tpl_vocabulary/          # Example module (rename tpl_ to your prefix)
+├── esmis_vocabulary/          # Example module (rename esmis_ to your prefix)
 ├── .claude/                 # Claude Code configuration and rules
 ├── .github/                 # GitHub Actions workflows and templates
 ├── CLAUDE.md                # Claude Code project instructions
@@ -204,11 +204,11 @@ See [Claude Code for Developers](docs/guides/claude-code-for-developers.md) for 
 Dependencies flow downward — higher layers depend on lower ones, never the reverse.
 
 ```
-Layer 3: DOMAIN EXTENSIONS (tpl_reports, tpl_api)
+Layer 3: DOMAIN EXTENSIONS (esmis_reports, esmis_api)
     ↓
-Layer 2: DOMAIN CORE (tpl_sale, tpl_inventory, tpl_hr)
+Layer 2: DOMAIN CORE (esmis_sale, esmis_inventory, esmis_hr)
     ↓
-Layer 1: FOUNDATION (tpl_security, tpl_vocabulary)
+Layer 1: FOUNDATION (esmis_security, esmis_vocabulary)
     ↓
 Layer 0: ODOO CORE (base, hr, stock, account, calendar)
 ```

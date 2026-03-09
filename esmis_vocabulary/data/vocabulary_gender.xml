@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- ISO 5218: Codes for the representation of human sexes -->
-    <record id="vocab_gender" model="tpl.vocabulary">
+    <record id="vocab_gender" model="esmis.vocabulary">
         <field name="name">Gender</field>
         <field name="namespace_uri">urn:iso:std:iso:5218</field>
         <field name="version">2004</field>
@@ -11,7 +11,7 @@
         <field name="domain">core</field>
     </record>
 
-    <record id="code_gender_not_known" model="tpl.vocabulary.code">
+    <record id="code_gender_not_known" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_gender"/>
         <field name="code">0</field>
         <field name="display">Not Known</field>
@@ -19,21 +19,21 @@
         <field name="sequence">10</field>
     </record>
 
-    <record id="code_gender_male" model="tpl.vocabulary.code">
+    <record id="code_gender_male" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_gender"/>
         <field name="code">1</field>
         <field name="display">Male</field>
         <field name="sequence">20</field>
     </record>
 
-    <record id="code_gender_female" model="tpl.vocabulary.code">
+    <record id="code_gender_female" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_gender"/>
         <field name="code">2</field>
         <field name="display">Female</field>
         <field name="sequence">30</field>
     </record>
 
-    <record id="code_gender_not_applicable" model="tpl.vocabulary.code">
+    <record id="code_gender_not_applicable" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_gender"/>
         <field name="code">9</field>
         <field name="display">Not Applicable</field>

@@ -13,7 +13,7 @@ Generated tests cover:
 5. Action access restrictions
 
 Usage:
-    python -m scripts.compliance.test_generator tpl_vocabulary
+    python -m scripts.compliance.test_generator esmis_vocabulary
     python -m scripts.compliance.test_generator --all
     python -m scripts.compliance.test_generator --all --output-dir tests/generated
 """
@@ -190,7 +190,7 @@ def _generate_base_class(spec: ComplianceSpec) -> list[str]:
             '        cls.user_manager = cls.role_users.get("manager")',
             "",
             "        # Admin user",
-            '        admin_group = safe_ref("tpl_security.group_tpl_admin")',
+            '        admin_group = safe_ref("esmis_security.group_esmis_admin")',
             '        cls.user_admin = cls._create_test_user("admin", admin_group)',
             "",
             "    @classmethod",
@@ -844,7 +844,7 @@ def _generate_admin_linkage_tests(spec: ComplianceSpec) -> list[str]:
             "",
             "    def test_admin_group_implies_manager(self):",
             f'        """Test admin group implies {manager_group}."""',
-            '        admin_group = self.env.ref("tpl_security.group_tpl_admin", raise_if_not_found=False)',
+            '        admin_group = self.env.ref("esmis_security.group_esmis_admin", raise_if_not_found=False)',
             f'        manager_group = self.env.ref("{spec.module}.{manager_group}", raise_if_not_found=False)',
             "        if not admin_group or not manager_group:",
             '            self.skipTest("Required groups not found")',
@@ -922,10 +922,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s tpl_vocabulary         # Generate tests for single module
+  %(prog)s esmis_vocabulary         # Generate tests for single module
   %(prog)s --all                            # Generate tests for all modules
   %(prog)s --all --output-dir tests/        # Output to specific directory
-  %(prog)s tpl_vocabulary --dry-run       # Preview without writing
+  %(prog)s esmis_vocabulary --dry-run       # Preview without writing
 """,
     )
     parser.add_argument("module", nargs="?", help="Module name")

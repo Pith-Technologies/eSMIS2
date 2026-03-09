@@ -1,9 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_tpl_vocabulary_system,tpl.vocabulary / System,model_tpl_vocabulary,base.group_system,1,1,1,1
-access_tpl_vocabulary_user,tpl.vocabulary / User,model_tpl_vocabulary,base.group_user,1,0,0,0
-access_tpl_vocabulary_officer,tpl.vocabulary / Officer,model_tpl_vocabulary,group_vocabulary_officer,1,1,1,0
-access_tpl_vocabulary_manager,tpl.vocabulary / Manager,model_tpl_vocabulary,group_vocabulary_manager,1,1,1,1
-access_tpl_vocabulary_code_system,tpl.vocabulary.code / System,model_tpl_vocabulary_code,base.group_system,1,1,1,1
-access_tpl_vocabulary_code_user,tpl.vocabulary.code / User,model_tpl_vocabulary_code,base.group_user,1,0,0,0
-access_tpl_vocabulary_code_officer,tpl.vocabulary.code / Officer,model_tpl_vocabulary_code,group_vocabulary_officer,1,1,1,0
-access_tpl_vocabulary_code_manager,tpl.vocabulary.code / Manager,model_tpl_vocabulary_code,group_vocabulary_manager,1,1,1,1

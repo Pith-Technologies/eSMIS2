@@ -18,7 +18,7 @@ Run `audit-security` regularly (it's fast). Run `audit-modules` before a PR on m
 ./odoo-project audit-security
 
 # Audit a single module
-./odoo-project audit-security tpl_inventory
+./odoo-project audit-security esmis_inventory
 
 # Generate markdown report
 ./odoo-project audit-security --report
@@ -30,12 +30,12 @@ Run `audit-security` regularly (it's fast). Run `audit-modules` before a PR on m
 ### Understanding the output
 
 ```
-[tpl_inventory] Auditing...
+[esmis_inventory] Auditing...
   [ERROR] GROUPS-CATEGORY: Group 'group_inventory_officer' uses category_id (Odoo 19 violation - use privilege_id instead)
-         File: tpl_inventory/security/security_groups.xml
+         File: esmis_inventory/security/security_groups.xml
   [WARN] ACL-NAMING: Entry 'inventory_officer_access' doesn't follow 'access_{model}_{group}' pattern
-         File: tpl_inventory/security/ir.model.access.csv
-[tpl_inventory] Errors: 1, Warnings: 1
+         File: esmis_inventory/security/ir.model.access.csv
+[esmis_inventory] Errors: 1, Warnings: 1
 
 ========================================
 AUDIT SUMMARY
@@ -45,7 +45,7 @@ Total errors:   1
 Total warnings: 1
 
 Modules with issues:
-  tpl_inventory: 1 errors, 1 warnings
+  esmis_inventory: 1 errors, 1 warnings
 
 Detailed report saved to: reports/security/audit-report.md
 ```
@@ -76,13 +76,13 @@ Errors block the CI pipeline. Warnings should be fixed but do not block. The ful
 ./odoo-project audit-modules
 
 # Audit a single module
-./odoo-project audit-modules tpl_inventory
+./odoo-project audit-modules esmis_inventory
 
 # Auto-fix simple issues
-./odoo-project audit-modules --fix tpl_inventory
+./odoo-project audit-modules --fix esmis_inventory
 
 # Auto-fix and commit each module
-./odoo-project audit-modules --fix --commit tpl_inventory
+./odoo-project audit-modules --fix --commit esmis_inventory
 ```
 
 Results are saved as JSON files in `reports/compliance/`. A summary is written to `reports/compliance/summary.json`.
@@ -93,13 +93,13 @@ The AI audit checks: naming conventions, ACL completeness, `print()` usage, bare
 
 ```bash
 # Fix a single module (mechanical fixes + AI if cursor-agent/claude available)
-./odoo-project fix-security tpl_inventory
+./odoo-project fix-security esmis_inventory
 
 # Preview what would change without writing files
-./odoo-project fix-security --dry-run tpl_inventory
+./odoo-project fix-security --dry-run esmis_inventory
 
 # Only apply mechanical fixes (no AI)
-./odoo-project fix-security --mechanical-only tpl_inventory
+./odoo-project fix-security --mechanical-only esmis_inventory
 
 # Fix all modules that have issues
 ./odoo-project fix-security --all
@@ -119,7 +119,7 @@ This project uses a three-tier hierarchy for access control. See `docs/principle
 
 ```
 Tier 1: ROLES (composite, cross-domain)
-    role_tpl_field_officer, role_tpl_supervisor
+    role_esmis_field_officer, role_esmis_supervisor
 
 Tier 2: FUNCTIONAL PRIVILEGES (user-facing, per domain)
     group_inventory_viewer, group_inventory_officer, group_inventory_manager
@@ -136,26 +136,26 @@ File: `security/ir.model.access.csv`
 
 ```csv
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_tpl_stock_move_viewer,tpl.stock.move viewer,model_tpl_stock_move,group_inventory_viewer,1,0,0,0
-access_tpl_stock_move_officer,tpl.stock.move officer,model_tpl_stock_move,group_inventory_officer,1,1,1,0
-access_tpl_stock_move_manager,tpl.stock.move manager,model_tpl_stock_move,group_inventory_manager,1,1,1,1
+access_esmis_stock_move_viewer,esmis.stock.move viewer,model_esmis_stock_move,group_inventory_viewer,1,0,0,0
+access_esmis_stock_move_officer,esmis.stock.move officer,model_esmis_stock_move,group_inventory_officer,1,1,1,0
+access_esmis_stock_move_manager,esmis.stock.move manager,model_esmis_stock_move,group_inventory_manager,1,1,1,1
 ```
 
 ### ACL entry ID naming
 
 IDs must follow `access_{model}_{group}`:
 
-- `{model}` — model name with underscores, no dots (`tpl_stock_move`, `res_partner`)
+- `{model}` — model name with underscores, no dots (`esmis_stock_move`, `res_partner`)
 - `{group}` — short group identifier (`viewer`, `officer`, `manager`, `admin`)
 
 ```
 # Correct
-access_tpl_stock_move_officer
+access_esmis_stock_move_officer
 access_res_partner_registry_viewer
 
 # Wrong — don't prefix with user/manager/module name
-user_access_tpl_stock_move
-tpl_inventory_officer_access
+user_access_esmis_stock_move
+esmis_inventory_officer_access
 stock_move_manager
 ```
 
@@ -164,7 +164,7 @@ stock_move_manager
 Models that hold lookup values (vocabulary codes, terminology, configuration) must be readable by all internal users:
 
 ```csv
-access_tpl_stock_type_user,tpl.stock.type user,model_tpl_stock_type,base.group_user,1,0,0,0
+access_esmis_stock_type_user,esmis.stock.type user,model_esmis_stock_type,base.group_user,1,0,0,0
 ```
 
 Write access for reference data stays restricted to managers and admins.
@@ -202,7 +202,7 @@ Create a `res.groups.privilege` record before using it on a group:
 ```xml
 <record id="privilege_inventory_officer" model="res.groups.privilege">
     <field name="name">Inventory Officer</field>
-    <field name="category_id" ref="tpl_security.module_category_tpl_operations"/>
+    <field name="category_id" ref="esmis_security.module_category_esmis_operations"/>
 </record>
 ```
 
@@ -225,7 +225,7 @@ The privilege must appear before the group that references it in the same XML fi
 ```xml
 <record id="rule_stock_move_company" model="ir.rule">
     <field name="name">Stock Move: Multi-Company</field>
-    <field name="model_id" ref="model_tpl_stock_move"/>
+    <field name="model_id" ref="model_esmis_stock_move"/>
     <field name="domain_force">[
         '|', ('company_id', '=', False), ('company_id', 'in', company_ids)
     ]</field>
@@ -239,7 +239,7 @@ The privilege must appear before the group that references it in the same XML fi
 <!-- Officer sees own records -->
 <record id="rule_stock_move_officer_scope" model="ir.rule">
     <field name="name">Stock Move: Officer Scope</field>
-    <field name="model_id" ref="model_tpl_stock_move"/>
+    <field name="model_id" ref="model_esmis_stock_move"/>
     <field name="domain_force">[('create_uid', '=', user.id)]</field>
     <field name="groups" eval="[(4, ref('group_inventory_officer'))]"/>
 </record>
@@ -247,7 +247,7 @@ The privilege must appear before the group that references it in the same XML fi
 <!-- Manager sees all records -->
 <record id="rule_stock_move_manager_all" model="ir.rule">
     <field name="name">Stock Move: Manager All Access</field>
-    <field name="model_id" ref="model_tpl_stock_move"/>
+    <field name="model_id" ref="model_esmis_stock_move"/>
     <field name="domain_force">[(1, '=', 1)]</field>
     <field name="groups" eval="[(4, ref('group_inventory_manager'))]"/>
 </record>
@@ -309,7 +309,7 @@ Replace `category_id` with `privilege_id`. Create the `res.groups.privilege` rec
 <!-- Add this BEFORE the group record -->
 <record id="privilege_xyz" model="res.groups.privilege">
     <field name="name">XYZ Officer</field>
-    <field name="category_id" ref="tpl_security.module_category_tpl"/>
+    <field name="category_id" ref="esmis_security.module_category_tpl"/>
 </record>
 
 <!-- Then update the group -->
@@ -351,13 +351,13 @@ After running `fix-security` or making manual security changes:
 1. Re-run the audit to confirm the error count dropped to zero:
 
 ```bash
-./odoo-project audit-security tpl_inventory
+./odoo-project audit-security esmis_inventory
 ```
 
 2. Run module tests — security changes can break existing tests:
 
 ```bash
-./odoo-project test tpl_inventory
+./odoo-project test esmis_inventory
 ```
 
 3. Search for broken cross-module references if you renamed any group IDs or ACL entry IDs:

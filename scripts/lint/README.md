@@ -138,8 +138,8 @@ python scripts/lint/odoo_lint.py --severity warning
 
 Validates:
 
-- Module names follow `tpl_*` pattern (when prefix is configured)
-- Model names use `tpl.*` namespace (when prefix is configured)
+- Module names follow `esmis_*` pattern (when prefix is configured)
+- Model names use `esmis.*` namespace (when prefix is configured)
 - Boolean fields use `is_*` or `has_*` prefix
 - Many2one fields end with `_id`
 - One2many/Many2many fields end with `_ids`
@@ -163,11 +163,11 @@ Validates XML record IDs follow conventions:
 
 | Model                   | Pattern                  | Example                |
 | ----------------------- | ------------------------ | ---------------------- |
-| `ir.ui.view`            | `view_{model}_{type}`    | `view_tpl_entity_form` |
-| `ir.actions.act_window` | `action_{model}`         | `action_tpl_entity`    |
-| `ir.ui.menu`            | `menu_{model}`           | `menu_tpl_entity`      |
+| `ir.ui.view`            | `view_{model}_{type}`    | `view_esmis_entity_form` |
+| `ir.actions.act_window` | `action_{model}`         | `action_esmis_entity`    |
+| `ir.ui.menu`            | `menu_{model}`           | `menu_esmis_entity`      |
 | `res.groups`            | `group_{domain}_{level}` | `group_entity_officer` |
-| `ir.module.category`    | `category_{domain}`      | `category_tpl_entity`  |
+| `ir.module.category`    | `category_{domain}`      | `category_esmis_entity`  |
 | `ir.rule`               | `rule_{model}_{purpose}` | `rule_partner_company` |
 
 ```bash

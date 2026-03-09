@@ -45,7 +45,7 @@ jobs:
       - name: Run tests
         run: oca_run_tests
         env:
-          ADDONS: tpl_vocabulary
+          ADDONS: esmis_vocabulary
 
       - uses: codecov/codecov-action@v4
         with:

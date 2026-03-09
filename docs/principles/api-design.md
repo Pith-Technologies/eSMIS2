@@ -1,6 +1,6 @@
 # API Design Principles
 
-Standards for building APIs in {Project}.
+Standards for building APIs in eSMIS.
 
 ## Core Principles
 
@@ -32,13 +32,13 @@ Standards for building APIs in {Project}.
 
 **Why:** Integrated systems require stable, external IDs for cross-system references.
 
-## Use `tpl.identifier` for All Identifiers
+## Use `esmis.identifier` for All Identifiers
 
 ```python
 # Single system for flexible + external IDs
-tpl.vocabulary.code  # Configuration: identifier types (National ID, Tax ID, etc.)
-tpl.identifier       # Storage: partner_id, type_id, system_uri, value
-res.partner.identifier_ids → Many tpl.identifier records
+esmis.vocabulary.code  # Configuration: identifier types (National ID, Tax ID, etc.)
+esmis.identifier       # Storage: partner_id, type_id, system_uri, value
+res.partner.identifier_ids → Many esmis.identifier records
 ```
 
 ## API Response Pattern
@@ -59,19 +59,19 @@ res.partner.identifier_ids → Many tpl.identifier records
 - Deprecation warnings in response headers
 
 ```python
-@route('/api/v2/tpl/contacts/<id>')
+@route('/api/v2/esmis/contacts/<id>')
 ```
 
 ## Namespace Convention
 
-All APIs use the `tpl.*` namespace:
+All APIs use the `esmis.*` namespace:
 
-- Models: `tpl.{domain}` or `tpl.{domain}.{entity}`
-- REST mixins: `tpl.process.individual.rest.mixin`, `tpl.process.group.rest.mixin`
+- Models: `esmis.{domain}` or `esmis.{domain}.{entity}`
+- REST mixins: `esmis.process.individual.rest.mixin`, `esmis.process.group.rest.mixin`
 
 ## Field Filtering
 
-Use `tpl.api.path` model for configuration:
+Use `esmis.api.path` model for configuration:
 
 ```
 API Path → field_ids → Only these fields returned
@@ -90,7 +90,7 @@ API Path → field_ids → Only these fields returned
 
 - OAuth 2.0 for external APIs
 - API keys with scoped permissions
-- Audit logging via `tpl_api.log`
+- Audit logging via `esmis_api.log`
 
 ---
 
