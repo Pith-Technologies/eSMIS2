@@ -8,7 +8,7 @@ classification, encryption, consent management, access control, audit logging, b
 response, and privacy-by-design patterns.
 
 > **Relationship to existing ADRs:** This research extends and deepens the patterns described
-> in ADR-011 (Data Classification), ADR-012 (PII Encryption Strategy), and ADR-025 (Student
+> in ADR-005 (Data Classification), ADR-006 (PII Encryption Strategy), and ADR-012 (Student
 > Data Privacy). Where those ADRs establish *what* to build, this document provides *how* —
 > implementation patterns, edge cases, and trade-off analysis.
 
@@ -33,7 +33,7 @@ response, and privacy-by-design patterns.
 ### 1.1 Field Classification Taxonomy
 
 Student data fields must be classified into tiers that determine encryption, masking, access
-control, audit, and export behavior. The classification below builds on ADR-011's four-tier
+control, audit, and export behavior. The classification below builds on ADR-005's four-tier
 taxonomy (Public, Internal, Confidential, Restricted) and maps it to specific SIS fields.
 
 #### Tier 0: Public
@@ -135,7 +135,7 @@ field is sensitive. The masking pattern depends on the field type.
 | Full redaction | Health, counseling, disciplinary | Nothing shown in list | `[Restricted]` |
 | Placeholder | Biometric photo | Generic avatar | Default user icon |
 
-Masking is applied at the **widget level** (ADR-012's `masked_pii` widget), not at the model
+Masking is applied at the **widget level** (ADR-006's `masked_pii` widget), not at the model
 level. The underlying data is still accessible to authorized users who click "reveal."
 
 ### 1.4 Fields to Exclude from Logs
@@ -164,11 +164,11 @@ Standard Odoo `mail.thread` tracking logs writes, not reads. For PII, we need re
 | Report generation | All Tier 2+ fields | QWeb report rendering |
 | Search | Blind index lookups on Tier 3 fields | `search()` with PII criteria |
 
-Read logging is implemented via the `esmis.pii.access.log` model (ADR-011 implementation).
+Read logging is implemented via the `esmis.pii.access.log` model (ADR-005 implementation).
 
 ### 1.6 PII in Search Indexes
 
-Encrypted fields cannot be searched directly. The blind index pattern (ADR-012) provides three
+Encrypted fields cannot be searched directly. The blind index pattern (ADR-006) provides three
 search strategies:
 
 | Strategy | How It Works | Use Case | Limitation |
@@ -187,7 +187,7 @@ search strategies:
 **Workarounds:**
 - For sorting: sort by a non-encrypted surrogate (e.g., `student_number` instead of name)
 - For aggregation: use pre-computed, non-PII aggregate tables
-- For range queries on dates: store year/month in separate plaintext columns (ADR-012 pattern)
+- For range queries on dates: store year/month in separate plaintext columns (ADR-006 pattern)
 
 ### 1.7 PII in Exports and Reports
 
@@ -202,7 +202,7 @@ search strategies:
 
 **Automatic redaction rules for exports:**
 1. The export wizard checks the user's group membership against each field's `min_group_id`
-   (ADR-011).
+   (ADR-005).
 2. Fields the user cannot access are replaced with `[REDACTED]` in the export output.
 3. The export event is logged in `esmis.pii.access.log` with: user, timestamp, model, record
    IDs, field names exported.
@@ -215,9 +215,9 @@ search strategies:
 
 ### 2.1 Application-Level vs Database-Level Encryption
 
-ADR-012 chose a hybrid approach. Here is the detailed trade-off analysis:
+ADR-006 chose a hybrid approach. Here is the detailed trade-off analysis:
 
-| Criterion | App-Level (ALE) | DB-Level (TDE/pgcrypto) | Hybrid (ADR-012) |
+| Criterion | App-Level (ALE) | DB-Level (TDE/pgcrypto) | Hybrid (ADR-006) |
 |-----------|----------------|------------------------|-------------------|
 | Protects against DB breach | Yes | Yes | Yes |
 | Protects against SQL injection | Yes | No (data decrypted in query) | Yes (for ALE fields) |
@@ -284,7 +284,7 @@ exact-match lookups without decrypting.
 
 ### 2.3 Key Management
 
-ADR-012 defines four provider tiers. Here are the operational procedures:
+ADR-006 defines four provider tiers. Here are the operational procedures:
 
 #### Key Storage Rules
 
@@ -343,7 +343,7 @@ Measured benchmarks from similar Odoo deployments:
 
 ### 2.5 Odoo-Specific: Encrypted Fields and ORM Compatibility
 
-The ADR-012 pattern uses compute/inverse fields to maintain ORM compatibility. Key
+The ADR-006 pattern uses compute/inverse fields to maintain ORM compatibility. Key
 considerations:
 
 1. **`store=False` on the computed field**: The decrypted value is never stored in the
@@ -380,7 +380,7 @@ considerations:
 
 ### 2.6 pgcrypto vs Application-Layer Encryption
 
-| Feature | pgcrypto | Application-Layer (ADR-012) |
+| Feature | pgcrypto | Application-Layer (ADR-006) |
 |---------|----------|-----------------------------|
 | Encryption location | Inside PostgreSQL | In Python (Odoo server) |
 | Key exposure | Key appears in SQL queries | Key never sent to DB |
@@ -390,7 +390,7 @@ considerations:
 | Portability | PostgreSQL only | Any database |
 | Audit of key usage | Hard to audit | Full control in application |
 
-**Decision**: Application-layer encryption (ADR-012) is preferred for Tier 3 fields because it
+**Decision**: Application-layer encryption (ADR-006) is preferred for Tier 3 fields because it
 keeps keys out of the database entirely. pgcrypto is acceptable as a supplementary layer for
 Tier 2 fields where search flexibility is needed, but only if the institution accepts the risk
 that keys appear in SQL queries.
@@ -401,7 +401,7 @@ that keys appear in SQL queries.
 
 ### 3.1 Consent Data Model
 
-ADR-025 defines the `esmis.consent` model. Here is the expanded schema with implementation
+ADR-012 defines the `esmis.consent` model. Here is the expanded schema with implementation
 notes:
 
 ```
@@ -672,7 +672,7 @@ When anonymizing records for research or regulatory reporting, preserve aggregat
 
 ### 5.1 Field-Level Access Control
 
-Odoo's `groups=` attribute on fields provides field-level access control. ADR-004 establishes
+Odoo's `groups=` attribute on fields provides field-level access control. ADR-001 establishes
 the group hierarchy. For PII fields, the `groups=` attribute must match the permitted roles
 listed in the classification registry.
 
@@ -763,7 +763,7 @@ re-authentication within the current session:
 2. System checks if the user re-authenticated within the last 15 minutes.
 3. If not, display a password prompt (modal dialog).
 4. On successful re-authentication, set a session flag with a 15-minute TTL.
-5. Reveal the field value; auto-hide after 30 seconds (ADR-012 widget behavior).
+5. Reveal the field value; auto-hide after 30 seconds (ADR-006 widget behavior).
 6. Log the reveal event in `esmis.pii.access.log`.
 
 ---
@@ -891,7 +891,7 @@ When a breach is detected or reported:
 
 ### 7.3 Breach Assessment
 
-The `esmis.data.breach` model (ADR-025) tracks the breach. The assessment process:
+The `esmis.data.breach` model (ADR-012) tracks the breach. The assessment process:
 
 1. **Identify affected records**: Query `esmis.pii.access.log` for all access by the
    compromised user/session within the breach window.

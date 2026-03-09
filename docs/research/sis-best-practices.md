@@ -482,7 +482,7 @@ Adopt a tiered data classification system for all student data:
 | **Confidential** | Student grades, GPA, enrollment status, financial records | Role-based, need-to-know | Encrypted at rest |
 | **Restricted** | SSN/national ID, medical records, disciplinary records, counseling notes | Named individuals only | Encrypted, access-logged |
 
-This aligns with the existing eSMIS ADR-011 (Data Classification System) and ADR-012 (PII Encryption Strategy).
+This aligns with the existing eSMIS ADR-005 (Data Classification System) and ADR-006 (PII Encryption Strategy).
 
 ### 3.2 Role-Based Access Control (RBAC) for Education
 
@@ -537,7 +537,7 @@ Every SIS must maintain comprehensive audit logs:
 - User role/permission changes
 - Login/logout events
 
-This aligns with the existing eSMIS ADR-020 (Unified API Audit Log).
+This aligns with the existing eSMIS ADR-008 (Unified API Audit Log).
 
 ### 3.5 Session Management for Shared Environments
 
@@ -595,7 +595,7 @@ SIF is an older standard primarily for K-12 in Australia, US, and UK. It uses a 
 
 ### 4.4 RESTful API Best Practices for Education
 
-Align with the existing eSMIS API design principles (ADR-010), with education-specific considerations:
+Align with the existing eSMIS API design principles (ADR-004), with education-specific considerations:
 
 - **Resource naming** — Use education domain language: `/students`, `/enrollments`, `/sections`, `/grades`
 - **Filtering** — Support filtering by term, program, college, year level

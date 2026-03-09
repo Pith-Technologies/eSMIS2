@@ -36,7 +36,7 @@ module: esmis_my_module
 domain: my_domain
 version: "1.0"
 
-# Group definitions (ADR-004 three-tier)
+# Group definitions (ADR-001 three-tier)
 groups:
   # Tier 3: Technical
   - id: group_my_domain_read
@@ -244,7 +244,7 @@ model.
 
 ### 2. Use Standard Patterns
 
-Follow ADR-004 three-tier architecture:
+Follow ADR-001 three-tier architecture:
 
 - **Tier 3**: Technical groups (read, write, create)
 - **Tier 2**: User-facing groups (viewer, officer, manager)
@@ -321,6 +321,6 @@ esmis_*/security/
 
 ## Related Documentation
 
-- [ADR-004: Access Rights Management](../../docs/architecture/decisions/ADR-004-access-rights-management.md)
+- [ADR-001: Access Rights Management](../../docs/architecture/decisions/ADR-001-access-rights-management.md)
 - [Access Rights Principles](../../docs/principles/access-rights.md)
 - [Naming Conventions](../../docs/principles/naming-conventions.md)

@@ -16,7 +16,7 @@ for the full legislative analysis.
 
 All student data fields must be assigned to one of four tiers. The tier governs encryption,
 masking, access control, audit, and export behavior. See
-[ADR-011](../architecture/decisions/ADR-011-data-classification-system.md) for the
+[ADR-005](../architecture/decisions/ADR-005-data-classification-system.md) for the
 architectural decision.
 
 | Tier | Label | Encryption | Masking | Access Control | Audit on Read | Export |
@@ -119,7 +119,7 @@ All government-issued IDs are SPI under Sec. 3(l)(4). All are Tier 3.
 
 ## 3. Encryption Strategy
 
-See [ADR-012](../architecture/decisions/ADR-012-pii-encryption-strategy.md) for the
+See [ADR-006](../architecture/decisions/ADR-006-pii-encryption-strategy.md) for the
 architectural decision. The hybrid approach: PostgreSQL Transparent Data Encryption (TDE)
 as the baseline for all data at rest, with application-level encryption (ALE) layered on
 top for Tier 3 fields only.
@@ -202,7 +202,7 @@ the database server never holds plaintext Tier 3 values, only ciphertext.
 Grades are protected at Tier 2 through access control and audit logging, not
 application-level encryption. Encrypting grades would make ORM sorting, GWA computation,
 and CHED HEMIS reporting queries impossible without decrypting every row. The trade-off is
-documented in ADR-012.
+documented in ADR-006.
 
 ---
 
@@ -587,9 +587,9 @@ Run this checklist for every feature that touches personal data:
 
 | Document | Purpose |
 |---|---|
-| [ADR-025](../architecture/decisions/ADR-025-student-data-privacy-ra10173.md) | Architectural decisions for RA 10173 compliance |
-| [ADR-011](../architecture/decisions/ADR-011-data-classification-system.md) | Data classification system design |
-| [ADR-012](../architecture/decisions/ADR-012-pii-encryption-strategy.md) | PII encryption strategy and key management |
+| [ADR-012](../architecture/decisions/ADR-012-student-data-privacy-ra10173.md) | Architectural decisions for RA 10173 compliance |
+| [ADR-005](../architecture/decisions/ADR-005-data-classification-system.md) | Data classification system design |
+| [ADR-006](../architecture/decisions/ADR-006-pii-encryption-strategy.md) | PII encryption strategy and key management |
 | [`consent-management.md`](consent-management.md) | Full consent data model and enforcement patterns |
 | [`data-retention-and-disposal.md`](data-retention-and-disposal.md) | Retention schedules and disposal procedures |
 | [`test-data-pii.md`](test-data-pii.md) | Synthetic data generation and test environment rules |

@@ -1,4 +1,4 @@
-# ADR-023: Multi-Campus Architecture
+# ADR-004: Multi-Campus Architecture
 
 ## Status
 
@@ -118,8 +118,8 @@ When a student from one campus takes a course at another campus (cross-enrollmen
 ## References
 
 - [Odoo 19 Multi-Company Documentation](https://www.odoo.com/documentation/19.0/developer/reference/backend/multicompany.html)
-- ADR-004: Access Rights Management Architecture
-- ADR-011: Data Classification System
+- ADR-001: Access Rights Management Architecture
+- ADR-005: Data Classification System
 
 ---
 

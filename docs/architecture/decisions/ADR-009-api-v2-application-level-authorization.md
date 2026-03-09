@@ -1,4 +1,4 @@
-# ADR-022: API V2 Application-Level Authorization
+# ADR-003: API V2 Application-Level Authorization
 
 ## Status
 
