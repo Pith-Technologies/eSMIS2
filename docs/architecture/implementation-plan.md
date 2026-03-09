@@ -46,7 +46,7 @@ can work efficiently and the project presents well as an open-source contributio
 ### Phase E: Strategic Documentation
 
 - [ ] E1. Create compliance matrix page (`docs/architecture/compliance-matrix.md`)
-- [ ] E2. Document internationalization strategy (`docs/architecture/decisions/ADR-016-internationalization-strategy.md`)
+- [x] E2. Document internationalization strategy (`docs/architecture/decisions/ADR-017-internationalization-strategy.md`)
 - [ ] E3. Create API specification outline (`docs/architecture/api-specification.md`)
 
 ## Execution Notes
