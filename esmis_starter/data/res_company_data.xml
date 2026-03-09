@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Activate Philippine Peso (inactive by default) -->
+    <record id="base.PHP" model="res.currency">
+        <field name="active" eval="True" />
+    </record>
+
+    <!-- Set main company defaults for Philippine deployment -->
+    <record id="base.main_company" model="res.company">
+        <field name="currency_id" ref="base.PHP" />
+        <field name="country_id" ref="base.ph" />
+    </record>
+
+    <!-- Set main company partner country -->
+    <record id="base.main_partner" model="res.partner">
+        <field name="country_id" ref="base.ph" />
+    </record>
+
+    <!-- Set admin timezone -->
+    <record id="base.user_admin" model="res.users">
+        <field name="tz">Asia/Manila</field>
+    </record>
+</odoo>
