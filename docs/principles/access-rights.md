@@ -188,11 +188,31 @@ All record rules MUST follow these requirements:
     <!-- Missing groups field OR global="True" -->
 </record>
 
-<!-- BAD: Modifying base Odoo groups -->
+<!-- BAD: Destructively modifying base Odoo groups (changing name, category, removing implied groups) -->
 <record id="base.group_user" model="res.groups">
-    <field name="implied_ids" eval="[...]"/>  <!-- Don't do this -->
+    <field name="name">Changed Name</field>  <!-- Don't do this -->
+</record>
+
+<!-- GOOD: Extending base.group_system implied_ids (standard Odoo pattern) -->
+<record id="base.group_system" model="res.groups">
+    <field name="implied_ids" eval="[Command.link(ref('group_esmis_myfeature_manager'))]"/>
 </record>
 ```
+
+## Settings Admin Inheritance (REQUIRED)
+
+Every module that defines security groups MUST extend `base.group_system` (`implied_ids`) to include its highest-privilege group. This ensures that members of the Administration/Settings group automatically have full access to all eSMIS features without needing to be manually added to each module's groups.
+
+```xml
+<!-- In your module's groups.xml, AFTER defining your groups -->
+<record id="base.group_system" model="res.groups">
+    <field name="implied_ids" eval="[
+        Command.link(ref('group_esmis_myfeature_manager')),
+    ]"/>
+</record>
+```
+
+This is a standard Odoo pattern — `Command.link()` adds to the existing `implied_ids` without removing any. Only link the **top-level** group in each hierarchy; lower groups are inherited transitively.
 
 ## ACL File Format
 
@@ -233,6 +253,7 @@ access_res_partner_inventory_officer,res.partner officer,base.model_res_partner,
 - [ ] Module depends on `esmis_security`
 - [ ] Groups use `privilege_id` for user-facing groups
 - [ ] Groups have `comment` field documentation
+- [ ] `base.group_system` extended to imply the module's highest-privilege group
 - [ ] ACL entries for all models
 - [ ] Every custom `esmis.*` model has a `base.group_system` full CRUD row
 - [ ] No duplicate group definitions
