@@ -1,4 +1,4 @@
-# ADR-009: Vocabulary System for Multi-Domain Registries
+# ADR-003: Vocabulary System for Multi-Domain Registries
 
 **Status:** **IMPLEMENTED** - Production ready
 **Date:** 2025-11-28

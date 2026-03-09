@@ -7,7 +7,7 @@ How eSMIS modules map to and extend Odoo 19's built-in capabilities for a Philip
 Extend Odoo modules rather than replacing them. Custom modules add domain-specific fields, workflows, and
 validations on top of Odoo's proven foundation. External system integrations follow a dual strategy: real
 API calls for systems that support them (PhilSys, payment gateways, LMS), and file export wizards for
-portal-based government systems (CHED HEMIS, UniFAST). See ADR-024 for the rationale.
+portal-based government systems (CHED HEMIS, UniFAST). See ADR-011 for the rationale.
 
 ## Module Mapping
 
@@ -105,7 +105,7 @@ advising load. Faculty can only see the grades and enrollments of their own sect
 
 Philippine HEIs must report to multiple government agencies. eSMIS uses two integration strategies:
 **real API** for systems that support it, and **file export wizards** for portal-based systems. See
-ADR-024 for the full rationale and consequences.
+ADR-011 for the full rationale and consequences.
 
 ### PhilSys (PSA — Philippine Identification System)
 
@@ -154,7 +154,7 @@ Module: `esmis_payment`
 Module: `esmis_lms_bridge`
 
 Positioned at Layer 4 (Integrations). Nothing depends on it — the core SIS operates normally without it
-installed. See ADR-027 for the full decision record.
+installed. See ADR-014 for the full decision record.
 
 | Standard | Version | Purpose |
 | -------- | ------- | ------- |
@@ -203,6 +203,6 @@ Principles for maintaining Odoo upgrade compatibility:
 - [Project Architecture Vision](vision.md)
 - [Module Architecture](../principles/module-architecture.md) (principle)
 - [Access Rights](../principles/access-rights.md) (principle)
-- [ADR-024: Government Integration Architecture](decisions/ADR-024-government-integration-architecture.md)
-- [ADR-027: LMS Integration Standards](decisions/ADR-027-lms-integration-standards.md)
+- [ADR-011: Government Integration Architecture](decisions/ADR-011-government-integration-architecture.md)
+- [ADR-014: LMS Integration Standards](decisions/ADR-014-lms-integration-standards.md)
 - [External System Integrations Research](../research/external-system-integrations.md)

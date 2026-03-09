@@ -3,7 +3,7 @@
 Security Audit Script for Odoo Access Rights Migration
 
 This script audits custom Odoo modules for compliance with the new access rights
-architecture defined in ADR-004.
+architecture defined in ADR-001.
 
 Usage:
     python scripts/security_audit.py [module_path]
@@ -26,7 +26,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-# Naming convention patterns from ADR-004
+# Naming convention patterns from ADR-001
 # More flexible to allow special roles and backward compatibility
 NAMING_PATTERNS = {
     "category": re.compile(r"^category_esmis_[a-z_]+$"),
@@ -548,7 +548,7 @@ def generate_markdown_report(audits: list[ModuleAudit]) -> str:
             "",
             "### Error Types",
             "- **ODOO19**: Breaking changes for Odoo 19 compatibility",
-            "- **ARCHITECTURE**: Violations of ADR-004 architecture",
+            "- **ARCHITECTURE**: Violations of ADR-001 architecture",
             "- **PARSE**: File parsing errors",
             "",
             "### Warning Types",
@@ -633,7 +633,7 @@ def generate_text_report(audits: list[ModuleAudit]) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Audit custom Odoo modules for access rights compliance (ADR-004)")
+    parser = argparse.ArgumentParser(description="Audit custom Odoo modules for access rights compliance (ADR-001)")
     parser.add_argument("module", nargs="?", help="Module name to audit (e.g., esmis_vocabulary)")
     parser.add_argument("--all", "-a", action="store_true", help="Audit all custom Odoo modules")
     parser.add_argument("--report", "-r", action="store_true", help="Generate full detailed report")

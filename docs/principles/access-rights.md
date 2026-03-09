@@ -83,7 +83,7 @@ Certain fields carry heightened privacy obligations and must be restricted beyon
 | National ID (PhilSys), PWD ID, Solo Parent ID | Tier 3 / SPI | Admissions Officer, Registrar |
 | Student grades (`grade_value`, cumulative GWA) | Tier 3 / SPI | Faculty (own sections only), Registrar, Student (self only) |
 | Disciplinary records | Tier 3 / SPI | Registrar, Student Affairs |
-| Counseling notes | Tier 3 / SPI — Restricted per ADR-011 | Counselor only |
+| Counseling notes | Tier 3 / SPI — Restricted per ADR-005 | Counselor only |
 | Health / medical records | Tier 3 / SPI | Clinic staff only |
 | Financial records | Tier 2 / Confidential | Finance, Financial Aid Officer |
 
@@ -403,6 +403,6 @@ test("Inventory manager sees all records", async () => {
 ---
 
 **Authoritative Sources:**
-- [ADR-004: Access Rights Management](../architecture/decisions/ADR-004-access-rights-management.md) - Architecture decision
+- [ADR-001: Access Rights Management](../architecture/decisions/ADR-001-access-rights-management.md) - Architecture decision
 
 **See also:** [Naming Conventions](naming-conventions.md), [Module Architecture](module-architecture.md)

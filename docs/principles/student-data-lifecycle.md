@@ -702,7 +702,7 @@ PII fields are classified into three tiers:
 | Confidential | Grades, enrollment status, contact info | Campus staff only; logged on access |
 | Restricted | National ID / PSN, health records, counseling notes, financial standing details | Named role access only; every read logged |
 
-Restricted fields are encrypted at rest (ADR-012). Access to Restricted fields is logged
+Restricted fields are encrypted at rest (ADR-006). Access to Restricted fields is logged
 even for read operations — not just writes.
 
 ### Multi-Campus Scoping

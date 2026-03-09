@@ -1,4 +1,4 @@
-# ADR-010: API V2 Architecture
+# ADR-001: API V2 Architecture
 
 **Status:** **IMPLEMENTED** - Phase 1 & 2 complete, Phase 3 basic, Phase 4 deferred
 **Date:** 2024-11-28
@@ -195,7 +195,7 @@ POST /api/v2/esmis/$batch
 
 #### 3.3 External Identifiers Only
 
-Per existing ADR-007, never expose database IDs:
+Per existing ADR-002, never expose database IDs:
 
 ```json
 // ❌ WRONG
@@ -443,5 +443,5 @@ X-Deprecation-Notice: v1 endpoints deprecated, sunset 2025-06-01
 
 ## Related ADRs
 
-- ADR-007: Namespace URIs for Identifiers
-- ADR-009: Vocabulary System
+- ADR-002: Namespace URIs for Identifiers
+- ADR-003: Vocabulary System

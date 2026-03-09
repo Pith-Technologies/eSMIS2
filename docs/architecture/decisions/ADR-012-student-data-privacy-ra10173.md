@@ -1,4 +1,4 @@
-# ADR-025: Student Data Privacy — RA 10173 Compliance
+# ADR-006: Student Data Privacy — RA 10173 Compliance
 
 ## Status
 
@@ -68,15 +68,15 @@ Before any processing of SPI for a given purpose, the calling code must verify a
 
 ### Pillar 2: Data Classification
 
-All SPI fields are classified according to ADR-011's four-tier taxonomy (Public, Internal, Confidential, Restricted). Field-level classification is declared in model metadata and drives masking in list views and exports. No changes to ADR-011 are required; this ADR extends its application to student data specifically.
+All SPI fields are classified according to ADR-005's four-tier taxonomy (Public, Internal, Confidential, Restricted). Field-level classification is declared in model metadata and drives masking in list views and exports. No changes to ADR-005 are required; this ADR extends its application to student data specifically.
 
 ### Pillar 3: PII Encryption
 
-National identifiers (PhilSys RN, TIN), health information fields, and disciplinary record summaries are encrypted at the application layer per ADR-012's strategy (Fernet encryption + blind index for searchable fields). Grades and financial ledgers are stored plaintext but access-controlled; they do not require encryption because they are not in the "Restricted" classification under the ADR-011 taxonomy.
+National identifiers (PhilSys RN, TIN), health information fields, and disciplinary record summaries are encrypted at the application layer per ADR-006's strategy (Fernet encryption + blind index for searchable fields). Grades and financial ledgers are stored plaintext but access-controlled; they do not require encryption because they are not in the "Restricted" classification under the ADR-005 taxonomy.
 
 ### Pillar 4: Audit Trail
 
-All read and write access to Confidential and Restricted fields is logged in the unified audit trail per ADR-020. Audit log entries include: user ID, timestamp, operation type, model, record ID, and field names accessed. No field values are logged (logging PII values would compound a breach). Audit logs are retained for 3 years per NPC recommendation.
+All read and write access to Confidential and Restricted fields is logged in the unified audit trail per ADR-008. Audit log entries include: user ID, timestamp, operation type, model, record ID, and field names accessed. No field values are logged (logging PII values would compound a breach). Audit logs are retained for 3 years per NPC recommendation.
 
 ### Pillar 5: Data Subject Rights
 
@@ -125,7 +125,7 @@ On creation, a `mail.activity` is automatically created assigned to the DPO with
 ### Positive
 
 - Full RA 10173 compliance at the architectural level, not as an afterthought
-- Builds entirely on ADR-011 (data classification), ADR-012 (encryption), and ADR-020 (audit trail) — no new infrastructure required
+- Builds entirely on ADR-005 (data classification), ADR-006 (encryption), and ADR-008 (audit trail) — no new infrastructure required
 - Consent records provide an auditable paper trail for NPC investigations
 - Data subject rights are self-service where possible, reducing Registrar workload
 - Minor protection is enforced by the system rather than depending on staff awareness
@@ -160,7 +160,7 @@ On creation, a `mail.activity` is automatically created assigned to the DPO with
 
 3. **Mixin for PII models**: Models that store student PII inherit `esmis.consent.mixin`, which provides the `_check_consent_for_export()` hook called by export wizards.
 
-4. **Audit trail integration**: The ADR-020 audit log hooks are extended to log access to fields tagged with `pii_classification` in `_fields` metadata. No changes to ADR-020's core model are needed.
+4. **Audit trail integration**: The ADR-008 audit log hooks are extended to log access to fields tagged with `pii_classification` in `_fields` metadata. No changes to ADR-008's core model are needed.
 
 5. **Breach notification escalation**: A scheduled action (`ir.cron`) runs hourly and checks for `esmis.data.breach` records where `npc_deadline < now()` and `npc_notified = False`. Matching records trigger an email to the `esmis_security.group_system_admin` group.
 
@@ -183,10 +183,10 @@ On creation, a `mail.activity` is automatically created assigned to the DPO with
 - [RA 10173 — Data Privacy Act of 2012](https://www.officialgazette.gov.ph/2012/08/15/republic-act-no-10173/)
 - [NPC Circular 16-03 — Security Incident Notification](https://www.privacy.gov.ph/circular-16-03/)
 - [NPC Advisory 2020-02 — Guidelines on Personal Data Breach Management](https://www.privacy.gov.ph/advisory-2020-02/)
-- ADR-011: Data Classification System
-- ADR-012: PII Encryption Strategy
-- ADR-020: Unified API Audit Log
-- ADR-022: API V2 Application-Level Authorization
+- ADR-005: Data Classification System
+- ADR-006: PII Encryption Strategy
+- ADR-008: Unified API Audit Log
+- ADR-009: API V2 Application-Level Authorization
 
 ---
 

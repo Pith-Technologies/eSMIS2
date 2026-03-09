@@ -1,4 +1,4 @@
-# ADR-018: DMS Security and Storage Enhancements
+# ADR-002: DMS Security and Storage Enhancements
 
 ## Status
 
@@ -1014,9 +1014,9 @@ s3_use_ssl = false
 
 ## Related ADRs
 
-- ADR-012: PII Encryption Strategy (encryption at rest option)
-- ADR-004: Access Rights Management (audit logging)
-- ADR-011: Data Classification System (file sensitivity)
+- ADR-006: PII Encryption Strategy (encryption at rest option)
+- ADR-001: Access Rights Management (audit logging)
+- ADR-005: Data Classification System (file sensitivity)
 
 ## References
 

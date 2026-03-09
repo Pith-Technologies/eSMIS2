@@ -256,6 +256,6 @@ another module, use the fully qualified form: `{module}.{xml_id}`
 ---
 
 **Authoritative Sources:**
-- [ADR-004: Access Rights](../architecture/decisions/ADR-004-access-rights-management.md) - Security group naming
+- [ADR-001: Access Rights](../architecture/decisions/ADR-001-access-rights-management.md) - Security group naming
 
 **See also:** [Access Rights](access-rights.md), [Module Architecture](module-architecture.md)

@@ -13,7 +13,7 @@ from enum import Enum
 
 
 class PermissionLevel(Enum):
-    """Standard permission levels following ADR-004."""
+    """Standard permission levels following ADR-001."""
 
     NONE = "none"
     READ = "read"

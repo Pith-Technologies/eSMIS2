@@ -1,4 +1,4 @@
-# ADR-024: Government Integration Architecture
+# ADR-005: Government Integration Architecture
 
 ## Status
 
@@ -107,8 +107,8 @@ The DICT's eGov PH Super App is targeting a unified API for government services.
 - [CHED HEMIS Technical Specifications](https://ched.gov.ph/hemis/)
 - [PhilSys Integration Guidelines — PSA](https://philsys.gov.ph/)
 - [BIR e-Filing and Payment System](https://efps.bir.gov.ph/)
-- ADR-020: Unified API Audit Log
-- ADR-022: API V2 Application-Level Authorization
+- ADR-008: Unified API Audit Log
+- ADR-009: API V2 Application-Level Authorization
 
 ---
 

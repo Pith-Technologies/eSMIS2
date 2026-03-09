@@ -1,4 +1,4 @@
-# ADR-011: Data Classification System
+# ADR-005: Data Classification System
 
 ## Status
 
@@ -1188,5 +1188,5 @@ Use PostgreSQL comments/labels for classification.
 
 ## Related ADRs
 
-- ADR-004: Access Rights Management (field-level access control)
-- ADR-012: PII Encryption Strategy (uses classifications)
+- ADR-001: Access Rights Management (field-level access control)
+- ADR-006: PII Encryption Strategy (uses classifications)

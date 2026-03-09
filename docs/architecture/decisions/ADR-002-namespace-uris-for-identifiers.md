@@ -1,4 +1,4 @@
-# ADR-007: Namespace URIs for Identifier Types
+# ADR-002: Namespace URIs for Identifier Types
 
 **Status:** **IMPLEMENTED** - Production ready
 **Date:** 2025-11-28

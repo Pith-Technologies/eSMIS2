@@ -1,4 +1,4 @@
-# ADR-028: Grading System Flexibility
+# ADR-015: Grading System Flexibility
 
 ## Status
 

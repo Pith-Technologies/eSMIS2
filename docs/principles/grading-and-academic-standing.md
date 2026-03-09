@@ -5,7 +5,7 @@ related workflows in eSMIS — the Student Management Information System for Phi
 higher education institutions (HEIs).
 
 > **Scope:** Philippine HEIs use varied grading systems. This document covers the
-> configurable grading architecture defined in ADR-028, the rules that govern GWA
+> configurable grading architecture defined in ADR-015, the rules that govern GWA
 > and academic standing computation, and the workflows for INC resolution, grade
 > changes, and Latin honors. Hardcoded institutional values belong in
 > `esmis_grading_ph`, not in this document.
@@ -89,7 +89,7 @@ institution-specific while the business logic remains flag-driven.
 
 ## 2. Configurable Grading Model
 
-Per ADR-028, grading rules are data-driven. No grading logic is hardcoded.
+Per ADR-015, grading rules are data-driven. No grading logic is hardcoded.
 
 ### `esmis.grading.system`
 
@@ -434,7 +434,7 @@ premature honors labels.
 
 **Authoritative Sources:**
 
-- ADR-028: [Grading System Flexibility](../architecture/decisions/ADR-028-grading-system-flexibility.md)
+- ADR-015: [Grading System Flexibility](../architecture/decisions/ADR-015-grading-system-flexibility.md)
 - `esmis_grading` module — models and workflows
 - `esmis_grading_ph` module — Philippine default scales and thresholds
 

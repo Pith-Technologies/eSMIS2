@@ -1,4 +1,4 @@
-# ADR-012: PII Encryption Strategy
+# ADR-006: PII Encryption Strategy
 
 ## Status
 
@@ -74,7 +74,7 @@ However, this infrastructure is **not connected** to field-level data protection
 
 ### Dependency
 
-This ADR depends on **ADR-011: Data Classification System** which identifies which fields require encryption.
+This ADR depends on **ADR-005: Data Classification System** which identifies which fields require encryption.
 
 ## Decision
 
@@ -963,6 +963,6 @@ class PIIEncryptionMigration(models.TransientModel):
 
 ## Related ADRs
 
-- ADR-011: Data Classification System (prerequisite - defines what to encrypt)
-- ADR-004: Access Rights Management (field-level access control)
-- ADR-010: Verifiable Credentials System (uses encryption infrastructure)
+- ADR-005: Data Classification System (prerequisite - defines what to encrypt)
+- ADR-001: Access Rights Management (field-level access control)
+- ADR-004: Verifiable Credentials System (uses encryption infrastructure)

@@ -141,7 +141,7 @@ odoo shell -d mydb
 
 #### `security_audit.py`
 
-Static analysis script that audits Odoo modules for compliance with ADR-004 security architecture.
+Static analysis script that audits Odoo modules for compliance with ADR-001 security architecture.
 
 **Usage:**
 

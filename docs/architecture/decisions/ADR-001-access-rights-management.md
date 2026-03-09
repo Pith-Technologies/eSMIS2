@@ -1,4 +1,4 @@
-# ADR-004: Access Rights Management Architecture
+# ADR-001: Access Rights Management Architecture
 
 ## Status
 
