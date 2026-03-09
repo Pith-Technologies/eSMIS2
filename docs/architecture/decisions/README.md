@@ -22,6 +22,7 @@ This directory contains Architecture Decision Records documenting significant ar
 | [014](ADR-014-lms-integration-standards.md) | LMS Integration Standards | Accepted | 2026-03-09 | LTI 1.3 + OneRoster 1.2, modality tracking, grade passback |
 | [015](ADR-015-grading-system-flexibility.md) | Grading System Flexibility | Accepted | 2026-03-09 | Configurable scales, GWA rules, INC resolution, Latin honors |
 | [016](ADR-016-foundation-module-strategy.md) | Foundation Module Strategy | Accepted | 2026-03-09 | Keep four separate foundation modules; no esmis_base consolidation |
+| [017](ADR-017-internationalization-strategy.md) | Internationalization Strategy | Accepted | 2026-03-09 | Layered localization: country-neutral base modules + `esmis_*_{country}` extensions |
 
 ## Status Legend
 
@@ -40,7 +41,7 @@ ADRs 001–009 cover cross-cutting concerns (security, identifiers, terminology,
 
 ## Creating New ADRs
 
-1. Use the next available number (currently 017)
+1. Use the next available number (currently 018)
 2. Follow the template: `ADR-NNN-short-title.md`
 3. Include: Status, Date, Context, Decision, Consequences
 4. Update this index after creating
