@@ -4,7 +4,7 @@ Detailed implementation blueprint for Phase 1 of eSMIS. A developer reading this
 should not need to reference any other document to implement these modules.
 
 **Created:** 2026-03-09
-**Status:** Draft — awaiting Edwin's review and annotations
+**Status:** Approved — decisions finalized 2026-03-09
 
 ---
 
@@ -30,9 +30,10 @@ already-completed `esmis_vocabulary`:
 | Order | Module | Size | Models | Purpose |
 |-------|--------|------|--------|---------|
 | — | `esmis_vocabulary` | M | 3 | Done. Controlled code lists. |
-| 1 | `esmis_security` | XL | 6 abstract + 10 concrete = 16 | Security groups, mixins, consent, audit, breach, DSAR, retention, disposal |
-| 2 | `esmis_academic_term` | S | 2 | Academic year and term definitions |
-| 3 | `esmis_student` | L | 3 (course history deferred) | Student profiles, identifiers, program bindings |
+| 1 | `esmis_security` | L | 6 abstract + 4 concrete = 10 | Security groups, mixins, consent, approval definitions |
+| 2 | `esmis_audit` | M | 6 concrete | Audit logs, PII access logs, breach, DSAR, retention, disposal |
+| 3 | `esmis_academic_term` | S | 2 | Academic year and term definitions |
+| 4 | `esmis_student` | L | 3 (course history deferred) | Student profiles, identifiers, program bindings |
 
 **Phase 1 goal:** The institution can configure its terminology, security groups, campuses,
 academic calendar, and begin entering student profiles. No academic operations yet.
@@ -73,9 +74,8 @@ This gives ~10 models in `esmis_security` and ~6 in `esmis_audit`.
 `esmis.encrypted.field.mixin` as belonging to `esmis_pii_encryption`, a module not in our
 Phase 1 scope.
 
-> **Edwin:** Which option? If Option C, do we build `esmis_audit` in Phase 1 or defer it
-> to later? The acceptance criteria for `esmis_security` include breach workflow and DSAR
-> lifecycle tests, which require those models.
+> **Decision:** Option C — split into `esmis_security` + `esmis_audit`. Both built in
+> Phase 1 since breach and DSAR acceptance criteria require the audit models.
 
 ---
 
@@ -102,7 +102,8 @@ is "complete" with AES-256-GCM, but no `esmis_pii_encryption` module directory e
 the codebase. The principle doc explicitly says Fernet. ADR-006 appears to be a
 forward-looking design spec, not a description of existing code.
 
-> **Edwin:** Fernet for Phase 1, or implement AES-256-GCM from the start?
+> **Decision:** AES-256-GCM from the start. Implement the full spec per ADR-006
+> rather than taking on migration debt.
 
 ---
 
@@ -122,7 +123,8 @@ The roadmap lists `esmis_student`'s dependencies as: `base`, `esmis_vocabulary`,
 Phase 2 models (`esmis_curriculum` and `esmis_grading`). Deferring it keeps `esmis_student`
 dependency-free from academic operations.
 
-> **Edwin:** Defer course history to Phase 2?
+> **Decision:** Yes — defer `esmis.student.course.history` to Phase 2
+> (`esmis_enrollment`). Keeps `esmis_student` focused on profile and lifecycle.
 
 ---
 
@@ -143,7 +145,8 @@ dependencies. When `esmis_student` installs, it can add helper methods or comput
 to link consent records back to student records via the partner relationship. This is
 standard Odoo extension pattern.
 
-> **Edwin:** Option C (partner_id in consent, student module adds helper)?
+> **Decision:** Option C — `partner_id` in consent model. `esmis_student` adds
+> computed helper to link consent records via the partner relationship.
 
 ---
 
@@ -166,7 +169,9 @@ pattern where categories appear only when their module is installed.
 **Note:** ADR-001's existing implementation defined all 26 categories centrally. If we
 go with Option B, we should update ADR-001 to reflect this change.
 
-> **Edwin:** Centralized (A) or distributed (B)?
+> **Decision:** Option B — distributed. Each module owns its categories and
+> privileges. `esmis_security` only defines cross-cutting ones (admin, audit,
+> consent, data_protection, approval).
 
 ---
 
@@ -188,7 +193,8 @@ How much demo data should Phase 1 create?
 
 This makes the system immediately usable for evaluation and testing.
 
-> **Edwin:** Is this scope right? More/fewer students? Different university name?
+> **Decision:** Approved as recommended. Rizal State University, 3 campuses,
+> 20 students, 5 demo users, AY 2025-2026 with 2 semesters + summer.
 
 ---
 
