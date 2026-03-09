@@ -21,6 +21,7 @@ This directory contains Architecture Decision Records documenting significant ar
 | [013](ADR-013-financial-aid-modeling.md) | Financial Aid Modeling | Accepted | 2026-03-09 | Rule-based eligibility, stacking order, audit trail for UniFAST/COA |
 | [014](ADR-014-lms-integration-standards.md) | LMS Integration Standards | Accepted | 2026-03-09 | LTI 1.3 + OneRoster 1.2, modality tracking, grade passback |
 | [015](ADR-015-grading-system-flexibility.md) | Grading System Flexibility | Accepted | 2026-03-09 | Configurable scales, GWA rules, INC resolution, Latin honors |
+| [016](ADR-016-foundation-module-strategy.md) | Foundation Module Strategy | Accepted | 2026-03-09 | Keep four separate foundation modules; no esmis_base consolidation |
 
 ## Status Legend
 
@@ -39,7 +40,7 @@ ADRs 001–009 cover cross-cutting concerns (security, identifiers, terminology,
 
 ## Creating New ADRs
 
-1. Use the next available number (currently 016)
+1. Use the next available number (currently 017)
 2. Follow the template: `ADR-NNN-short-title.md`
 3. Include: Status, Date, Context, Decision, Consequences
 4. Update this index after creating
