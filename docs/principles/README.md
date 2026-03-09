@@ -10,7 +10,7 @@ This directory contains the core principles and standards that guide eSMIS devel
 | [Access Rights](access-rights.md) | Security architecture, permission levels, and group hierarchy |
 | [Module Architecture](module-architecture.md) | Module organization, consolidation decisions, and extension patterns |
 | [Module Visibility](module-visibility.md) | `application`, `auto_install`, and category settings |
-| [API Design](api-design.md) | External identifiers, API standards, and integration patterns |
+| [API Design](api-design.md) | Stable identifiers (no DB IDs), API standards, and integration patterns |
 | [Performance & Scalability](performance-scalability.md) | Database optimization, batch processing, and async patterns |
 | [Testing](testing.md) | Coverage targets, test types, and quality requirements |
 | [Approval Workflows](approval-workflows.md) | Standardized approval patterns and state machines |

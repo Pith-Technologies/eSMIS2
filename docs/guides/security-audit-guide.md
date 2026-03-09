@@ -220,7 +220,7 @@ The privilege must appear before the group that references it in the same XML fi
 </data>
 ```
 
-### Multi-company isolation (required for models with `company_id`)
+### Campus isolation (required for models with `company_id`)
 
 ```xml
 <record id="rule_stock_move_company" model="ir.rule">

@@ -29,8 +29,8 @@ Starter modules are the single entry point for installing eSMIS in a specific co
 
 In addition to aggregating dependencies, starter modules configure the Odoo database for the target country's locale via a `data/res_company_data.xml` file (with `noupdate="1"`):
 
-- **Currency** — activate the country's currency (many are inactive by default) and set it on the main company
-- **Country** — set the main company partner's country
+- **Currency** — activate the country's currency (many are inactive by default) and set it on the main campus (`res.company`)
+- **Country** — set the main campus partner's country
 - **Timezone** — set the admin user's timezone to the country's primary zone
 - **Language** — only needed if the country's primary language is not English (`en_US`)
 

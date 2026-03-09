@@ -10,7 +10,7 @@
 
 | Phase | Status | Components |
 |-------|--------|------------|
-| Phase 1: Foundation | ✅ Complete | OAuth2, external IDs, consent filtering, FastAPI |
+| Phase 1: Foundation | ✅ Complete | OAuth2, stable IDs (no DB IDs), consent filtering, FastAPI |
 | Phase 2: Transactions | ✅ Complete | Bundle/$batch, placeholder resolution, atomic rollback |
 | Phase 3: Extensions | ⚠️ Basic | Extension registry, manual module registration |
 
@@ -18,7 +18,7 @@
 |-----------|--------|-------|
 | FastAPI routers | ✅ Complete | 9 routers: oauth, metadata, individual, group, program, membership, consent, batch, filter |
 | OAuth2 client credentials | ✅ Complete | Scrypt-hashed secrets, JWT tokens, 1h expiry |
-| External identifiers only | ✅ Complete | No DB IDs exposed (verified in tests) |
+| Stable identifiers only (no DB IDs) | ✅ Complete | No DB IDs exposed (verified in tests) |
 | Consent-based filtering | ✅ Complete | Field-level scoping, legal basis support |
 | FHIR-inspired patterns | ✅ Complete | CapabilityStatement, Bundle, CodeableConcept |
 | Tests | ✅ Complete | 169 tests (~95% coverage), 23 test files |
@@ -193,7 +193,7 @@ POST /api/v2/esmis/$batch
 - Placeholder UUIDs for cross-references
 - Batch mode available (independent operations)
 
-#### 3.3 External Identifiers Only
+#### 3.3 Stable Identifiers Only (No DB IDs)
 
 Per existing ADR-002, never expose database IDs:
 
@@ -419,7 +419,7 @@ X-Deprecation-Notice: v1 endpoints deprecated, sunset 2025-06-01
 ### Phase 1: Foundation ✅
 - [x] Core schema models (Individual, Group)
 - [x] Capability statement endpoint
-- [x] External identifier enforcement
+- [x] Stable identifier enforcement (no DB IDs in responses)
 - [x] Basic consent filtering
 - [x] OAuth2 client credentials with JWT
 

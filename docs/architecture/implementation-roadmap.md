@@ -808,7 +808,7 @@ lifecycle from enrollment through graduation.
 
 | Attribute   | Value                                                              |
 |-------------|--------------------------------------------------------------------|
-| Description | REST API facade with OAuth 2.0, external identifiers, API client management, and audit logging |
+| Description | REST API facade with OAuth 2.0, stable identifiers (no DB IDs), API client management, and audit logging |
 | Dependencies | `esmis_security`, `esmis_student`                                 |
 | Complexity  | **XL**                                                             |
 
@@ -826,7 +826,7 @@ lifecycle from enrollment through graduation.
 - OAuth 2.0 client credentials flow
 - Scrypt-hashed client secrets
 - Per-client scope authorization (resource + action + consent flag)
-- External identifier enforcement — never expose DB IDs
+- Stable identifier enforcement — never expose DB IDs
 - API audit logging (request ID, IP, operation, resource, status)
 - Extensible API schema via module-contributed extensions
 - Consent verification for PII-containing responses
@@ -835,7 +835,7 @@ lifecycle from enrollment through graduation.
 - [ ] OAuth 2.0 token issuance and validation
 - [ ] Client secret stored as scrypt hash — never in plaintext
 - [ ] Scope enforcement blocks unauthorized resource/action combinations
-- [ ] All API responses use external identifiers, never DB IDs
+- [ ] All API responses use stable identifiers (`esmis.identifier`), never DB IDs
 - [ ] API audit log captures every request with correlation ID
 - [ ] Consent checked before returning PII fields
 - [ ] Rate limiting per client

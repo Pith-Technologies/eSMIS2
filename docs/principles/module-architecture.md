@@ -133,7 +133,7 @@ Country modules never use `auto_install`. They are installed exclusively through
 
 ### Starter Module Localization
 
-Beyond aggregating country module dependencies, each starter module configures the Odoo database for the target country's locale via `data/res_company_data.xml` (`noupdate="1"`). This includes activating the country's currency, setting the main company's country and currency, and configuring the default timezone. See [Module Visibility — Localization Defaults](module-visibility.md#localization-defaults) for the full checklist.
+Beyond aggregating country module dependencies, each starter module configures the Odoo database for the target country's locale via `data/res_company_data.xml` (`noupdate="1"`). This includes activating the country's currency, setting the main campus's (`res.company`) country and currency, and configuring the default timezone. See [Module Visibility — Localization Defaults](module-visibility.md#localization-defaults) for the full checklist.
 
 This applies to all layers:
 - `esmis_grading_ph` excludes `esmis_grading_ke`, `esmis_grading_ng`, etc.
@@ -157,7 +157,7 @@ class Grade(models.Model):
 
 ## Identifier Pattern
 
-External identifiers (tax IDs, national IDs, passport numbers, etc.) are stored in a **separate identifier model** linked to `res.partner` via One2many — never as direct fields on the partner.
+Government and institutional identifiers (tax IDs, national IDs, passport numbers, etc.) are stored in a **separate identifier model** (`esmis.identifier`) linked to `res.partner` via One2many — never as direct fields on the partner.
 
 ```
 res.partner
@@ -171,7 +171,7 @@ res.partner
 - Adding new ID types via data files (no code changes)
 - Enforcing uniqueness per type+value via SQL constraints
 - Validating format per type via regex patterns
-- Standardized mapping to external identifier formats
+- Standardized mapping to government identifier formats
 
 The identifier type definitions are seeded as data in the appropriate country module (e.g., `esmis_student_ph` for Philippine national IDs such as PhilSys).
 

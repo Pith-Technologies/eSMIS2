@@ -39,7 +39,7 @@ esmis.api.audit.log
 ├── Operation
 │   ├── operation: read|search|export|create|update|patch|delete
 │   ├── resource_type: individual|group|program|program_membership
-│   └── resource_identifier (external ID, never DB ID)
+│   └── resource_identifier (stable identifier, never DB ID)
 ├── Consent (optional)
 │   ├── consent_id → esmis.consent
 │   └── purpose

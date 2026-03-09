@@ -54,7 +54,7 @@ record. This gives each campus isolated financial records, user access scoping, 
 while allowing central administration to view consolidated data across all campuses.
 
 - Campus-specific academic terms, fee schedules, and enrollment quotas are scoped per `res.company`
-- Cross-campus course sharing and student transfers are handled via inter-company records
+- Cross-campus course sharing and student transfers are handled via inter-campus records
 - Country-specific modules follow the `esmis_*_ph` naming pattern for Philippine-only logic
 
 ## Government Integrations

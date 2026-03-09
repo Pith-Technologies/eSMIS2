@@ -2,13 +2,13 @@
 
 How to configure eSMIS when an institution operates more than one campus.
 
-Each campus is modeled as a separate Odoo company. Data isolation, user access, and reporting scope are all controlled through the standard Odoo multi-company mechanisms.
+Each campus is modeled as a `res.company` record in Odoo. Data isolation, user access, and reporting scope are all controlled through Odoo's standard multi-company mechanisms.
 
 ---
 
-## Creating Campus Companies
+## Creating Campuses
 
-1. Go to **Settings → Companies → Create**.
+1. Go to **Settings → Companies → Create** (each campus is a `res.company` record).
 2. Enter the campus name. Use a consistent convention, for example:
    - "University of X - Main Campus"
    - "University of X - Satellite Campus"
@@ -21,19 +21,19 @@ Repeat for each campus.
 
 ## User Assignment
 
-Each user is granted access to one or more companies.
+Each user is granted access to one or more campuses.
 
 1. Go to **Settings → Users → [User]**.
 2. Under **Allowed Companies**, add every campus the user may access.
 3. Set **Default Company** to the user's primary campus.
 
-| User type | Allowed companies |
+| User type | Allowed campuses |
 |-----------|-------------------|
 | Campus staff (registrar, admissions, finance) | Their campus only |
 | System administrators | All campuses |
 | VP Academic Affairs / President / CHED Reporter | All campuses (system-wide groups — see below) |
 
-When a user switches the active company in the top bar, all records and menus reflect that campus.
+When a user switches the active campus in the top bar, all records and menus reflect that campus.
 
 ---
 
@@ -43,11 +43,11 @@ eSMIS uses two categories of groups for multi-campus deployments.
 
 ### Campus-scoped groups
 
-Groups such as Registrar, Admissions Officer, and Campus Finance are scoped to the user's active company via `company_id` record rules. A user in these groups can only see and edit records belonging to their current company.
+Groups such as Registrar, Admissions Officer, and Campus Finance are scoped to the user's active campus via `company_id` record rules. A user in these groups can only see and edit records belonging to their current campus.
 
 ### System-wide groups
 
-Groups such as VP Academic Affairs, President, and CHED Reporter bypass company isolation. Users in these groups see records across all campuses. Assign these groups with care.
+Groups such as VP Academic Affairs, President, and CHED Reporter bypass campus isolation. Users in these groups see records across all campuses. Assign these groups with care.
 
 Group inheritance follows Odoo's standard `implied_ids` pattern — a higher-level group automatically includes the permissions of lower-level groups in the same domain.
 
@@ -64,13 +64,13 @@ Some academic data is configured separately for each campus.
 | Room and facility catalog | Per campus |
 | Faculty assignments | Per campus (secondary assignment to another campus is allowed) |
 
-To configure these, switch to the target campus using the company switcher, then navigate to the relevant menu.
+To configure these, switch to the target campus using the campus switcher in the top bar, then navigate to the relevant menu.
 
 ---
 
 ## Shared Academic Data
 
-Some academic data is shared across all campuses. These records carry no `company_id` and are visible system-wide regardless of the active company.
+Some academic data is shared across all campuses. These records carry no `company_id` and are visible system-wide regardless of the active campus.
 
 | Data | Shared |
 |------|--------|
@@ -79,7 +79,7 @@ Some academic data is shared across all campuses. These records carry no `compan
 | Grading system templates (campus may override defaults) | Yes |
 | Vocabulary codes | Yes |
 
-Do not set a `company_id` on these models. Adding company scoping to shared data will break cross-campus curriculum consistency.
+Do not set a `company_id` on these models. Adding campus scoping to shared data will break cross-campus curriculum consistency.
 
 ---
 
@@ -110,12 +110,12 @@ Create at least three users:
 | HEMIS export run by CHED Reporter | Aggregates data from all campuses into a single submission file |
 | Financial consolidation report | Consolidates per Odoo multi-company accounting rules |
 
-Run these checks against real test data, not just empty companies.
+Run these checks against real test data, not just empty campuses.
 
 ---
 
 ## Deep Dives
 
-- `docs/principles/access-rights.md` — record rules, company_id scoping, system-wide groups
-- `docs/principles/module-architecture.md` — which models carry company_id and which are shared
+- `docs/principles/access-rights.md` — record rules, campus scoping via `company_id`, system-wide groups
+- `docs/principles/module-architecture.md` — which models carry `company_id` (campus-scoped) and which are shared
 - `docs/guides/government-export-guide.md` — how HEMIS export aggregates multi-campus data
