@@ -33,6 +33,10 @@ institutions (HEIs).
 **Enforcing body:** National Privacy Commission (NPC)
 **IRR:** NPC Circular 16-01 to 16-04
 
+> **Important NPC Circular Updates:** NPC Circular 16-01 has been repealed by NPC Circular
+> 2023-06. NPC Circular 16-02 has been superseded by NPC Circular 2020-03. Only NPC Circular
+> 16-03 (breach management) remains in force from the original set.
+
 ### Key Provisions
 
 Student data — including academic records, health information, financial standing, and
@@ -79,12 +83,26 @@ legitimate purpose, and proportionality.
 - Students **18 and above**: can provide their own consent
 - Consent forms must be stored as evidence and retrievable on request
 
+**Grades are SPI:** NPC advisory opinions confirm that test scores, grade levels, and
+section assignments are sensitive personal information under Section 3(l)(2). Public
+posting of grades — even by student number — violates the DPA.
+
+**MFA required per NPC Circular 2023-06** for all online access to SPI. Compliance
+deadline: March 30, 2025.
+
+**50% penalty increase for SPI violations involving minors** (Section 36). This is
+critical for a SIS where many freshmen are under 18.
+
+**30 working days** response deadline for data subject rights requests (NPC Advisory
+2021-01).
+
 **Penalties for non-compliance:**
 
 - Administrative fines up to PHP 5,000,000 per violation
 - Criminal penalties: 1–6 years imprisonment and PHP 500,000–4,000,000 in fines
   depending on the offense (unauthorized processing, negligent access, improper
   disposal, unauthorized disclosure)
+- SPI violations involving minors carry an additional 50% penalty increase (Section 36)
 
 ### eSMIS Modules
 
@@ -132,6 +150,11 @@ legitimate purpose, and proportionality.
 - [ ] All personal data at rest is encrypted; connections use TLS in transit
 - [ ] Cross-border transfer of student records (e.g., to foreign credential verification
       services) requires NPC approval or adequacy determination; transfers are logged
+- [ ] MFA enabled for all users accessing Tier 3 (SPI) data
+- [ ] Grade data treated as SPI — no public posting, no exposure without authorization,
+      no inclusion in list exports accessible to unauthorized roles
+- [ ] Data subject rights requests tracked with 30-working-day deadline (NPC Advisory
+      2021-01); overdue requests escalate to the DPO
 
 ### Testing Requirements
 

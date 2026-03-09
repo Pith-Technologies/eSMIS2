@@ -78,15 +78,20 @@ These roles map to real positions in a Philippine higher education institution. 
 
 Certain fields carry heightened privacy obligations and must be restricted beyond normal role access. Access is granted only to the named roles:
 
-| Field / Record Type | Permitted Roles |
-|---------------------|-----------------|
-| National ID (PhilSys), PWD ID, Solo Parent ID | Admissions Officer, Registrar |
-| Disciplinary records | Registrar, Student Affairs |
-| Counseling notes | Counselor only (Restricted per ADR-011) |
-| Health / medical records | Clinic staff only |
-| Financial records | Finance, Financial Aid Officer |
+| Field / Record Type | Classification | Permitted Roles |
+|---------------------|----------------|-----------------|
+| National ID (PhilSys), PWD ID, Solo Parent ID | Tier 3 / SPI | Admissions Officer, Registrar |
+| Student grades (`grade_value`, cumulative GWA) | Tier 3 / SPI | Faculty (own sections only), Registrar, Student (self only) |
+| Disciplinary records | Tier 3 / SPI | Registrar, Student Affairs |
+| Counseling notes | Tier 3 / SPI — Restricted per ADR-011 | Counselor only |
+| Health / medical records | Tier 3 / SPI | Clinic staff only |
+| Financial records | Tier 2 / Confidential | Finance, Financial Aid Officer |
 
 Never expose these fields to roles not listed here, even for read access. Do not include them in list views or exports without explicit access checks.
+
+> **MFA requirement:** All users accessing Tier 3 / SPI fields must authenticate with
+> multi-factor authentication per NPC Circular 2023-06 (compliance deadline March 30,
+> 2025). MFA enforcement is handled at the authentication layer, not in record rules.
 
 ### Multi-Campus Scoping
 

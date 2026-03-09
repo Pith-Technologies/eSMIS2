@@ -144,6 +144,8 @@ except Exception as e:
 - Biometric data
 - Bank account numbers
 - Phone numbers, addresses
+- Grade values (grades are SPI under RA 10173 — never include `grade_value` or GWA
+  in log messages or exception text)
 
 ### Safe Logging
 
@@ -156,6 +158,12 @@ _logger.info("Processing partner_id=%s", partner.id)
 
 # Good - mask sensitive data
 _logger.info("Processing ID ending in %s", national_id[-4:] if national_id else "N/A")
+
+# Bad - logs grade value (SPI)
+_logger.info("Grade %s submitted for student %s", line.grade_value, line.student_id.name)
+
+# Good - log the record ID, not the grade value
+_logger.info("Grade submitted for enrollment_line %s", line.id)
 ```
 
 ## Error Recovery

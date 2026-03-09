@@ -29,6 +29,10 @@ This directory contains the core principles and standards that guide eSMIS devel
 | [Enrollment Workflows](enrollment-workflows.md) | Admission pipeline, pre-enrollment gates, enrollment state machine, validation hooks, add/drop, cross-enrollment, and staggered enrollment |
 | [Grading and Academic Standing](grading-and-academic-standing.md) | Philippine grading systems, GWA computation, academic standing, INC resolution, grade change workflow, Latin honors |
 | [Student Data Lifecycle](student-data-lifecycle.md) | Full student data flow from admissions through alumni status; state machines, models, and cross-cutting concerns per phase |
+| [Test Data and PII](test-data-pii.md) | Rules for synthetic test data, demo data, staging masking, CI safeguards, and developer access to PII |
+| [Consent Management](consent-management.md) | Consent model, processing purposes, minor consent, withdrawal rules, enforcement patterns, and testing requirements under RA 10173 |
+| [Data Retention and Disposal](data-retention-and-disposal.md) | Retention schedule matrix, anonymization rules, disposal procedures, legal hold, and conflict resolution between CHED and RA 10173 |
+| [Data Privacy and PII](data-privacy-and-pii.md) | **AUTHORITATIVE** — PII classification tiers, field inventory, encryption strategy, consent management, data subject rights, audit logging, breach response, and developer checklist for RA 10173 compliance |
 
 ## How to Use These Principles
 
