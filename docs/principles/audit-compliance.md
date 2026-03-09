@@ -197,6 +197,16 @@ def generate_audit_report(self, date_from, date_to):
   - Permanent: TOR and academic records
   - 10 years: transfer credentials
   - 5 years minimum: enrollment forms (per CHED En Banc Res. 170-2018)
+- **Grades are SPI** — all grade read access by non-student users must be logged in the
+  audit trail with: accessor, timestamp, record ID, and the role under which access was
+  granted. Do not log the grade value itself.
+- **Suspicious access detection**: alert if any user accesses more than 100 student
+  records in 1 hour or exports more than 500 records at once. These thresholds indicate
+  potential bulk data exfiltration and require immediate DPO review.
+- **Audit logs must be immutable** — append-only, with no `unlink` or `write`
+  permissions on the audit model for any user group. Implement a hash chain (each log
+  entry hashes its predecessor) to provide tamper evidence that can be verified
+  independently.
 
 ---
 

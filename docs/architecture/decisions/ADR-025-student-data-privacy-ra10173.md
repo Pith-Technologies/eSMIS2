@@ -35,6 +35,8 @@ Republic Act 10173 (Data Privacy Act of 2012) and its Implementing Rules and Reg
 7. **Privacy Impact Assessment (PIA)**: Required before deploying new systems processing SPI
 8. **Retention and disposal**: Records retained per CHED-prescribed schedules; disposal must be documented
 
+Grades, test scores, and section assignments are confirmed as SPI by NPC advisory opinions. Penalties for SPI violations involving minors are increased by 50% under Section 36.
+
 ### Gaps Without This ADR
 
 Without a deliberate privacy architecture, the system would have no mechanism to track consent, no way to enforce purpose limitation programmatically, no structured breach notification workflow, and no data subject rights implementation. Each of these gaps is a regulatory violation.
@@ -86,6 +88,14 @@ All read and write access to Confidential and Restricted fields is logged in the
 | Right to erasure | Anonymization wizard replaces PII with pseudonymous tokens; referential integrity is preserved by retaining record shells with anonymized fields |
 | Right to data portability | Same export wizard as right of access; output is machine-readable JSON following a published schema |
 | Right to object | Consent withdrawal form sets `esmis.consent.is_withdrawn = True`; downstream processing checks are blocked at next execution |
+
+### MFA Requirement
+
+MFA is required for all users accessing SPI per NPC Circular 2023-06 (compliance deadline March 30, 2025). The system must enforce MFA at the authentication layer for any session that will read or write Confidential or Restricted fields.
+
+### Data Subject Rights Response Deadline
+
+Data subject rights requests must be fulfilled within 30 working days per NPC Advisory 2021-01. The `esmis.data.subject.request` model tracks the receipt date and computed deadline; overdue requests trigger escalation to the DPO.
 
 ### Minor Protection
 
@@ -157,6 +167,16 @@ On creation, a `mail.activity` is automatically created assigned to the DPO with
 6. **No PII in logs**: The breach model's `description` field must describe the nature of the breach (e.g., "unauthorized access to grade records") without naming affected students. Affected students are tracked in a separate `esmis.data.breach.subject` relation.
 
 7. **Retention schedule integration**: The anonymization wizard queries a configurable retention schedule (`esmis.retention.schedule`) before anonymizing any record. Records under a legal hold or within the mandatory retention period cannot be anonymized; the wizard informs the operator and skips those records.
+
+### Phased Rollout
+
+| Phase | Scope |
+|-------|-------|
+| Phase 1 | Consent model + basic consent checks in enrollment workflows |
+| Phase 2 | PII field encryption for national identifiers and other Restricted fields |
+| Phase 3 | Breach notification automation (`esmis.data.breach` + 72-hour cron escalation) |
+| Phase 4 | Data subject rights wizards (export, rectification, anonymization) |
+| Phase 5 | MFA enforcement for all users accessing SPI (NPC Circular 2023-06 requirement) |
 
 ## References
 
