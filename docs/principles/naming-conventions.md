@@ -182,6 +182,62 @@ Examples:
 For non-government identifiers (e.g., international standards), use the standard's own URI
 scheme (e.g., `urn:iso:std:iso:5218` for ISO 5218 gender codes).
 
+### Government Identifier URIs
+
+Standard URIs for Philippine government-issued identifiers used in the SIS context:
+
+| URI | Identifier |
+|-----|------------|
+| `urn:gov:ph:psa:philsys` | PhilSys Number (PSN) |
+| `urn:gov:ph:deped:lrn` | DepEd Learner Reference Number |
+| `urn:gov:ph:ched:institution-code` | CHED institution code |
+| `urn:gov:ph:ched:program-code` | CHED program code |
+| `urn:gov:ph:dost-sei:scholar-id` | DOST-SEI scholar ID |
+| `urn:gov:ph:unifast:beneficiary-id` | UniFAST beneficiary ID |
+| `urn:gov:ph:ncda:pwd-id` | PWD ID |
+| `urn:gov:ph:dswd:solo-parent-id` | Solo Parent ID |
+
+These URIs are stored in `esmis.identifier.type` records and referenced wherever government-issued IDs are collected or reported. Do not invent short-form aliases — always use the full URI for interoperability.
+
+### SIS Vocabulary Code Examples
+
+Vocabulary codes for common SIS domains follow the `code_{domain}_{value}` pattern. Reference examples by domain:
+
+**Academic standing:**
+
+| XML ID | Meaning |
+|--------|---------|
+| `code_standing_good` | Good standing |
+| `code_standing_probation` | Academic probation |
+| `code_standing_dismissed` | Academically dismissed |
+
+**Learning modality:**
+
+| XML ID | Meaning |
+|--------|---------|
+| `code_modality_f2f` | Face-to-face |
+| `code_modality_online` | Fully online |
+| `code_modality_blended` | Blended / hybrid |
+
+**Admission decision:**
+
+| XML ID | Meaning |
+|--------|---------|
+| `code_admission_admitted` | Admitted |
+| `code_admission_waitlisted` | Waitlisted |
+| `code_admission_denied` | Denied |
+
+**Student type:**
+
+| XML ID | Meaning |
+|--------|---------|
+| `code_student_new` | New student (first-time enrollee) |
+| `code_student_old` | Continuing student |
+| `code_student_transferee` | Transferee from another institution |
+| `code_student_returnee` | Returning student (was previously enrolled) |
+
+These codes are defined in the `esmis_vocabulary` module and referenced via `env.ref('esmis_vocabulary.code_standing_good')`. Always use `env.ref()` — never hard-code the integer ID.
+
 ## Data Record XML IDs
 
 XML IDs for data records (vocabulary codes, identifier types) follow predictable patterns

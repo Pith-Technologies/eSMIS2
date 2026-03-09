@@ -746,4 +746,46 @@ For time-based records (cycles, appointments, events):
 
 ---
 
+## SIS Form Patterns
+
+Standard tab layouts for the most common SIS entity types:
+
+| Entity | Type | Tab Structure |
+|--------|------|---------------|
+| Student Profile | Registry Entity | Personal, Academics, Financial, Documents, Identifiers |
+| Enrollment Form | Workflow Entity | Courses, Financial Assessment, Prerequisites, Holds |
+| Grade Entry | Transactional | Inline editable list for faculty; component breakdown expandable per row |
+| Section Management | — | Kanban by status (draft, open, closed); list view with enrolled/capacity columns |
+| Financial Aid Award | Workflow Entity | Eligibility criteria display, approval chain, disbursement tracking |
+| Dashboard | — | Role-specific KPI cards: enrollment progress, collection rate, grade submission status |
+
+---
+
+## Mobile-First Student Portal
+
+Priority flows in order of student frequency:
+
+1. Check grades
+2. View schedule
+3. Check balance
+4. Enroll
+5. Request documents
+
+**Viewport and interaction requirements**:
+- Minimum viewport: 360px (standard Android)
+- Touch targets: 44×44px minimum
+- Progressive disclosure: show summary first, tap to expand details
+
+---
+
+## Accessibility (WCAG 2.1 AA)
+
+- Color contrast: 4.5:1 for normal text, 3:1 for large text
+- All functions must be reachable via keyboard navigation
+- Screen reader support with ARIA labels on all interactive elements
+- Form labels must be visible and programmatically associated with their inputs
+- Focus management must follow a logical tab order that matches visual layout
+
+---
+
 **See also**: [error-handling.md](error-handling.md) for user-facing error messages

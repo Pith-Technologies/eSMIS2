@@ -856,6 +856,42 @@ code = self.env["esmis.vocabulary.code"].resolve_by_uri("urn:tpl:vocab:priority#
 
 Both methods use the ORM cache for fast repeated lookups.
 
+## SIS Module Development Patterns
+
+These patterns apply to all eSMIS Student Information System modules.
+
+### Government identifier integration
+
+Use the `esmis.identifier` model with URIs (e.g., `urn:gov:ph:deped:lrn`) for all government IDs. Never store national IDs as plain text fields on the model — use the identifier system with encryption.
+
+### Consent mixin
+
+Models handling student PII should inherit `esmis.consent.mixin`. This adds consent tracking and enforces RA 10173 compliance. Check consent status before exposing PII in `read()` or API responses.
+
+### Learning modality
+
+All course/section models must support a `learning_modality` field (vocabulary code: `f2f`, `online`, `blended`) per CMO No. 4, s. 2020.
+
+### Multi-campus
+
+All domain models include `company_id = fields.Many2one('res.company', default=lambda self: self.env.company)`. Add a company record rule. See `docs/principles/multi-campus-architecture.md`.
+
+### Financial aid hooks
+
+Enrollment models should call `_compute_financial_aid_eligibility()` hook to allow `esmis_financial_aid` and `esmis_financial_aid_ph` to inject eligibility checks.
+
+## SIS Module Checklist
+
+In addition to the [Verification Checklist](#verification-checklist) above, confirm these SIS-specific items:
+
+- [ ] `company_id` field added for multi-campus
+- [ ] Company record rule created in `security/`
+- [ ] Consent mixin inherited if model handles student PII
+- [ ] Government identifier URIs used (not plain text fields)
+- [ ] Learning modality vocabulary used (not hardcoded selection)
+- [ ] Hook methods defined for extension points
+- [ ] Philippine-specific logic isolated in `esmis_*_ph` module
+
 ## Deep Dives
 
 - `docs/principles/module-architecture.md` — layer structure, extension patterns, consolidation decisions

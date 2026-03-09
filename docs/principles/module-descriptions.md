@@ -291,3 +291,25 @@ After installing:
 
 This example is ~40 lines, names every model, includes menu paths, lists security groups by XML ID, and documents
 extension points. A developer, implementer, or AI agent can each find what they need without reading the source code.
+
+## SIS Module Description Example
+
+SIS module descriptions must mention which Philippine regulations the module supports. This helps auditors and accreditors understand compliance coverage.
+
+Example `readme/DESCRIPTION.md` for `esmis_enrollment`:
+
+```markdown
+Manages the student enrollment lifecycle from course selection through registration confirmation.
+
+Handles pre-enrollment validation (prerequisites, academic standing, schedule conflicts,
+enrollment holds), financial assessment (tuition and fee computation), and payment verification.
+Supports staggered enrollment by year level and cross-enrollment between campuses.
+
+**Regulatory compliance:**
+- RA 10931 (Free Tuition Law): citizenship and prior degree eligibility checks
+- RA 10173 (Data Privacy Act): consent verification before PII processing
+- CHED MORPHE: enrollment records retained per institutional policy
+
+**Depends on:** esmis_student, esmis_curriculum, esmis_academic_term, esmis_scheduling
+**Extended by:** esmis_billing, esmis_financial_aid, esmis_lms_bridge
+```

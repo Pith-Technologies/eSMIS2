@@ -15,6 +15,12 @@ This directory contains Architecture Decision Records documenting significant ar
 | [018](ADR-018-dms-security-and-storage-enhancements.md) | DMS Security & Storage Enhancements | **Implemented** | 2025-12-14 | AV scanning, pluggable storage, audit |
 | [020](ADR-020-unified-api-audit-log.md) | Unified API Audit Log | Accepted | 2025-12-14 | Single audit model for all API operations |
 | [022](ADR-022-api-v2-application-level-authorization.md) | API V2 Application-Level Authorization | Accepted | 2025-12-14 | Scope + consent-based API auth |
+| [023](ADR-023-multi-campus-architecture.md) | Multi-Campus Architecture | Accepted | 2026-03-09 | One `res.company` per campus; shared master data, campus-scoped transactional data |
+| [024](ADR-024-government-integration-architecture.md) | Government Integration Architecture | Accepted | 2026-03-09 | Dual strategy: API for PhilSys/payments, file export for portal-based systems |
+| [025](ADR-025-student-data-privacy-ra10173.md) | Student Data Privacy — RA 10173 | Accepted | 2026-03-09 | Consent management, data subject rights, breach notification (72-hour NPC) |
+| [026](ADR-026-financial-aid-modeling.md) | Financial Aid Modeling | Accepted | 2026-03-09 | Rule-based eligibility, stacking order, audit trail for UniFAST/COA |
+| [027](ADR-027-lms-integration-standards.md) | LMS Integration Standards | Accepted | 2026-03-09 | LTI 1.3 + OneRoster 1.2, modality tracking, grade passback |
+| [028](ADR-028-grading-system-flexibility.md) | Grading System Flexibility | Accepted | 2026-03-09 | Configurable scales, GWA rules, INC resolution, Latin honors |
 
 ## Status Legend
 
@@ -33,7 +39,7 @@ The remaining ADRs (004, 007, 009-012, 018, 020, 022) cover cross-cutting concer
 
 ## Creating New ADRs
 
-1. Use the next available number (currently 023)
+1. Use the next available number (currently 029)
 2. Follow the template: `ADR-NNN-short-title.md`
 3. Include: Status, Date, Context, Decision, Consequences
 4. Update this index after creating
