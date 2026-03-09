@@ -100,12 +100,12 @@ Template for `data/res_company_data.xml`:
         <field name="active" eval="True"/>
     </record>
 
-    <!-- Set main company country -->
+    <!-- Set main campus (res.company) country -->
     <record id="base.main_partner" model="res.partner">
         <field name="country_id" ref="base.de"/>
     </record>
 
-    <!-- Set main company currency -->
+    <!-- Set main campus (res.company) currency -->
     <record id="base.main_company" model="res.company">
         <field name="currency_id" ref="base.EUR"/>
     </record>
@@ -149,7 +149,7 @@ Fields and logic specific to a single variant (e.g., country or deployment) go i
 
 ### Identifiers as a separate model
 
-External IDs (tax numbers, registration codes, national IDs, passport numbers) are stored in the identifier model linked via One2many to `res.partner` — never as direct `Char` fields on the partner.
+Government and institutional identifiers (tax numbers, registration codes, national IDs, passport numbers) are stored in the `esmis.identifier` model linked via One2many to `res.partner` — never as direct `Char` fields on the partner.
 
 ### Vocabulary over static selections
 
@@ -421,7 +421,7 @@ Before marking any task complete, confirm all items below:
 - [ ] Many2one fields use `{model}_id`, One2many/M2m use `{model}_ids`
 - [ ] No variant-specific fields in base modules (use `esmis_*_{variant}` modules)
 - [ ] No static `Selection` for values that should be vocabulary-backed
-- [ ] External IDs stored in identifier model, not as direct fields
+- [ ] Government/institutional IDs stored in `esmis.identifier` model, not as direct fields
 - [ ] `application` and `auto_install` set correctly
 - [ ] All models have `_description` set
 - [ ] Public methods, overrides, and constraints have docstrings
@@ -874,7 +874,7 @@ All course/section models must support a `learning_modality` field (vocabulary c
 
 ### Multi-campus
 
-All domain models include `company_id = fields.Many2one('res.company', default=lambda self: self.env.company)`. Add a company record rule. See `docs/principles/multi-campus-architecture.md`.
+All domain models include `company_id = fields.Many2one('res.company', default=lambda self: self.env.company)`. Add a campus isolation record rule. See `docs/principles/multi-campus-architecture.md`.
 
 ### Financial aid hooks
 

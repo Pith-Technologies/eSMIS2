@@ -34,7 +34,7 @@ can work efficiently and the project presents well as an open-source contributio
 - [ ] C4. Update `CONTRIBUTING.md` with SIS-specific guidance (module proposals, vocabulary
       additions, country-specific modules, regulatory compliance in PRs)
 - [ ] C5. Add "Module Request" issue template (`.github/ISSUE_TEMPLATE/module_request.md`)
-- [ ] C6. Fix terminology inconsistencies across docs (campus vs company, identifier vs external
+- [x] C6. Fix terminology inconsistencies across docs (campus vs company, identifier vs external
       ID)
 
 ### Phase D: Developer Experience

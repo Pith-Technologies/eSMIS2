@@ -23,7 +23,7 @@ eSMIS uses **Odoo's native multi-company architecture**. Each campus is represen
 - **Consolidated reporting** — CHED HEMIS reports and system-wide enrollment dashboards work directly against the single database without ETL.
 - **Shared employee records** — Faculty with appointments at multiple campuses are a single `hr.employee` record, avoiding duplicate PII and simplifying payroll.
 
-### Naming Convention for Companies
+### Naming Convention for Campus Records
 
 Campus `res.company` records should follow a consistent naming scheme so they sort and display predictably:
 
@@ -33,7 +33,7 @@ University of the Philippines Los Baños  → company_id = 2
 University of the Philippines Manila     → company_id = 3
 ```
 
-Use the full institutional name, not abbreviations, as the company name. Abbreviations belong in a separate field or in the company's `short_name` if Odoo provides one.
+Use the full institutional name, not abbreviations, as the campus name. Abbreviations belong in a separate field or in the `res.company` record's `short_name` if Odoo provides one.
 
 ---
 
@@ -41,7 +41,7 @@ Use the full institutional name, not abbreviations, as the company name. Abbrevi
 
 ### Shared (No `company_id`, visible to all)
 
-These are master data records that campuses reference but do not own. They have no `company_id` field and are not filtered by company.
+These are master data records that campuses reference but do not own. They have no `company_id` field and are not filtered by campus.
 
 | Data | Model (example) | Why shared |
 |------|-----------------|------------|
@@ -55,7 +55,7 @@ These are master data records that campuses reference but do not own. They have 
 
 ### Campus-Specific (Has `company_id`, filtered by company)
 
-These records are owned by a campus and are only visible to users of that company.
+These records are owned by a campus and are only visible to users of that campus.
 
 | Data | Model (example) | Why campus-specific |
 |------|-----------------|---------------------|
@@ -76,7 +76,7 @@ These items have a system-wide default and a campus-level override record. The o
 |------|---------|
 | Grading scale | Campus creates its own `esmis.grading.scale` linked to its `company_id`. If none exists, the system falls back to the shared template. |
 | Financial aid programs | Campus defines its own scholarship programs. Government scholarships (CHED, DOST-SEI, UniFAST/TES) are shared reference data. |
-| Retention policies | System-wide policy is the baseline. Campus policy record overrides it for that company. |
+| Retention policies | System-wide policy is the baseline. Campus policy record overrides it for that campus. |
 | GWA computation rules | Some campuses weight units differently. A campus-level configuration record controls the formula. |
 
 ---
@@ -112,7 +112,7 @@ Always set `index=True` on `company_id`. It is used in every record rule domain 
 
 ### Standard Record Rule — Campus Isolation
 
-The default record rule restricts users to records belonging to their active company. This follows Odoo's standard `ir.rule` multi-company pattern.
+The default record rule restricts users to records belonging to their active campus. This follows Odoo's standard `ir.rule` multi-company pattern.
 
 ```xml
 <!-- esmis_enrollment/security/ir.rule.xml -->
@@ -134,7 +134,7 @@ The default record rule restricts users to records belonging to their active com
 </odoo>
 ```
 
-`company_ids` is an Odoo built-in rule variable that resolves to the list of companies the current user is allowed to access (their own company plus any companies they have been explicitly granted access to via `res.users.company_ids`).
+`company_ids` is an Odoo built-in rule variable that resolves to the list of campuses (as `res.company` records) the current user is allowed to access (their own campus plus any campuses they have been explicitly granted access to via `res.users.company_ids`).
 
 ### System-Level Rule — Consolidated Access
 
@@ -208,9 +208,9 @@ Campus manager groups imply their officer groups. This prevents the need to assi
 
 ### Campus Assignment Enforced Through Company Membership
 
-A user's campus access is controlled by `res.users.company_ids`. A registrar assigned to Campus A should have only Campus A in their allowed companies. This is set in Settings > Users > Allowed Companies — no custom code needed.
+A user's campus access is controlled by `res.users.company_ids`. A registrar assigned to Campus A should have only Campus A in their allowed campuses. This is set in Settings > Users > Allowed Companies — no custom code needed.
 
-System-wide roles (VP, President, CHED reporter) have all campuses in their allowed companies list. Their unrestricted record rules (Section 3) then allow them to query across all.
+System-wide roles (VP, President, CHED reporter) have all campuses in their allowed campuses list. Their unrestricted record rules (Section 3) then allow them to query across all.
 
 ---
 
@@ -220,11 +220,11 @@ System-wide roles (VP, President, CHED reporter) have all campuses in their allo
 
 CHED's Higher Education Management Information System requires enrollment statistics at the institutional level (the whole university system), not per campus.
 
-These reports must aggregate across all campuses. Use `sudo()` with an explicit domain or use a dedicated reporting user that belongs to all companies:
+These reports must aggregate across all campuses. Use `sudo()` with an explicit domain or use a dedicated reporting user that belongs to all campuses:
 
 ```python
 def _get_system_enrollment_count(self, term_id):
-    # Deliberately queries all companies — this is a CHED system-level report.
+    # Deliberately queries all campuses — this is a CHED system-level report.
     return self.env["esmis.enrollment"].sudo().search_count([
         ("term_id", "=", term_id),
         ("state", "=", "enrolled"),
@@ -243,7 +243,7 @@ Accreditation reports vary by accrediting body:
 | CHED COE / COD recognition | Per campus or per program across the system |
 | ISO audit | May cover the whole system |
 
-The `company_id` filter on report wizard fields controls scope. System-level reports leave `company_id` blank (all campuses). Campus-level reports pre-fill it with the current user's company and make the field read-only for campus staff.
+The `company_id` filter on report wizard fields controls scope. System-level reports leave `company_id` blank (all campuses). Campus-level reports pre-fill it with the current user's campus and make the field read-only for campus staff.
 
 ### Enrollment Dashboard Drill-Down
 
@@ -324,7 +324,7 @@ Odoo ORs rules within the same model for the same group. The registrar sees reco
 
 ### Credit Transfer Between Campuses
 
-A student transferring from Campus A to Campus B brings their academic record. The canonical record stays with Campus A (their original home company). Campus B creates a credit evaluation record referencing the original:
+A student transferring from Campus A to Campus B brings their academic record. The canonical record stays with Campus A (their original home campus). Campus B creates a credit evaluation record referencing the original:
 
 ```python
 class EsmisCreditTransfer(models.Model):
@@ -351,7 +351,7 @@ class EsmisCreditTransfer(models.Model):
     # ... evaluated_units, approved_units, approver_id, state ...
 ```
 
-The credit transfer record lives in the receiving campus's company scope. The source enrollment records remain in the source campus's scope; the receiving registrar accesses them via a specific cross-campus read permission granted during the transfer workflow.
+The credit transfer record lives in the receiving campus's scope. The source enrollment records remain in the source campus's scope; the receiving registrar accesses them via a specific cross-campus read permission granted during the transfer workflow.
 
 ### Faculty Shared Appointments
 
@@ -384,7 +384,7 @@ A student formally transferring their enrollment from Campus A to Campus B is ha
 1. The student's `esmis.student` record (scoped to Campus A) is marked with `transfer_state = 'transferred_out'` and a `transfer_date`.
 2. Campus B creates a new `esmis.student` record (scoped to Campus B) with `transfer_state = 'transferred_in'` and a reference to the Campus A student record.
 3. A credit evaluation is created to bring recognized units forward (see Credit Transfer above).
-4. The student's `res.partner` record is shared — it is not company-scoped. Only the domain-specific student profile records are campus-scoped.
+4. The student's `res.partner` record is shared — it is not campus-scoped. Only the domain-specific student profile records are campus-scoped.
 
 ---
 
@@ -467,7 +467,7 @@ eSMIS must support both. The institutional-level report is the cross-campus cons
 | ISO 9001 | Often system-wide for administrative processes |
 | CHED Center of Excellence / Development | Per program, cross-campus eligibility possible |
 
-Accreditation reports in eSMIS should support a `scope` field on the report wizard: `campus` or `system`. When `campus`, filter by `company_id`. When `system`, query all companies with appropriate permissions.
+Accreditation reports in eSMIS should support a `scope` field on the report wizard: `campus` or `system`. When `campus`, filter by `company_id`. When `system`, query all campuses with appropriate permissions.
 
 ### CHED CMO Compliance
 

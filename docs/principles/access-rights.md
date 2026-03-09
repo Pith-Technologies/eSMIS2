@@ -243,7 +243,7 @@ access_res_partner_inventory_officer,res.partner officer,base.model_res_partner,
 - [ ] All rules have non-empty `domain_force` (no `[]` with write permissions)
 - [ ] All rules have explicit `groups` field OR `global="True"`
 - [ ] Rules wrapped in `<data noupdate="1">`
-- [ ] Multi-company models have company isolation rules
+- [ ] Campus-scoped models have campus isolation rules (via `company_id`)
 - [ ] Role-based scoping rules for each functional group (viewer, officer, manager)
 - [ ] Naming follows `rule_{model}_{purpose}` pattern
 
@@ -251,7 +251,7 @@ access_res_partner_inventory_officer,res.partner officer,base.model_res_partner,
 
 When adding a new model with `company_id`, you MUST create:
 
-1. **Multi-company isolation rule** (global):
+1. **Campus isolation rule** (global, uses `company_id`):
 ```xml
 <record id="rule_{model}_multi_company" model="ir.rule">
     <field name="name">Model: Multi-Company</field>

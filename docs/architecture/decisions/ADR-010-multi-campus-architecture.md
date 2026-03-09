@@ -33,8 +33,8 @@ Philippine universities are commonly multi-campus systems. The UP System has 8 c
 1. **One company per campus**: Each campus is represented as a `res.company` record. The parent institution (e.g., "UP System") is the root company.
 2. **Shared academic master data**: Curriculum plans, course catalog entries, grading system templates, and vocabulary terms are not company-scoped. They are defined once at the system level and referenced by all campuses.
 3. **Campus-scoped transactional data**: Sections, room assignments, enrollment records, fee schedules, grade sheets, and disciplinary records carry `company_id` and are filtered per campus by default record rules.
-4. **System-level users for reporting**: Users with CHED reporting or system administration roles receive cross-company access. This is granted via group membership, not by bypassing record rules with `sudo()`.
-5. **No custom multi-tenancy code**: The architecture relies entirely on Odoo's built-in company switching, financial consolidation, and inter-company transaction mechanisms.
+4. **System-level users for reporting**: Users with CHED reporting or system administration roles receive cross-campus access. This is granted via group membership, not by bypassing record rules with `sudo()`.
+5. **No custom multi-tenancy code**: The architecture relies entirely on Odoo's built-in campus switching (company selector), financial consolidation, and inter-campus transaction mechanisms.
 
 ### Data Scoping Rules
 
@@ -65,7 +65,7 @@ company_id = fields.Many2one(
 )
 ```
 
-The record rule restricts visibility to the user's active company:
+The record rule restricts visibility to the user's active campus:
 
 ```xml
 <record id="rule_{model}_company" model="ir.rule">
@@ -79,7 +79,7 @@ The record rule restricts visibility to the user's active company:
 
 ### Inter-Campus Enrollment
 
-When a student from one campus takes a course at another campus (cross-enrollment, common in the UP System), a dedicated cross-enrollment workflow creates linked enrollment records in both campuses. The requesting campus holds the student record; the hosting campus holds the section enrollment. A cross-campus coordinator user with access to both companies manages the handoff.
+When a student from one campus takes a course at another campus (cross-enrollment, common in the UP System), a dedicated cross-enrollment workflow creates linked enrollment records in both campuses. The requesting campus holds the student record; the hosting campus holds the section enrollment. A cross-campus coordinator user with access to both campuses manages the handoff.
 
 ## Consequences
 
@@ -87,16 +87,16 @@ When a student from one campus takes a course at another campus (cross-enrollmen
 
 - Leverages Odoo's tested multi-company infrastructure with no custom multi-tenancy code to maintain
 - Native financial consolidation reports work without modification
-- Campus switching in the UI uses Odoo's standard company selector
+- Campus switching in the UI uses Odoo's standard campus selector (company switcher)
 - Inter-company invoicing and cost allocation use Odoo's built-in inter-company rules
 - CHED system-level users can run consolidated reports using Odoo's standard `allowed_company_ids` mechanism
 
 ### Negative
 
-- Cross-campus queries must explicitly include company filtering; ad-hoc SQL reports must be reviewed for missing filters
+- Cross-campus queries must explicitly include `company_id` filtering; ad-hoc SQL reports must be reviewed for missing filters
 - Inter-campus enrollment requires a dedicated workflow module (`esmis_cross_enrollment`) rather than a simple section assignment
 - Shared master data and campus-scoped data must be clearly distinguished in every module — ambiguity here causes isolation failures
-- System administrators must understand Odoo's multi-company rules to correctly configure user company access
+- System administrators must understand Odoo's multi-company rules to correctly configure user campus access
 
 ### Risks & Mitigations
 
@@ -105,13 +105,13 @@ When a student from one campus takes a course at another campus (cross-enrollmen
 | Developer forgets `company_id` on new model | MEDIUM | HIGH | Module audit script checks for missing `company_id` on transactional models |
 | Shared master data accidentally scoped | LOW | MEDIUM | Code review checklist; architect approval for any `company_id` on master data models |
 | Cross-campus query returns all campuses | MEDIUM | HIGH | Record rule tests in CI; integration tests assert campus isolation |
-| User assigned to wrong campus | LOW | MEDIUM | Onboarding checklist; company assignment reviewed by IT admin role |
+| User assigned to wrong campus | LOW | MEDIUM | Onboarding checklist; campus assignment reviewed by IT admin role |
 
 ## Implementation Notes
 
-1. Every new transactional model adds `company_id` with the default lambda and a company record rule as shown above.
-2. System-level reporting users (CHED coordinator, system admin) are added to the `esmis_security.group_system_admin` group, which carries `res.groups` `share` = False and explicit multi-company access.
-3. Shared master data models (curriculum, course catalog, grading templates) explicitly omit `company_id` and omit company record rules. This is a deliberate design choice, not an oversight.
+1. Every new transactional model adds `company_id` with the default lambda and a campus isolation record rule as shown above.
+2. System-level reporting users (CHED coordinator, system admin) are added to the `esmis_security.group_system_admin` group, which carries `res.groups` `share` = False and explicit cross-campus access.
+3. Shared master data models (curriculum, course catalog, grading templates) explicitly omit `company_id` and omit campus isolation record rules. This is a deliberate design choice, not an oversight.
 4. The `esmis_cross_enrollment` module, when implemented, must use `with_company()` context manager to create enrollment records in the hosting campus.
 5. Module audit tooling (`./odoo-project audit-modules`) will be extended to flag transactional models missing `company_id`.
 

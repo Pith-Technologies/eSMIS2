@@ -4,23 +4,25 @@ Standards for building APIs in eSMIS.
 
 ## Core Principles
 
-1. **External Identifiers Only** - Never expose internal database IDs
+1. **Stable Identifiers Only** - Never expose internal database IDs; use `esmis.identifier` records or XML IDs
 2. **Standards-Based** - Use well-known standards for interoperability
 3. **Field Filtering** - Control which fields are returned per endpoint
 4. **Versioned** - Explicit versioning with deprecation periods
 
-## External Identifier Rule (Critical)
+## Stable Identifier Rule (Critical)
 
-**NEVER expose internal database IDs for cross-system integration.**
+**NEVER expose internal database IDs in API responses.**
+
+Use `esmis.identifier` records (government IDs like PhilSys, TIN, LRN) as stable, cross-system identifiers. Do not confuse these with Odoo's "external identifiers" (`ir.model.data` XML IDs), which are a separate concept used internally for data records.
 
 ```python
-# WRONG - exposes internal ID
+# WRONG - exposes internal DB ID
 {
     "id": 12345,
     "name": "Jane Smith"
 }
 
-# CORRECT - uses external identifiers
+# CORRECT - uses esmis.identifier records (government/institutional IDs)
 {
     "identifier": [
         {"name": "National ID", "identifier": "US-123456789"},
@@ -30,12 +32,12 @@ Standards for building APIs in eSMIS.
 }
 ```
 
-**Why:** Integrated systems require stable, external IDs for cross-system references.
+**Why:** Integrated systems require stable identifiers for cross-system references. Database IDs are internal and may change across environments.
 
 ## Use `esmis.identifier` for All Identifiers
 
 ```python
-# Single system for flexible + external IDs
+# Single system for flexible government/institutional IDs
 esmis.vocabulary.code  # Configuration: identifier types (National ID, Tax ID, etc.)
 esmis.identifier       # Storage: partner_id, type_id, system_uri, value
 res.partner.identifier_ids → Many esmis.identifier records
@@ -154,7 +156,7 @@ Supported gateways: PayMongo, Maya, Dragonpay.
 | `/curricula` | Program curriculum with prerequisite graph |
 | `/financial-aid` | Scholarship awards and eligibility status |
 
-All resources follow the External Identifier Rule — no internal database IDs in responses.
+All resources follow the Stable Identifier Rule — no internal database IDs in responses.
 
 ---
 

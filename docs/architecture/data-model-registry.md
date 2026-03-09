@@ -1104,7 +1104,7 @@ have their own database tables.
 
 ### Module: `esmis_api`
 
-**Purpose:** REST API facade, OAuth 2.0 authentication, external identifier enforcement, API client management.
+**Purpose:** REST API facade, OAuth 2.0 authentication, stable identifier enforcement (no DB IDs in responses), API client management.
 **Status:** Planned
 **Governed by:** [API Design](../principles/api-design.md), [ADR-004](decisions/ADR-004-api-v2-architecture.md), [ADR-009](decisions/ADR-009-api-v2-application-level-authorization.md)
 
@@ -1146,7 +1146,7 @@ have their own database tables.
 | `ip_address` | Char | Client IP |
 | `operation` | Selection | `read`, `search`, `export`, `create`, `update`, `patch`, `delete` |
 | `resource_type` | Char | Resource type |
-| `resource_identifier` | Char | External identifier (never DB ID) |
+| `resource_identifier` | Char | Stable identifier (never DB ID) |
 | `consent_id` | Many2one (`esmis.consent`) | Consent record (optional) |
 | `status` | Selection | `success`, `access_denied`, `not_found`, `error` |
 | `timestamp` | Datetime | Event time |
