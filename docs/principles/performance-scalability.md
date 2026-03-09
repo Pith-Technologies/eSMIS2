@@ -169,4 +169,38 @@ A performance linter exists at `scripts/lint/check_performance.py` to detect:
 
 ---
 
+## SIS Scale Targets
+
+| Operation | Target |
+|-----------|--------|
+| Concurrent students per campus | 50,000+ |
+| List view load | < 2s |
+| Student search (by name, ID, email) | < 500ms |
+| HEMIS export (50k+ students) | < 5 minutes |
+| Bulk grade import (5k+ records) | < 2 minutes |
+| Financial aid batch evaluation (10k+) | < 10 minutes |
+
+---
+
+## Enrollment Surge Handling
+
+Peak enrollment is characterized by 80% of all enrollments occurring within a 3-day window. The following strategies apply:
+
+- **Staggered enrollment**: open enrollment by year level, seniors first
+- **Slot reservation**: hold section slots with a 15-minute TTL; release automatically if not confirmed
+- **Pre-computed availability**: section available-slot count is a stored field, not a live count query
+- **Background fee assessment**: trigger fee computation via `queue_job` after enrollment confirmation
+- **Read replicas**: route schedule and availability queries to read replicas to reduce primary DB load
+
+---
+
+## Academic Data Optimization
+
+- **GWA**: stored as a computed field on the student record; recomputed whenever a grade changes
+- **Enrollment statistics**: pre-aggregated in summary tables; refreshed by scheduled action, not computed on demand
+- **Grade records**: partitioned by academic year so archival queries do not scan the full history table
+- **Curriculum checklist progress**: cached per student; cache invalidated on any grade or enrollment change
+
+---
+
 **See also:** [Testing](testing.md), [Approval Workflows](approval-workflows.md)

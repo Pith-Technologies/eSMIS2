@@ -55,6 +55,45 @@ TIER 3: BASE PERMISSIONS            ← Technical, granular
 | Manager | + Admin functions | Supervisory |
 | Admin | Full CRUD + Config | System administration |
 
+### SIS-Specific Roles
+
+These roles map to real positions in a Philippine higher education institution. Each entry notes the functional scope and whether it is campus-scoped or broader.
+
+| Role | Level | Scope | Functional Access |
+|------|-------|-------|-------------------|
+| **Registrar** | Officer / Manager | Campus | Enrollment records, grades, TOR, graduation, curriculum |
+| **Admissions Officer** | Officer | Campus | Application evaluation, admission decisions |
+| **Faculty** | Officer | Department | Grade entry for own sections only |
+| **Financial Aid Officer** | Officer | Campus | Scholarship awards, eligibility, subsidy tracking |
+| **Cashier / Finance** | Officer | Campus | Payment processing, fee assessment, refunds |
+| **Student (Self)** | Viewer | Own records | Own grades, schedule, balance, document requests |
+| **Parent / Guardian** | Viewer | Linked student | Linked student records only, with student consent |
+| **Counselor** | Officer | Assigned students | Counseling records for assigned students (Restricted classification) |
+| **Department Chair** | Manager | Department | Faculty loads, section management, grade distributions |
+| **Dean** | Manager | College | College-level reports, grade change approvals, faculty assignments |
+| **VP Academic Affairs / President** | Admin | System-wide | All-campus dashboards and reports |
+| **CHED Reporter** | Viewer | System-wide | Read access for HEMIS/eCAV exports |
+
+### Sensitive Field Access
+
+Certain fields carry heightened privacy obligations and must be restricted beyond normal role access. Access is granted only to the named roles:
+
+| Field / Record Type | Permitted Roles |
+|---------------------|-----------------|
+| National ID (PhilSys), PWD ID, Solo Parent ID | Admissions Officer, Registrar |
+| Disciplinary records | Registrar, Student Affairs |
+| Counseling notes | Counselor only (Restricted per ADR-011) |
+| Health / medical records | Clinic staff only |
+| Financial records | Finance, Financial Aid Officer |
+
+Never expose these fields to roles not listed here, even for read access. Do not include them in list views or exports without explicit access checks.
+
+### Multi-Campus Scoping
+
+- All campus-scoped roles are restricted via `company_id` record rules. A Registrar at Campus A cannot access enrollment records at Campus B.
+- System-level roles (VP Academic Affairs, President, CHED Reporter) use `[(1, '=', 1)]` domain rules that bypass campus isolation.
+- See `multi-campus-architecture.md` for the full record rule design.
+
 ## Reference Data Models
 
 Reference data models contain shared lookup values used across the system (like countries, currencies, or vocabulary codes). These MUST be readable by all internal users.

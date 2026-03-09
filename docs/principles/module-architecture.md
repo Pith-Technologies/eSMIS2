@@ -13,21 +13,33 @@ Guidelines for organizing, consolidating, and extending eSMIS modules.
 ## Layer Structure
 
 ```
-Layer 3: COUNTRY/DOMAIN EXTENSIONS
-├── esmis_reporting (Reporting integration)
-└── esmis_workflow (Workflow management)
+Layer 3: EXTENSIONS & INTEGRATIONS
+├── esmis_reports (Reporting & analytics)
+├── esmis_documents (Document management)
+├── esmis_alumni (Alumni tracking)
+├── esmis_student_services (Advising, counseling, records)
+├── esmis_api (REST API layer)
+├── esmis_lms_bridge (LMS integration)
+├── esmis_philsys (PhilSys identity verification)
+└── esmis_payment (Payment gateway integration)
 
-Layer 2: CAPABILITIES
-├── esmis_order (Order management)
-├── esmis_inventory (Inventory tracking)
-└── esmis_procurement (Procurement orders)
+Layer 2: DOMAIN CORE
+├── esmis_enrollment (Enrollment & admission)
+├── esmis_curriculum (Programs, courses, subjects)
+├── esmis_grading (Grade entry & computation)
+├── esmis_scheduling (Class scheduling & rooms)
+├── esmis_billing (Fees, assessments, invoicing)
+├── esmis_financial_aid (Scholarships & discounts)
+└── esmis_faculty (Faculty loading & profiles)
 
 Layer 1: FOUNDATION
-├── esmis_contact (Contact management)
+├── esmis_student (Student profiles & records)
+├── esmis_academic_term (School year & semester)
 ├── esmis_vocabulary (Vocabulary & identifiers)
-├── esmis_security (Access control)
-└── esmis_area (Geographic management)
+└── esmis_security (Access control & groups)
 ```
+
+> All domain models include `company_id` for multi-campus isolation. See [multi-campus-architecture.md](multi-campus-architecture.md).
 
 ## Three-Tier Customization Model
 
@@ -91,11 +103,12 @@ Fields and logic specific to a single country belong in a country-suffixed modul
 
 | Base module | Country module | Contains |
 |-------------|----------------|----------|
-| `esmis_contact` | `esmis_contact_us` | Country-specific fields, validation rules |
-| `esmis_order` | `esmis_order_us` | Country-specific order types, regulatory codes |
-| `esmis_integration` | `esmis_integration_us` | Country-specific API profiles, identifier mappings |
+| `esmis_grading` | `esmis_grading_ph` | Philippine grading scales (1.0–5.0, INC, DRP) |
+| `esmis_curriculum` | `esmis_curriculum_ph` | CHED program codes, PQF level mappings |
+| `esmis_financial_aid` | `esmis_financial_aid_ph` | TES, DOST-SEI, Universal Access to Quality Tertiary Education Act free tuition programs |
+| `esmis_reports` | `esmis_reporting_ph` | CHED HEMIS export formats, statistical reports |
 
-**Rule:** If a field, constraint, or method only applies to one country's regulations, it goes in the `_us` (or `_ke`, `_ng`, etc.) module. The base module must remain country-agnostic.
+**Rule:** If a field, constraint, or method only applies to one country's regulations, it goes in the `_ph` (or other country suffix) module. The base module must remain country-agnostic.
 
 ### Country Module Exclusion
 
@@ -104,12 +117,12 @@ Country-specific modules **must declare exclusions** against all other country v
 Odoo's `excludes` manifest key enforces this at install time — attempting to install an excluded module raises a `UserError`.
 
 ```python
-# esmis_contact_us/__manifest__.py
+# esmis_grading_ph/__manifest__.py
 {
-    "name": "eSMIS Contact - United States",
-    "depends": ["esmis_contact", "esmis_vocabulary"],
-    "excludes": ["esmis_contact_ke", "esmis_contact_ng"],
-    "auto_install": False,  # installed via esmis_starter_us
+    "name": "eSMIS Grading - Philippines",
+    "depends": ["esmis_grading", "esmis_vocabulary"],
+    "excludes": ["esmis_grading_ke", "esmis_grading_ng"],
+    "auto_install": False,  # installed via esmis_starter_ph
     ...
 }
 ```
@@ -123,20 +136,22 @@ Country modules never use `auto_install`. They are installed exclusively through
 Beyond aggregating country module dependencies, each starter module configures the Odoo database for the target country's locale via `data/res_company_data.xml` (`noupdate="1"`). This includes activating the country's currency, setting the main company's country and currency, and configuring the default timezone. See [Module Visibility — Localization Defaults](module-visibility.md#localization-defaults) for the full checklist.
 
 This applies to all layers:
-- `esmis_contact_us` excludes `esmis_contact_ke`, `esmis_contact_ng`, etc.
-- `esmis_order_us` excludes `esmis_order_ke`, etc.
+- `esmis_grading_ph` excludes `esmis_grading_ke`, `esmis_grading_ng`, etc.
+- `esmis_curriculum_ph` excludes `esmis_curriculum_ke`, etc.
 
 Country modules use `_inherit` to extend the base model:
 
 ```python
-# esmis_contact_us/models/res_partner.py
-class ResPartner(models.Model):
-    _inherit = "res.partner"
+# esmis_grading_ph/models/esmis_grade.py
+class Grade(models.Model):
+    _inherit = "esmis.grade"
 
-    tax_id_number = fields.Char(string="Tax ID Number")
-    membership_type_id = fields.Many2one(
+    # Philippine numerical grade scale (1.0 = highest, 5.0 = failing)
+    numerical_grade = fields.Float(string="Numerical Grade", digits=(3, 2))
+    grade_status_id = fields.Many2one(
         "esmis.vocabulary.code",
-        domain="[('namespace_uri', '=', 'urn:gov:us:irs:membership-type')]",
+        domain="[('namespace_uri', '=', 'urn:esmis:grade-status')]",
+        # codes: draft, submitted, approved, locked
     )
 ```
 
@@ -158,7 +173,7 @@ res.partner
 - Validating format per type via regex patterns
 - Standardized mapping to external identifier formats
 
-The identifier type definitions are seeded as data in the appropriate country module (e.g., `esmis_contact_us`).
+The identifier type definitions are seeded as data in the appropriate country module (e.g., `esmis_student_ph` for Philippine national IDs such as PhilSys).
 
 **Exception: High-frequency convenience fields.** A country module may add a direct `Char` field (e.g., `tax_id_number`) for an identifier that appears on most forms and is entered frequently. The field must sync bidirectionally with `esmis.identifier` via overridden `create()` and `write()`. This is a UX shortcut, not a replacement — the identifier model remains the canonical store.
 
@@ -168,14 +183,14 @@ Avoid hardcoding selection values for fields like status, category, type, or any
 
 **Instead of this:**
 ```python
-priority = fields.Selection([("low", "Low"), ("medium", "Medium"), ("high", "High")])
+modality = fields.Selection([("face_to_face", "Face to Face"), ("online", "Online"), ("blended", "Blended")])
 ```
 
 **Do this:**
 ```python
-priority_id = fields.Many2one(
+modality_id = fields.Many2one(
     "esmis.vocabulary.code",
-    domain="[('namespace_uri', '=', 'urn:example:priority')]",
+    domain="[('namespace_uri', '=', 'urn:esmis:learning-modality')]",
 )
 ```
 
@@ -183,12 +198,21 @@ The `esmis_vocabulary` module provides:
 
 | Model | Purpose |
 |-------|---------|
-| `esmis.vocabulary` | A named code list with a namespace URI (e.g., `urn:example:priority` for priority levels) |
+| `esmis.vocabulary` | A named code list with a namespace URI (e.g., `urn:esmis:learning-modality` for delivery modalities) |
 | `esmis.vocabulary.code` | Individual code within a vocabulary (code, display label, sequence, URI) |
+
+**SIS vocabulary examples:**
+
+| Vocabulary | Namespace URI | Sample codes |
+|------------|---------------|--------------|
+| Learning modality | `urn:esmis:learning-modality` | `face_to_face`, `online`, `blended` |
+| Admission decision | `urn:esmis:admission-decision` | `admitted`, `waitlisted`, `denied` |
+| Scholarship category | `urn:esmis:scholarship-category` | `government`, `institutional`, `merit`, `need` |
+| Academic standing | `urn:esmis:academic-standing` | `good`, `probation`, `warning`, `dismissed` |
 
 **When to use vocabulary vs. static selection:**
 - **Use vocabulary** for values that follow external standards, vary by deployment, or need to be extended without code changes.
-- **Use static selection** only for internal workflow states (`draft`, `confirmed`, `cancelled`) or boolean-like choices that are truly fixed.
+- **Use static selection** only for internal workflow states (`draft`, `submitted`, `approved`, `locked`) or boolean-like choices that are truly fixed.
 
 ## Extension Patterns
 
@@ -227,13 +251,15 @@ class ApprovalPlugin(models.AbstractModel):
 
 ```python
 # Core module
-class Order(models.Model):
-    def register_contact(self, partner):
-        self._pre_registration_hook(partner)
-        # ... registration logic ...
-        self._post_registration_hook(partner)
+class Enrollment(models.Model):
+    _name = "esmis.enrollment"
 
-    def _pre_registration_hook(self, partner):
+    def enroll_student(self, student):
+        self._pre_enrollment_hook(student)
+        # ... enrollment logic ...
+        self._post_enrollment_hook(student)
+
+    def _pre_enrollment_hook(self, student):
         """Override in extensions for custom validation"""
         pass
 ```

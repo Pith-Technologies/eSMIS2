@@ -177,6 +177,60 @@ odoo-bin -d test_db -u esmis_vocabulary --test-enable --stop-after-init
 coverage run odoo-bin ... && coverage report -m
 ```
 
+## SIS-Specific Testing Requirements
+
+### Regulatory Compliance
+
+- Test that PII access requires documented consent capture (no consent → access denied)
+- Test separate consent paths for minors (guardian consent) vs adults (self-consent)
+- Test that consent records are immutable after the fact
+
+### Multi-Campus Isolation
+
+- Test that a Campus A officer cannot read, write, or search Campus B student records
+- Test that a system administrator sees records across all campuses
+- Test that cross-campus data does not leak through related models (e.g., grade lines, enrollment lines)
+
+### Government Exports
+
+- Test HEMIS export output format against the CHED-prescribed column layout
+- Validate field types (e.g., date formats, numeric precision) and allowed value ranges
+- Test that export wizards surface validation errors to the user before generating the file
+
+### Financial Aid Eligibility
+
+- Test free tuition criteria: Filipino citizen, no prior baccalaureate degree, enrolled in SUC/LUC
+- Test PWD 20% discount application and that it stacks correctly with other aid (or is blocked per policy)
+- Test stacking rules: which aid types can combine, which are mutually exclusive
+- Test eligibility re-evaluation when student data changes mid-term
+
+### Grade Workflows
+
+- Test INC (Incomplete) grade resolution: deadline enforcement and grade replacement
+- Test the grade change approval chain: faculty submits → department chair reviews → registrar approves
+- Test GWA (General Weighted Average) computation accuracy across unit-weighted and non-weighted subjects
+- Test that grade records become immutable after registrar approval
+
+### Enrollment Validation
+
+- Test prerequisite checks: enrollment blocked if prerequisite not passed
+- Test schedule conflict detection: same student cannot enroll in two sections with overlapping schedules
+- Test capacity enforcement: enrollment blocked when section reaches maximum seats
+
+## Performance Testing Targets
+
+These targets apply to production-like data volumes. Tests that cannot meet these targets should be flagged before merge.
+
+| Operation | Target |
+|-----------|--------|
+| List views | < 2s load with 50,000+ student records |
+| Student search (name, ID, email, national ID) | < 500ms |
+| HEMIS export | < 5 minutes for 50,000+ students |
+| Bulk grade import | < 2 minutes for 5,000+ grades |
+| Financial aid batch eligibility evaluation | < 10 minutes for 10,000+ students |
+
+Performance tests should use `time.time()` assertions (see the Performance Testing section above for the pattern) and must run against a seeded dataset, not an empty database.
+
 ---
 
 **See also:** [Performance & Scalability](performance-scalability.md)

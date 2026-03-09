@@ -22,6 +22,13 @@ This directory contains the core principles and standards that guide eSMIS devel
 | [Pretty URLs](pretty-urls.md) | User-friendly URL paths for actions |
 | [Odoo 19 Compatibility](odoo19-compatibility.md) | Odoo 19 gotchas (constraints, views, Command API) |
 | [Module Descriptions](module-descriptions.md) | Writing readme/DESCRIPTION.md files for modules |
+| [Multi-Campus Architecture](multi-campus-architecture.md) | Multi-campus deployment, campus isolation, consolidated reporting |
+| [Government Integrations](government-integrations.md) | Philippine government systems, LMS, payment gateways, and campus subsystems |
+| [Regulatory Compliance](regulatory-compliance.md) | Philippine regulations (RA 10173, MORPHE, RA 10931, RA 10687, PWD, Solo Parent, PQF, Flexible Learning, Microcredentials, RA 9470, Accreditation) |
+| [Financial Aid Patterns](financial-aid-patterns.md) | Program types (government, institutional, external, statutory discounts), eligibility rules, discount stacking order, award workflow, and audit/reporting requirements |
+| [Enrollment Workflows](enrollment-workflows.md) | Admission pipeline, pre-enrollment gates, enrollment state machine, validation hooks, add/drop, cross-enrollment, and staggered enrollment |
+| [Grading and Academic Standing](grading-and-academic-standing.md) | Philippine grading systems, GWA computation, academic standing, INC resolution, grade change workflow, Latin honors |
+| [Student Data Lifecycle](student-data-lifecycle.md) | Full student data flow from admissions through alumni status; state machines, models, and cross-cutting concerns per phase |
 
 ## How to Use These Principles
 
