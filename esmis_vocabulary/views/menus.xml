@@ -8,14 +8,14 @@
         sequence="50"
     />
     <menuitem
-        id="menu_vocabulary_list"
+        id="menu_esmis_vocabulary_list"
         name="Vocabularies"
         parent="menu_esmis_configuration_vocabularies"
         action="action_esmis_vocabulary"
         sequence="10"
     />
     <menuitem
-        id="menu_vocabulary_code_list"
+        id="menu_esmis_vocabulary_code_list"
         name="Codes"
         parent="menu_esmis_configuration_vocabularies"
         action="action_esmis_vocabulary_code"

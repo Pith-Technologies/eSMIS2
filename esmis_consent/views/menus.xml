@@ -1,17 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Top-level Consent menu -->
     <menuitem
-        id="menu_esmis_consent_root"
+        id="menu_consent_root"
         name="Consent"
-        parent="esmis_base.menu_esmis_root"
         groups="esmis_security.group_esmis_security_viewer"
-        sequence="61"
+        sequence="90"
+    />
+
+    <!-- Operational -->
+    <menuitem
+        id="menu_consent_records"
+        name="Consent Records"
+        parent="menu_consent_root"
+        action="action_esmis_consent"
+        sequence="10"
+    />
+
+    <!-- Configuration -->
+    <menuitem
+        id="menu_consent_configuration"
+        name="Configuration"
+        parent="menu_consent_root"
+        groups="esmis_security.group_esmis_security_officer"
+        sequence="99"
     />
     <menuitem
-        id="menu_esmis_consent_records"
-        name="Consent Records"
-        parent="menu_esmis_consent_root"
-        action="action_esmis_consent"
+        id="menu_consent_configuration_scopes"
+        name="Consent Scopes"
+        parent="menu_consent_configuration"
+        action="action_esmis_consent_scope"
         sequence="10"
     />
 </odoo>

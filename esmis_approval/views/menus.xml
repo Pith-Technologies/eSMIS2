@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Top-level Approvals menu -->
     <menuitem
-        id="menu_esmis_approval_root"
+        id="menu_approval_root"
         name="Approvals"
-        parent="esmis_base.menu_esmis_root"
         groups="esmis_security.group_esmis_security_officer"
-        sequence="62"
+        sequence="92"
+    />
+
+    <!-- Configuration -->
+    <menuitem
+        id="menu_approval_configuration"
+        name="Configuration"
+        parent="menu_approval_root"
+        groups="esmis_security.group_esmis_security_manager"
+        sequence="99"
     />
     <menuitem
-        id="menu_esmis_approval_definitions"
+        id="menu_approval_configuration_definitions"
         name="Approval Definitions"
-        parent="menu_esmis_approval_root"
+        parent="menu_approval_configuration"
         action="action_esmis_approval_definition"
         sequence="10"
     />
