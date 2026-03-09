@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Sample PSGC provinces — real PSA codes, subset for testing.
+         NCR is treated as a single "province-level" district in PSGC.
+         Full provincial dataset should be added before production use. -->
+    <record id="psgc_province_ncr_district" model="esmis.psgc.province">
+        <field name="name">Metro Manila (NCR)</field>
+        <field name="psgc_code">133900000</field>
+        <field name="region_id" ref="psgc_region_ncr"/>
+    </record>
+
+    <record id="psgc_province_bulacan" model="esmis.psgc.province">
+        <field name="name">Bulacan</field>
+        <field name="psgc_code">031400000</field>
+        <field name="region_id" ref="psgc_region_3"/>
+    </record>
+
+    <record id="psgc_province_cavite" model="esmis.psgc.province">
+        <field name="name">Cavite</field>
+        <field name="psgc_code">042100000</field>
+        <field name="region_id" ref="psgc_region_4a"/>
+    </record>
+</odoo>

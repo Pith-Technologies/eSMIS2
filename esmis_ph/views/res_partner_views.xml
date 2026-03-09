@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend the student demographics page with Philippine-specific fields.
+         Inserts PH fields after existing fields in the student demographics page. -->
+    <record id="view_res_partner_ph_fields" model="ir.ui.view">
+        <field name="name">res.partner.ph.fields</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="esmis_student.view_res_partner_student_form"/>
+        <field name="arch" type="xml">
+            <!-- Add maiden name and suffixes after middle_name in the Name Components group -->
+            <xpath expr="//field[@name='middle_name']" position="after">
+                <field name="middle_name_b4_marriage" invisible="not is_student" />
+                <field name="suffix_ids" invisible="not is_student" widget="many2many_tags" />
+            </xpath>
+
+            <!-- Add PH-specific demographic fields after is_indigenous_people -->
+            <xpath expr="//field[@name='is_indigenous_people']" position="after">
+                <field name="ethnicity_id" invisible="not is_student"
+                       groups="esmis_student.group_esmis_registrar_officer" />
+                <field name="religion_id" invisible="not is_student"
+                       groups="esmis_student.group_esmis_registrar_officer" />
+                <field name="is_solo_parent" invisible="not is_student" />
+                <field name="is_4ps_beneficiary" invisible="not is_student" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

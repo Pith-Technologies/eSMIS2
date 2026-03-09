@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Education levels for Philippine HEIs.
+         Sequence values are used to order education history records from
+         lowest (pre-school) to highest (post-graduate). -->
+    <record id="vocab_education_level" model="esmis.vocabulary">
+        <field name="name">Education Level</field>
+        <field name="namespace_uri">urn:esmis:education-level</field>
+        <field name="description">Education levels from pre-school through post-graduate studies.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">core</field>
+    </record>
+
+    <record id="code_edu_pre_school" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_education_level"/>
+        <field name="code">pre_school</field>
+        <field name="display">Pre-School</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_edu_elementary" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_education_level"/>
+        <field name="code">elementary</field>
+        <field name="display">Elementary</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_edu_junior_high_school" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_education_level"/>
+        <field name="code">junior_high_school</field>
+        <field name="display">Junior High School</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_edu_senior_high_school" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_education_level"/>
+        <field name="code">senior_high_school</field>
+        <field name="display">Senior High School</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_edu_tertiary" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_education_level"/>
+        <field name="code">tertiary</field>
+        <field name="display">Tertiary</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_edu_graduate" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_education_level"/>
+        <field name="code">graduate</field>
+        <field name="display">Graduate Studies</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_edu_post_graduate" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_education_level"/>
+        <field name="code">post_graduate</field>
+        <field name="display">Post-Graduate Studies</field>
+        <field name="sequence">70</field>
+    </record>
+</odoo>

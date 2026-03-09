@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo identifiers for 5 students.
+         Values are obviously fake — they exist only to demonstrate
+         the encrypted identifier storage. Encryption happens at the
+         Python model level so values here go through the normal ORM path.
+
+         NOTE: Identifier type codes are seeded by country modules (e.g. esmis_ph).
+         These demo records reference esmis_vocabulary.code_gender_male as a placeholder
+         type_id since no PH identifier type codes exist in this base module.
+         Real deployments use esmis_ph which seeds PhilSys, LRN, etc.
+
+         This demo file is intentionally minimal — it documents the structure
+         and will be populated by country module demo data.
+    -->
+
+    <!-- No demo identifier records are created in the base module because
+         identifier type vocabulary codes are seeded by country-specific modules
+         (e.g. esmis_ph seeds urn:esmis:identifier-type-ph codes for PhilSys, LRN, etc.).
+
+         To add demo identifiers, create demo/demo_identifiers.xml in the
+         country module that seeds the identifier type vocabulary. -->
+</odoo>

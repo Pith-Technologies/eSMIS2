@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================================
+         STUDENT SELF
+         Portal/external group for students accessing their own records.
+         No privilege_id because this is not a staff role — it is not
+         shown as a radio selection on the user form.
+         ================================================================ -->
+
+    <record id="group_esmis_student_self" model="res.groups">
+        <field name="name">Student (Self)</field>
+        <field name="comment">Read-only access to the student's own partner record,
+identifiers, and education history. Enforced via record rules.
+Assign to portal/student user accounts.</field>
+    </record>
+
+    <!-- ================================================================
+         REGISTRAR HIERARCHY
+         Three-level hierarchy: Viewer → Officer → Manager
+         All three reference privilege_esmis_registrar so Odoo's user
+         form shows a single radio selection for the Registrar category.
+         ================================================================ -->
+
+    <!-- Viewer: read-only access to all student records at own campus -->
+    <record id="group_esmis_registrar_viewer" model="res.groups">
+        <field name="name">Registrar: Viewer</field>
+        <field name="comment">Read-only access to student records, identifiers, and
+education history at the user's campus.
+Base implied group for Registrar Officer and Manager.</field>
+        <field name="privilege_id" ref="privilege_esmis_registrar"/>
+    </record>
+
+    <!-- Officer: create and update student records, cannot delete -->
+    <record id="group_esmis_registrar_officer" model="res.groups">
+        <field name="name">Registrar: Officer</field>
+        <field name="comment">Create and update student records, identifiers, and
+education history. Cannot delete records.
+Implies Registrar Viewer permissions.
+Can view decrypted identifier values.</field>
+        <field name="privilege_id" ref="privilege_esmis_registrar"/>
+        <field name="implied_ids" eval="[Command.link(ref('group_esmis_registrar_viewer'))]"/>
+    </record>
+
+    <!-- Manager: full CRUD including delete, cross-campus visibility -->
+    <record id="group_esmis_registrar_manager" model="res.groups">
+        <field name="name">Registrar: Manager</field>
+        <field name="comment">Full access to student records including deletion.
+Implies Registrar Officer permissions.
+Can view and manage records across all campuses.</field>
+        <field name="privilege_id" ref="privilege_esmis_registrar"/>
+        <field name="implied_ids" eval="[Command.link(ref('group_esmis_registrar_officer'))]"/>
+    </record>
+
+    <!-- ================================================================
+         SETTINGS ADMIN INHERITANCE
+         Settings admins automatically receive the top-level Registrar
+         group so they can always access all student management features.
+         ================================================================ -->
+
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[Command.link(ref('group_esmis_registrar_manager'))]"/>
+    </record>
+</odoo>

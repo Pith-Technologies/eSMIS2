@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo students at Rizal State University (Main campus).
+         All names and data are fictional. Emails use @rsu.edu.ph domain.
+         States: 3 applicants, 2 admitted, 5 enrolled/active, 2 loa,
+                 3 graduated, 2 alumni, 1 dismissed, 1 transferred_out, 1 denied.
+
+         Minors (age < 18) use birthdate >= 2008-03-10 and have guardian_id set.
+    -->
+
+    <!-- Guardian partners (not students) -->
+    <record id="demo_guardian_one" model="res.partner">
+        <field name="name">Perla Dela Cruz Santos</field>
+        <field name="is_student" eval="False"/>
+        <field name="email">perla.santos@example.com</field>
+    </record>
+
+    <record id="demo_guardian_two" model="res.partner">
+        <field name="name">Roberto Reyes Bautista</field>
+        <field name="is_student" eval="False"/>
+        <field name="email">roberto.bautista@example.com</field>
+    </record>
+
+    <record id="demo_guardian_three" model="res.partner">
+        <field name="name">Marites Lim Villanueva</field>
+        <field name="is_student" eval="False"/>
+        <field name="email">marites.villanueva@example.com</field>
+    </record>
+
+    <!-- 3 Applicants -->
+    <record id="demo_student_01" model="res.partner">
+        <field name="name">Juan Dela Cruz</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2024-00001</field>
+        <field name="first_name">Juan</field>
+        <field name="last_name">Dela Cruz</field>
+        <field name="middle_name">Santos</field>
+        <field name="birthdate">2003-06-15</field>
+        <field name="birthplace">Antipolo, Rizal</field>
+        <field name="email">juan.delacruz@rsu.edu.ph</field>
+        <field name="student_state">applicant</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+    </record>
+
+    <record id="demo_student_02" model="res.partner">
+        <field name="name">Maria Santos Reyes</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2024-00002</field>
+        <field name="first_name">Maria</field>
+        <field name="last_name">Santos</field>
+        <field name="middle_name">Reyes</field>
+        <field name="birthdate">2004-03-20</field>
+        <field name="birthplace">Cainta, Rizal</field>
+        <field name="email">maria.santos@rsu.edu.ph</field>
+        <field name="student_state">applicant</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <!-- Minor student (born 2009) — requires guardian -->
+    <record id="demo_student_03" model="res.partner">
+        <field name="name">Pedro Bautista Lim</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2024-00003</field>
+        <field name="first_name">Pedro</field>
+        <field name="last_name">Bautista</field>
+        <field name="middle_name">Lim</field>
+        <field name="birthdate">2009-01-10</field>
+        <field name="birthplace">Binangonan, Rizal</field>
+        <field name="email">pedro.bautista@rsu.edu.ph</field>
+        <field name="student_state">applicant</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+        <field name="guardian_id" ref="demo_guardian_one"/>
+    </record>
+
+    <!-- 2 Admitted -->
+    <record id="demo_student_04" model="res.partner">
+        <field name="name">Ana Garcia Flores</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2023-00004</field>
+        <field name="first_name">Ana</field>
+        <field name="last_name">Garcia</field>
+        <field name="middle_name">Flores</field>
+        <field name="birthdate">2003-11-05</field>
+        <field name="birthplace">Morong, Rizal</field>
+        <field name="email">ana.garcia@rsu.edu.ph</field>
+        <field name="student_state">admitted</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <!-- Minor student (born 2008) — requires guardian -->
+    <record id="demo_student_05" model="res.partner">
+        <field name="name">Carlo Villanueva Cruz</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2023-00005</field>
+        <field name="first_name">Carlo</field>
+        <field name="last_name">Villanueva</field>
+        <field name="middle_name">Cruz</field>
+        <field name="birthdate">2008-07-22</field>
+        <field name="birthplace">Angono, Rizal</field>
+        <field name="email">carlo.villanueva@rsu.edu.ph</field>
+        <field name="student_state">admitted</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+        <field name="guardian_id" ref="demo_guardian_two"/>
+    </record>
+
+    <!-- 3 Enrolled / Active -->
+    <record id="demo_student_06" model="res.partner">
+        <field name="name">Rosa Mendoza Tan</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2022-00006</field>
+        <field name="first_name">Rosa</field>
+        <field name="last_name">Mendoza</field>
+        <field name="middle_name">Tan</field>
+        <field name="birthdate">2002-08-30</field>
+        <field name="birthplace">Taytay, Rizal</field>
+        <field name="email">rosa.mendoza@rsu.edu.ph</field>
+        <field name="student_state">enrolled</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <record id="demo_student_07" model="res.partner">
+        <field name="name">Jose Ramos Aquino</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2022-00007</field>
+        <field name="first_name">Jose</field>
+        <field name="last_name">Ramos</field>
+        <field name="middle_name">Aquino</field>
+        <field name="birthdate">2001-12-12</field>
+        <field name="birthplace">Pililla, Rizal</field>
+        <field name="email">jose.ramos@rsu.edu.ph</field>
+        <field name="student_state">active</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+    </record>
+
+    <!-- Minor on active (born 2009) — requires guardian -->
+    <record id="demo_student_08" model="res.partner">
+        <field name="name">Liza Castillo Navarro</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2024-00008</field>
+        <field name="first_name">Liza</field>
+        <field name="last_name">Castillo</field>
+        <field name="middle_name">Navarro</field>
+        <field name="birthdate">2009-04-18</field>
+        <field name="birthplace">Teresa, Rizal</field>
+        <field name="email">liza.castillo@rsu.edu.ph</field>
+        <field name="student_state">active</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+        <field name="guardian_id" ref="demo_guardian_three"/>
+    </record>
+
+    <record id="demo_student_09" model="res.partner">
+        <field name="name">Mark Lopez Dela Rosa</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2022-00009</field>
+        <field name="first_name">Mark</field>
+        <field name="last_name">Lopez</field>
+        <field name="middle_name">Dela Rosa</field>
+        <field name="birthdate">2001-05-07</field>
+        <field name="birthplace">Baras, Rizal</field>
+        <field name="email">mark.lopez@rsu.edu.ph</field>
+        <field name="student_state">enrolled</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+    </record>
+
+    <record id="demo_student_10" model="res.partner">
+        <field name="name">Claire Pascual Ong</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2022-00010</field>
+        <field name="first_name">Claire</field>
+        <field name="last_name">Pascual</field>
+        <field name="middle_name">Ong</field>
+        <field name="birthdate">2000-09-25</field>
+        <field name="birthplace">Tanay, Rizal</field>
+        <field name="email">claire.pascual@rsu.edu.ph</field>
+        <field name="student_state">active</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <!-- 2 Leave of Absence -->
+    <record id="demo_student_11" model="res.partner">
+        <field name="name">Ryan Torres Sison</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2021-00011</field>
+        <field name="first_name">Ryan</field>
+        <field name="last_name">Torres</field>
+        <field name="middle_name">Sison</field>
+        <field name="birthdate">1999-02-14</field>
+        <field name="birthplace">Cardona, Rizal</field>
+        <field name="email">ryan.torres@rsu.edu.ph</field>
+        <field name="student_state">loa</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+    </record>
+
+    <record id="demo_student_12" model="res.partner">
+        <field name="name">Grace Fernandez Abad</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2021-00012</field>
+        <field name="first_name">Grace</field>
+        <field name="last_name">Fernandez</field>
+        <field name="middle_name">Abad</field>
+        <field name="birthdate">2000-10-03</field>
+        <field name="birthplace">Rodriguez, Rizal</field>
+        <field name="email">grace.fernandez@rsu.edu.ph</field>
+        <field name="student_state">loa</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <!-- 3 Graduated -->
+    <record id="demo_student_13" model="res.partner">
+        <field name="name">Dennis Ocampo Rivera</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2019-00013</field>
+        <field name="first_name">Dennis</field>
+        <field name="last_name">Ocampo</field>
+        <field name="middle_name">Rivera</field>
+        <field name="birthdate">1998-04-11</field>
+        <field name="birthplace">San Mateo, Rizal</field>
+        <field name="email">dennis.ocampo@rsu.edu.ph</field>
+        <field name="student_state">graduated</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+    </record>
+
+    <record id="demo_student_14" model="res.partner">
+        <field name="name">Janine Soriano Reyes</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2019-00014</field>
+        <field name="first_name">Janine</field>
+        <field name="last_name">Soriano</field>
+        <field name="middle_name">Reyes</field>
+        <field name="birthdate">1998-07-28</field>
+        <field name="birthplace">Marikina City</field>
+        <field name="email">janine.soriano@rsu.edu.ph</field>
+        <field name="student_state">graduated</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <record id="demo_student_15" model="res.partner">
+        <field name="name">Vincent Chua Liwanag</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2020-00015</field>
+        <field name="first_name">Vincent</field>
+        <field name="last_name">Chua</field>
+        <field name="middle_name">Liwanag</field>
+        <field name="birthdate">1999-11-20</field>
+        <field name="birthplace">Pasig City</field>
+        <field name="email">vincent.chua@rsu.edu.ph</field>
+        <field name="student_state">graduated</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+    </record>
+
+    <!-- 2 Alumni -->
+    <record id="demo_student_16" model="res.partner">
+        <field name="name">Melody Buenaventura Diaz</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2018-00016</field>
+        <field name="first_name">Melody</field>
+        <field name="last_name">Buenaventura</field>
+        <field name="middle_name">Diaz</field>
+        <field name="birthdate">1997-01-30</field>
+        <field name="birthplace">Quezon City</field>
+        <field name="email">melody.buenaventura@rsu.edu.ph</field>
+        <field name="student_state">alumni</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <record id="demo_student_17" model="res.partner">
+        <field name="name">Arnold Pangilinan Santos</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2017-00017</field>
+        <field name="first_name">Arnold</field>
+        <field name="last_name">Pangilinan</field>
+        <field name="middle_name">Santos</field>
+        <field name="birthdate">1996-06-08</field>
+        <field name="birthplace">Caloocan City</field>
+        <field name="email">arnold.pangilinan@rsu.edu.ph</field>
+        <field name="student_state">alumni</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+    </record>
+
+    <!-- 1 Dismissed -->
+    <record id="demo_student_18" model="res.partner">
+        <field name="name">Sheryl Marquez Tiu</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2020-00018</field>
+        <field name="first_name">Sheryl</field>
+        <field name="last_name">Marquez</field>
+        <field name="middle_name">Tiu</field>
+        <field name="birthdate">2000-03-17</field>
+        <field name="birthplace">Taguig City</field>
+        <field name="email">sheryl.marquez@rsu.edu.ph</field>
+        <field name="student_state">dismissed</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <!-- 1 Transferred Out -->
+    <record id="demo_student_19" model="res.partner">
+        <field name="name">Kenneth Gomez Ilagan</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2021-00019</field>
+        <field name="first_name">Kenneth</field>
+        <field name="last_name">Gomez</field>
+        <field name="middle_name">Ilagan</field>
+        <field name="birthdate">2001-08-09</field>
+        <field name="birthplace">Valenzuela City</field>
+        <field name="email">kenneth.gomez@rsu.edu.ph</field>
+        <field name="student_state">transferred_out</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_male"/>
+    </record>
+
+    <!-- 1 Denied -->
+    <record id="demo_student_20" model="res.partner">
+        <field name="name">Patricia Ignacio Luna</field>
+        <field name="is_student" eval="True"/>
+        <field name="student_number">2024-00020</field>
+        <field name="first_name">Patricia</field>
+        <field name="last_name">Ignacio</field>
+        <field name="middle_name">Luna</field>
+        <field name="birthdate">2004-12-01</field>
+        <field name="birthplace">Navotas City</field>
+        <field name="email">patricia.ignacio@rsu.edu.ph</field>
+        <field name="student_state">denied</field>
+        <field name="gender_id" ref="esmis_vocabulary.code_gender_female"/>
+    </record>
+
+    <!-- Education history for 10 students -->
+    <record id="demo_edu_01_elem" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_07"/>
+        <field name="education_level_id" ref="code_edu_elementary"/>
+        <field name="school_name">Pililla Elementary School</field>
+        <field name="school_address">Pililla, Rizal</field>
+        <field name="year_started">2007</field>
+        <field name="year_graduated">2013</field>
+        <field name="is_graduated" eval="True"/>
+    </record>
+
+    <record id="demo_edu_01_jhs" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_07"/>
+        <field name="education_level_id" ref="code_edu_junior_high_school"/>
+        <field name="school_name">Pililla National High School</field>
+        <field name="school_address">Pililla, Rizal</field>
+        <field name="year_started">2013</field>
+        <field name="year_graduated">2017</field>
+        <field name="is_graduated" eval="True"/>
+    </record>
+
+    <record id="demo_edu_02_elem" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_10"/>
+        <field name="education_level_id" ref="code_edu_elementary"/>
+        <field name="school_name">Tanay Central Elementary School</field>
+        <field name="school_address">Tanay, Rizal</field>
+        <field name="year_started">2006</field>
+        <field name="year_graduated">2012</field>
+        <field name="is_graduated" eval="True"/>
+    </record>
+
+    <record id="demo_edu_02_shs" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_10"/>
+        <field name="education_level_id" ref="code_edu_senior_high_school"/>
+        <field name="school_name">Tanay National High School</field>
+        <field name="school_address">Tanay, Rizal</field>
+        <field name="year_started">2016</field>
+        <field name="year_graduated">2018</field>
+        <field name="is_graduated" eval="True"/>
+        <field name="honors_received">With Honors</field>
+    </record>
+
+    <record id="demo_edu_13_elem" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_13"/>
+        <field name="education_level_id" ref="code_edu_elementary"/>
+        <field name="school_name">San Mateo Central School</field>
+        <field name="school_address">San Mateo, Rizal</field>
+        <field name="year_started">2004</field>
+        <field name="year_graduated">2010</field>
+        <field name="is_graduated" eval="True"/>
+    </record>
+
+    <record id="demo_edu_13_jhs" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_13"/>
+        <field name="education_level_id" ref="code_edu_junior_high_school"/>
+        <field name="school_name">San Mateo National High School</field>
+        <field name="school_address">San Mateo, Rizal</field>
+        <field name="year_started">2010</field>
+        <field name="year_graduated">2014</field>
+        <field name="is_graduated" eval="True"/>
+    </record>
+
+    <record id="demo_edu_14_elem" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_14"/>
+        <field name="education_level_id" ref="code_edu_elementary"/>
+        <field name="school_name">Marikina Heights Elementary</field>
+        <field name="school_address">Marikina City</field>
+        <field name="year_started">2004</field>
+        <field name="year_graduated">2010</field>
+        <field name="is_graduated" eval="True"/>
+    </record>
+
+    <record id="demo_edu_15_shs" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_15"/>
+        <field name="education_level_id" ref="code_edu_senior_high_school"/>
+        <field name="school_name">Pasig City Science High School</field>
+        <field name="school_address">Pasig City</field>
+        <field name="year_started">2015</field>
+        <field name="year_graduated">2017</field>
+        <field name="is_graduated" eval="True"/>
+        <field name="honors_received">With High Honors</field>
+    </record>
+
+    <record id="demo_edu_06_elem" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_06"/>
+        <field name="education_level_id" ref="code_edu_elementary"/>
+        <field name="school_name">Taytay Elementary School</field>
+        <field name="school_address">Taytay, Rizal</field>
+        <field name="year_started">2008</field>
+        <field name="year_graduated">2014</field>
+        <field name="is_graduated" eval="True"/>
+    </record>
+
+    <record id="demo_edu_09_jhs" model="esmis.education.history">
+        <field name="partner_id" ref="demo_student_09"/>
+        <field name="education_level_id" ref="code_edu_junior_high_school"/>
+        <field name="school_name">Baras National High School</field>
+        <field name="school_address">Baras, Rizal</field>
+        <field name="year_started">2013</field>
+        <field name="year_graduated">2017</field>
+        <field name="is_graduated" eval="True"/>
+    </record>
+</odoo>

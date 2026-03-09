@@ -1,0 +1,21 @@
+{
+    "name": "eSMIS Address",
+    "version": "19.0.1.0.0",
+    "category": "eSMIS/Core",
+    "summary": "Structured address model linked to res.partner",
+    "author": "Your Organization",
+    "website": "",
+    "license": "LGPL-3",
+    "development_status": "Alpha",
+    "maintainers": [],
+    "depends": ["esmis_base", "esmis_vocabulary"],
+    "data": [
+        "security/ir.model.access.csv",
+        "data/vocabulary_address_type.xml",
+        "views/address_views.xml",
+        "views/res_partner_views.xml",
+    ],
+    "auto_install": False,
+    "application": False,
+    "installable": True,
+}

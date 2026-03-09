@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend the inline address form with PSGC cascading dropdowns.
+         PSGC fields appear only when a region is selected, which indicates
+         the user is entering a Philippine address using the PSGC hierarchy.
+         The generic city and state_province fields are hidden when a PSGC
+         region is selected, since the PSGC hierarchy replaces them. -->
+    <record id="view_esmis_address_ph_fields" model="ir.ui.view">
+        <field name="name">esmis.address.ph.fields</field>
+        <field name="model">esmis.address</field>
+        <field name="inherit_id" ref="esmis_address.view_esmis_address_form_inline"/>
+        <field name="arch" type="xml">
+            <!-- Hide generic city and state_province when a PSGC region is set -->
+            <field name="city" position="attributes">
+                <attribute name="invisible">region_id != False</attribute>
+            </field>
+            <field name="state_province" position="attributes">
+                <attribute name="invisible">region_id != False</attribute>
+            </field>
+
+            <!-- Add PSGC hierarchy fields after street2.
+                 region_id is always visible to allow switching to PH mode.
+                 Child fields appear only when a valid parent is selected. -->
+            <xpath expr="//field[@name='street2']" position="after">
+                <field name="region_id" options="{'no_create': True}"/>
+                <field name="province_id"
+                       invisible="not region_id"
+                       options="{'no_create': True}"/>
+                <field name="city_municipality_id"
+                       invisible="not province_id"
+                       options="{'no_create': True}"/>
+                <field name="barangay_id"
+                       invisible="not city_municipality_id"
+                       options="{'no_create': True}"/>
+                <field name="zip_code" readonly="1"
+                       invisible="not zip_code"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

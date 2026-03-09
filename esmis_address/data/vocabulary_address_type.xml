@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- eSMIS address type vocabulary -->
+    <record id="vocab_address_type" model="esmis.vocabulary">
+        <field name="name">Address Type</field>
+        <field name="namespace_uri">urn:esmis:address-type</field>
+        <field name="description">Types of addresses recorded for a contact (permanent, mailing, residency, emergency).</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">core</field>
+    </record>
+
+    <record id="code_address_type_permanent" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_address_type"/>
+        <field name="code">permanent</field>
+        <field name="display">Permanent Address</field>
+        <field name="definition">The contact's permanent home address as declared on official records.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_address_type_mailing" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_address_type"/>
+        <field name="code">mailing</field>
+        <field name="display">Mailing Address</field>
+        <field name="definition">The address where correspondence and official documents should be sent.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_address_type_residency" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_address_type"/>
+        <field name="code">residency</field>
+        <field name="display">Current Residence</field>
+        <field name="definition">The address where the contact currently resides during the academic term.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_address_type_emergency" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_address_type"/>
+        <field name="code">emergency</field>
+        <field name="display">Emergency Contact Address</field>
+        <field name="definition">The address of the contact's emergency contact person.</field>
+        <field name="sequence">40</field>
+    </record>
+</odoo>

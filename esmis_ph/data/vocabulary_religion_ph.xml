@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Religious affiliations for Philippine HEI demographic reporting -->
+    <record id="vocab_religion_ph" model="esmis.vocabulary">
+        <field name="name">Religion (Philippines)</field>
+        <field name="namespace_uri">urn:esmis:religion-ph</field>
+        <field name="version">1.0</field>
+        <field name="description">Religious affiliation codes for Philippine higher education demographic reporting. Based on PSA census classifications.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">regulatory</field>
+    </record>
+
+    <record id="code_religion_roman_catholic" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">roman_catholic</field>
+        <field name="display">Roman Catholic</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_religion_islam" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">islam</field>
+        <field name="display">Islam</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_religion_iglesia_ni_cristo" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">iglesia_ni_cristo</field>
+        <field name="display">Iglesia ni Cristo</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_religion_philippine_independent" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">philippine_independent</field>
+        <field name="display">Philippine Independent Church (Aglipayan)</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_religion_seventh_day_adventist" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">seventh_day_adventist</field>
+        <field name="display">Seventh Day Adventist</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_religion_bible_baptist" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">bible_baptist</field>
+        <field name="display">Bible Baptist Church</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_religion_uccp" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">uccp</field>
+        <field name="display">United Church of Christ in the Philippines</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_religion_jehovahs_witnesses" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">jehovahs_witnesses</field>
+        <field name="display">Jehovah's Witnesses</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_religion_evangelical" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">evangelical</field>
+        <field name="display">Evangelical</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="code_religion_born_again" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">born_again</field>
+        <field name="display">Born Again Christian</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="code_religion_buddhist" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">buddhist</field>
+        <field name="display">Buddhist</field>
+        <field name="sequence">110</field>
+    </record>
+
+    <record id="code_religion_mormon" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">mormon</field>
+        <field name="display">The Church of Jesus Christ of Latter-day Saints</field>
+        <field name="sequence">120</field>
+    </record>
+
+    <record id="code_religion_other" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">other</field>
+        <field name="display">Other</field>
+        <field name="sequence">130</field>
+    </record>
+
+    <record id="code_religion_none" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_religion_ph"/>
+        <field name="code">none</field>
+        <field name="display">None</field>
+        <field name="sequence">140</field>
+    </record>
+</odoo>

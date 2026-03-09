@@ -1,5 +1,5 @@
 {
-    "name": "eSMIS",
+    "name": "eSMIS - Philippines",
     "version": "19.0.1.0.0",
     "category": "eSMIS",
     "summary": "Student Management Information System for Philippine HEIs",
@@ -14,6 +14,9 @@
         "esmis_security",
         "esmis_consent",
         "esmis_approval",
+        "esmis_student",
+        "esmis_address",
+        "esmis_ph",
     ],
     "data": [
         "data/res_company_data.xml",

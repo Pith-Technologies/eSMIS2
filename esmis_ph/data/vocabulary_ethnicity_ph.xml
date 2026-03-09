@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Philippine ethno-linguistic groups for CHED HEMIS reporting -->
+    <record id="vocab_ethnicity_ph" model="esmis.vocabulary">
+        <field name="name">Ethnicity (Philippines)</field>
+        <field name="namespace_uri">urn:esmis:ethnicity-ph</field>
+        <field name="version">1.0</field>
+        <field name="description">Philippine ethno-linguistic group classification used for CHED HEMIS demographic reporting and Indigenous Peoples program eligibility.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">regulatory</field>
+    </record>
+
+    <record id="code_ethnicity_tagalog" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">tagalog</field>
+        <field name="display">Tagalog</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_ethnicity_cebuano" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">cebuano</field>
+        <field name="display">Cebuano</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_ethnicity_ilocano" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">ilocano</field>
+        <field name="display">Ilocano</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_ethnicity_bisaya" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">bisaya</field>
+        <field name="display">Bisaya/Binisaya</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_ethnicity_hiligaynon" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">hiligaynon</field>
+        <field name="display">Hiligaynon/Ilonggo</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_ethnicity_bikol" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">bikol</field>
+        <field name="display">Bikol</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_ethnicity_waray" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">waray</field>
+        <field name="display">Waray</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_ethnicity_pangasinan" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">pangasinan</field>
+        <field name="display">Pangasinan</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_ethnicity_kapampangan" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">kapampangan</field>
+        <field name="display">Kapampangan</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="code_ethnicity_maranao" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">maranao</field>
+        <field name="display">Maranao</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="code_ethnicity_maguindanao" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">maguindanao</field>
+        <field name="display">Maguindanao</field>
+        <field name="sequence">110</field>
+    </record>
+
+    <record id="code_ethnicity_tausug" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">tausug</field>
+        <field name="display">Tausug</field>
+        <field name="sequence">120</field>
+    </record>
+
+    <record id="code_ethnicity_other_ip" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">other_ip</field>
+        <field name="display">Other Indigenous People</field>
+        <field name="sequence">130</field>
+    </record>
+
+    <record id="code_ethnicity_other" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_ethnicity_ph"/>
+        <field name="code">other</field>
+        <field name="display">Other</field>
+        <field name="sequence">140</field>
+    </record>
+</odoo>

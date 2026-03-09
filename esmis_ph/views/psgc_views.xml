@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PSGC Region list view -->
+    <record id="view_psgc_region_list" model="ir.ui.view">
+        <field name="name">esmis.psgc.region.list</field>
+        <field name="model">esmis.psgc.region</field>
+        <field name="arch" type="xml">
+            <list string="Regions" create="0" edit="0" delete="0">
+                <field name="psgc_code"/>
+                <field name="name"/>
+                <field name="designation"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PSGC Province list view -->
+    <record id="view_psgc_province_list" model="ir.ui.view">
+        <field name="name">esmis.psgc.province.list</field>
+        <field name="model">esmis.psgc.province</field>
+        <field name="arch" type="xml">
+            <list string="Provinces" create="0" edit="0" delete="0">
+                <field name="psgc_code"/>
+                <field name="name"/>
+                <field name="region_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PSGC City / Municipality list view -->
+    <record id="view_psgc_city_municipality_list" model="ir.ui.view">
+        <field name="name">esmis.psgc.city.municipality.list</field>
+        <field name="model">esmis.psgc.city.municipality</field>
+        <field name="arch" type="xml">
+            <list string="Cities / Municipalities" create="0" edit="0" delete="0">
+                <field name="psgc_code"/>
+                <field name="name"/>
+                <field name="province_id"/>
+                <field name="is_city"/>
+                <field name="zip_code"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- PSGC Barangay list view -->
+    <record id="view_psgc_barangay_list" model="ir.ui.view">
+        <field name="name">esmis.psgc.barangay.list</field>
+        <field name="model">esmis.psgc.barangay</field>
+        <field name="arch" type="xml">
+            <list string="Barangays" create="0" edit="0" delete="0">
+                <field name="psgc_code"/>
+                <field name="name"/>
+                <field name="city_municipality_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Actions for PSGC reference data -->
+    <record id="action_psgc_region_list" model="ir.actions.act_window">
+        <field name="name">Regions</field>
+        <field name="res_model">esmis.psgc.region</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_psgc_province_list" model="ir.actions.act_window">
+        <field name="name">Provinces</field>
+        <field name="res_model">esmis.psgc.province</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_psgc_city_municipality_list" model="ir.actions.act_window">
+        <field name="name">Cities / Municipalities</field>
+        <field name="res_model">esmis.psgc.city.municipality</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_psgc_barangay_list" model="ir.actions.act_window">
+        <field name="name">Barangays</field>
+        <field name="res_model">esmis.psgc.barangay</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Settings > eSMIS > PSGC Reference menu (superuser only) -->
+    <menuitem
+        id="menu_esmis_psgc_config"
+        name="PSGC Reference"
+        parent="esmis_base.menu_esmis_root"
+        sequence="50"
+        groups="base.group_system"
+    />
+
+    <menuitem
+        id="menu_psgc_regions"
+        name="Regions"
+        parent="menu_esmis_psgc_config"
+        action="action_psgc_region_list"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_psgc_provinces"
+        name="Provinces"
+        parent="menu_esmis_psgc_config"
+        action="action_psgc_province_list"
+        sequence="20"
+    />
+
+    <menuitem
+        id="menu_psgc_cities_municipalities"
+        name="Cities / Municipalities"
+        parent="menu_esmis_psgc_config"
+        action="action_psgc_city_municipality_list"
+        sequence="30"
+    />
+
+    <menuitem
+        id="menu_psgc_barangays"
+        name="Barangays"
+        parent="menu_esmis_psgc_config"
+        action="action_psgc_barangay_list"
+        sequence="40"
+    />
+</odoo>

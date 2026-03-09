@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esmis_education_history_list" model="ir.ui.view">
+        <field name="name">esmis.education.history.list</field>
+        <field name="model">esmis.education.history</field>
+        <field name="arch" type="xml">
+            <list string="Education History">
+                <field name="partner_id"/>
+                <field name="education_level_id"/>
+                <field name="school_name"/>
+                <field name="year_started"/>
+                <field name="year_graduated"/>
+                <field name="is_graduated"/>
+                <field name="honors_received"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_esmis_education_history_form" model="ir.ui.view">
+        <field name="name">esmis.education.history.form</field>
+        <field name="model">esmis.education.history</field>
+        <field name="arch" type="xml">
+            <form string="Education History">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="education_level_id"/>
+                            <field name="school_name"/>
+                            <field name="school_address"/>
+                        </group>
+                        <group>
+                            <field name="year_started"/>
+                            <field name="year_graduated"/>
+                            <field name="is_graduated"/>
+                            <field name="honors_received"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

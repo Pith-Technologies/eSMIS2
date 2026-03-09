@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_esmis_identifier_system,esmis.identifier / System,model_esmis_identifier,base.group_system,1,1,1,1
+access_esmis_education_history_system,esmis.education.history / System,model_esmis_education_history,base.group_system,1,1,1,1
+access_esmis_identifier_registrar_manager,esmis.identifier / Registrar Manager,model_esmis_identifier,esmis_student.group_esmis_registrar_manager,1,1,1,1
+access_esmis_education_history_registrar_manager,esmis.education.history / Registrar Manager,model_esmis_education_history,esmis_student.group_esmis_registrar_manager,1,1,1,1
+access_esmis_identifier_registrar_officer,esmis.identifier / Registrar Officer,model_esmis_identifier,esmis_student.group_esmis_registrar_officer,1,1,1,0
+access_esmis_education_history_registrar_officer,esmis.education.history / Registrar Officer,model_esmis_education_history,esmis_student.group_esmis_registrar_officer,1,1,1,0
+access_esmis_identifier_registrar_viewer,esmis.identifier / Registrar Viewer,model_esmis_identifier,esmis_student.group_esmis_registrar_viewer,1,0,0,0
+access_esmis_education_history_registrar_viewer,esmis.education.history / Registrar Viewer,model_esmis_education_history,esmis_student.group_esmis_registrar_viewer,1,0,0,0
+access_esmis_identifier_self,esmis.identifier / Student Self,model_esmis_identifier,esmis_student.group_esmis_student_self,1,0,0,0
+access_esmis_education_history_self,esmis.education.history / Student Self,model_esmis_education_history,esmis_student.group_esmis_student_self,1,0,0,0

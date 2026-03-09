@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Student list view: filtered to is_student=True by the action -->
+    <record id="view_res_partner_student_list" model="ir.ui.view">
+        <field name="name">res.partner.student.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Students">
+                <field name="student_number"/>
+                <field name="last_name"/>
+                <field name="first_name"/>
+                <field name="middle_name"/>
+                <field name="student_state"/>
+                <field name="gender_id"/>
+                <field name="nationality_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Student form view: inherits the base partner form and adds student pages -->
+    <record id="view_res_partner_student_form" model="ir.ui.view">
+        <field name="name">res.partner.student.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Student status bar inserted before the sheet (no <header> in base partner form) -->
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <field name="student_state"
+                           invisible="not is_student"
+                           widget="statusbar"
+                           statusbar_visible="applicant,admitted,enrolled,active,graduated,alumni"/>
+                </header>
+            </xpath>
+
+            <!-- Mark as student checkbox near the top of the form -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="is_student"/>
+            </xpath>
+
+            <!-- Student number below the name block -->
+            <xpath expr="//field[@name='is_student']" position="after">
+                <field name="student_number"
+                       invisible="not is_student"/>
+            </xpath>
+
+            <!-- Student demographics page -->
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Student Demographics"
+                      name="student_demographics"
+                      invisible="not is_student">
+                    <group string="Name Components">
+                        <group>
+                            <field name="last_name"/>
+                            <field name="first_name"/>
+                            <field name="middle_name"/>
+                        </group>
+                        <group>
+                            <field name="student_state"/>
+                        </group>
+                    </group>
+                    <group string="Personal Information">
+                        <group>
+                            <field name="birthdate"/>
+                            <field name="birthplace"/>
+                            <field name="age"/>
+                            <field name="gender_id"/>
+                            <field name="civil_status_id"/>
+                        </group>
+                        <group>
+                            <field name="nationality_id"/>
+                            <field name="blood_type_id"/>
+                            <field name="is_pwd"/>
+                            <field name="disability_type_id"
+                                   invisible="not is_pwd"/>
+                            <field name="is_indigenous_people"/>
+                        </group>
+                    </group>
+                    <group string="Guardian Information"
+                           invisible="not birthdate or age >= 18">
+                        <group>
+                            <field name="guardian_id"/>
+                            <field name="guardian_relationship_id"/>
+                        </group>
+                    </group>
+                </page>
+
+                <!-- Identifiers page -->
+                <page string="Identifiers"
+                      name="student_identifiers"
+                      invisible="not is_student">
+                    <field name="identifier_ids" context="{'default_partner_id': id}">
+                        <list>
+                            <field name="type_id"/>
+                            <field name="system_uri"/>
+                        </list>
+                        <form>
+                            <group>
+                                <field name="type_id"/>
+                                <field name="system_uri" readonly="1"/>
+                                <field name="value"
+                                       groups="esmis_student.group_esmis_registrar_officer"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+
+                <!-- Education History page -->
+                <page string="Education History"
+                      name="student_education"
+                      invisible="not is_student">
+                    <field name="education_history_ids" context="{'default_partner_id': id}">
+                        <list>
+                            <field name="education_level_id"/>
+                            <field name="school_name"/>
+                            <field name="year_started"/>
+                            <field name="year_graduated"/>
+                            <field name="is_graduated"/>
+                            <field name="honors_received"/>
+                        </list>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="education_level_id"/>
+                                    <field name="school_name"/>
+                                    <field name="school_address"/>
+                                </group>
+                                <group>
+                                    <field name="year_started"/>
+                                    <field name="year_graduated"/>
+                                    <field name="is_graduated"/>
+                                    <field name="honors_received"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action to open the student list -->
+    <record id="action_student_list" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_student', '=', True)]</field>
+        <field name="context">{'default_is_student': True}</field>
+        <field name="view_ids" eval="[
+            Command.create({'view_mode': 'list', 'view_id': ref('view_res_partner_student_list')}),
+            Command.create({'view_mode': 'form', 'view_id': ref('base.view_partner_form')}),
+        ]"/>
+    </record>
+</odoo>

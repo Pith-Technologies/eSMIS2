@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_partner_form_address" model="ir.ui.view">
+        <field name="name">res.partner.form.address</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Addresses" name="addresses">
+                    <field name="address_ids" context="{'default_partner_id': id}">
+                        <list>
+                            <field name="address_type_id"/>
+                            <field name="is_primary"/>
+                            <field name="address_text"/>
+                        </list>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="address_type_id"/>
+                                    <field name="is_primary"/>
+                                </group>
+                                <group>
+                                    <field name="country_id"/>
+                                    <field name="postal_code"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="street1"/>
+                                <field name="street2"/>
+                                <field name="city"/>
+                                <field name="state_province"/>
+                            </group>
+                            <field name="notes" placeholder="Additional notes..."/>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

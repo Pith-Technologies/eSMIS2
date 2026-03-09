@@ -22,7 +22,7 @@ follow a single pattern.
    (seq 80) and the Settings → eSMIS config menu. All other modules attach to this scaffolding;
    none may redefine it.
 
-2. **Only `esmis_starter` is `application=True`.** Domain modules are not standalone apps.
+2. **Only `esmis_starter_ph` is `application=True`.** Domain modules are not standalone apps.
    Infrastructure modules (`esmis_security`, `esmis_vocabulary`) have no top-level menus at all.
 
 3. **Academic workflow modules nest under the eSMIS main menu.** Modules that are part of the
@@ -63,7 +63,7 @@ follow a single pattern.
 - `esmis_security` — provides audit groups and record rules; the Audit Log menu belongs to
   `esmis_audit`, not here.
 - `esmis_vocabulary` — configuration-only; its menus live under Settings → eSMIS.
-- `esmis_starter` — meta-package with no menus of its own.
+- `esmis_starter_ph` — meta-package with no menus of its own.
 
 ### Complete Menu Trees
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="category_esmis_student" model="ir.module.category">
+        <field name="name">eSMIS / Student Management</field>
+        <field name="sequence">10</field>
+    </record>
+</odoo>
