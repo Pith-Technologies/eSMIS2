@@ -49,11 +49,14 @@ class Vocabulary(models.Model):
     )
     domain = fields.Selection(
         selection=[
-            ("core", "Core"),
-            ("operations", "Operations"),
+            ("academic", "Academic"),
             ("administrative", "Administrative"),
+            ("core", "Core"),
+            ("financial", "Financial"),
             ("identity", "Identity"),
+            ("operations", "Operations"),
             ("regulatory", "Regulatory"),
+            ("student", "Student"),
         ],
         default="core",
         required=True,

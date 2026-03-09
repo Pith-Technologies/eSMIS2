@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================================
+         SYSTEM ADMINISTRATION
+         group_esmis_system_admin implies base.group_system, giving full
+         cross-campus, cross-module access. No privilege_id is used here
+         because system admin is a role, not a functional privilege.
+         ================================================================ -->
+
+    <record id="group_esmis_system_admin" model="res.groups">
+        <field name="name">eSMIS System Admin</field>
+        <field name="comment">Full system access across all campuses and modules.
+Implies Odoo system administrator (base.group_system).
+Assign only to personnel responsible for the entire eSMIS platform.</field>
+        <field name="implied_ids" eval="[Command.link(ref('base.group_system'))]"/>
+    </record>
+
+    <!-- ================================================================
+         SECURITY GROUPS
+         Three-level hierarchy: Viewer → Officer → Manager
+         All three reference privilege_esmis_security_officer so Odoo's
+         user form shows a single radio selection for the security category.
+         ================================================================ -->
+
+    <!-- Viewer: read-only access to security configuration -->
+    <record id="group_esmis_security_viewer" model="res.groups">
+        <field name="name">Security: Viewer</field>
+        <field name="comment">Read-only access to security configuration.
+Serves as the base implied group for Security Officer and Manager.
+Extension point for downstream modules to attach record rules.</field>
+        <field name="privilege_id" ref="privilege_esmis_security_officer"/>
+    </record>
+
+    <!-- Officer: manage consent records and audit rules -->
+    <record id="group_esmis_security_officer" model="res.groups">
+        <field name="name">Security: Officer</field>
+        <field name="comment">Manage consent records and audit rules.
+Implies Security Viewer permissions.
+May not delete consent records (preserves audit trail).</field>
+        <field name="privilege_id" ref="privilege_esmis_security_officer"/>
+        <field name="implied_ids" eval="[Command.link(ref('group_esmis_security_viewer'))]"/>
+    </record>
+
+    <!-- Manager: full security administration including deletion -->
+    <record id="group_esmis_security_manager" model="res.groups">
+        <field name="name">Security: Manager</field>
+        <field name="comment">Full security administration, including deletion of consent records.
+Implies Security Officer permissions.
+Assign only to the CISO or equivalent role.</field>
+        <field name="privilege_id" ref="privilege_esmis_security_officer"/>
+        <field name="implied_ids" eval="[Command.link(ref('group_esmis_security_officer'))]"/>
+    </record>
+
+    <!-- ================================================================
+         DATA PROTECTION
+         The DPO role is intentionally narrow: it covers breach
+         management, DSAR processing, legal holds, and disposal reviews
+         but does NOT have write access to student data itself.
+         ================================================================ -->
+
+    <record id="group_esmis_dpo" model="res.groups">
+        <field name="name">Data Protection Officer</field>
+        <field name="comment">DPO responsibilities: breach notification, Data Subject Access Requests (DSAR),
+data disposal reviews, and legal hold management.
+Implies Security Viewer to inspect consent records without modifying them.
+Governed by RA 10173 Section 21.</field>
+        <field name="privilege_id" ref="privilege_esmis_data_protection_officer"/>
+        <field name="implied_ids" eval="[Command.link(ref('group_esmis_security_viewer'))]"/>
+    </record>
+
+    <!-- ================================================================
+         AUDIT GROUPS
+         Two-level hierarchy: Viewer → Officer
+         Audit Viewer is the extension point for downstream modules
+         (esmis_audit) to attach record rules on audit log models.
+         ================================================================ -->
+
+    <!-- Audit Viewer: read audit logs -->
+    <record id="group_esmis_audit_viewer" model="res.groups">
+        <field name="name">Audit: Viewer</field>
+        <field name="comment">Read-only access to audit logs.
+Serves as the base implied group for Audit Officer.
+Downstream esmis_audit module attaches record rules here.</field>
+        <field name="privilege_id" ref="privilege_esmis_audit_officer"/>
+    </record>
+
+    <!-- Audit Officer: manage audit rules and read all logs -->
+    <record id="group_esmis_audit_officer" model="res.groups">
+        <field name="name">Audit: Officer</field>
+        <field name="comment">Manage audit rules and read all audit logs.
+Implies Audit Viewer permissions.
+Cannot delete audit log entries (immutability requirement).</field>
+        <field name="privilege_id" ref="privilege_esmis_audit_officer"/>
+        <field name="implied_ids" eval="[Command.link(ref('group_esmis_audit_viewer'))]"/>
+    </record>
+
+    <!-- ================================================================
+         SYSTEM-WIDE ROLES
+         These groups have no privilege_id — they are cross-domain roles
+         not tied to a single functional category. Downstream modules
+         add implied_ids to grant domain-specific access.
+         ================================================================ -->
+
+    <!-- VP Academic Affairs: cross-campus read oversight -->
+    <record id="group_esmis_vp_academic" model="res.groups">
+        <field name="name">VP Academic Affairs</field>
+        <field name="comment">Cross-campus oversight for the Vice President for Academic Affairs.
+Downstream domain modules (grading, enrollment, curriculum) add implied_ids
+to grant appropriate read access across all campuses.</field>
+    </record>
+
+    <!-- President: cross-campus executive oversight -->
+    <record id="group_esmis_president" model="res.groups">
+        <field name="name">President</field>
+        <field name="comment">Cross-campus oversight for the University/College President.
+Downstream domain modules add implied_ids to grant executive read access
+across all campuses and reports.</field>
+    </record>
+
+    <!-- CHED Reporter: read-only cross-campus access for HEMIS exports -->
+    <record id="group_esmis_ched_reporter" model="res.groups">
+        <field name="name">CHED Reporter</field>
+        <field name="comment">Read-only cross-campus access for generating HEMIS and CHED compliance exports.
+Users in this group can see aggregated institutional data but cannot
+modify any records. Governed by CHED MORPHE (CMO 40, s. 2008).</field>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root eSMIS configuration menu under Settings.
+         All eSMIS modules requiring a configuration interface should
+         parent their config menus under this menuitem. -->
+    <menuitem
+        id="menu_esmis_root"
+        name="eSMIS"
+        parent="base.menu_administration"
+        groups="base.group_system"
+        sequence="50"
+    />
+</odoo>

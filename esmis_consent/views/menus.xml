@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_esmis_consent_root"
+        name="Consent"
+        parent="esmis_base.menu_esmis_root"
+        groups="esmis_security.group_esmis_security_viewer"
+        sequence="61"
+    />
+    <menuitem
+        id="menu_esmis_consent_records"
+        name="Consent Records"
+        parent="menu_esmis_consent_root"
+        action="action_esmis_consent"
+        sequence="10"
+    />
+</odoo>

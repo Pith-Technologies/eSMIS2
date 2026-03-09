@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo partners representing fictional students -->
+
+    <record id="demo_partner_student_1" model="res.partner">
+        <field name="name">Fictional Student Alpha</field>
+        <field name="email">student.alpha@example.com</field>
+    </record>
+
+    <record id="demo_partner_student_2" model="res.partner">
+        <field name="name">Fictional Student Beta</field>
+        <field name="email">student.beta@example.com</field>
+    </record>
+
+    <record id="demo_partner_student_3" model="res.partner">
+        <field name="name">Fictional Student Gamma</field>
+        <field name="email">student.gamma@example.com</field>
+    </record>
+
+    <!-- Active consent records -->
+
+    <record id="demo_consent_enrollment_1" model="esmis.consent">
+        <field name="partner_id" ref="demo_partner_student_1"/>
+        <field name="purpose">consent_enrollment</field>
+        <field name="lawful_basis">contract</field>
+        <field name="evidence_type">electronic</field>
+        <field name="form_version">1.0</field>
+    </record>
+
+    <record id="demo_consent_ched_1" model="esmis.consent">
+        <field name="partner_id" ref="demo_partner_student_1"/>
+        <field name="purpose">consent_ched_reporting</field>
+        <field name="lawful_basis">legal_obligation</field>
+        <field name="evidence_type">electronic</field>
+        <field name="form_version">1.0</field>
+    </record>
+
+    <record id="demo_consent_enrollment_2" model="esmis.consent">
+        <field name="partner_id" ref="demo_partner_student_2"/>
+        <field name="purpose">consent_enrollment</field>
+        <field name="lawful_basis">contract</field>
+        <field name="evidence_type">written</field>
+    </record>
+
+    <record id="demo_consent_financial_2" model="esmis.consent">
+        <field name="partner_id" ref="demo_partner_student_2"/>
+        <field name="purpose">consent_financial_aid</field>
+        <field name="lawful_basis">consent</field>
+        <field name="evidence_type">electronic</field>
+        <field name="form_version">1.0</field>
+    </record>
+
+    <!-- Parent consent for a minor -->
+    <record id="demo_consent_enrollment_3" model="esmis.consent">
+        <field name="partner_id" ref="demo_partner_student_3"/>
+        <field name="purpose">consent_enrollment</field>
+        <field name="lawful_basis">contract</field>
+        <field name="evidence_type">written</field>
+        <field name="is_parent_consent" eval="True"/>
+    </record>
+</odoo>
