@@ -124,4 +124,22 @@ across all campuses and reports.</field>
 Users in this group can see aggregated institutional data but cannot
 modify any records. Governed by CHED MORPHE (CMO 40, s. 2008).</field>
     </record>
+
+    <!-- ================================================================
+         SETTINGS ADMIN INHERITANCE
+         Members of base.group_system (Settings) automatically receive
+         the top-level group from each eSMIS privilege hierarchy.
+         Every module that defines security groups must extend
+         base.group_system here (or in its own groups.xml) to include
+         its highest-privilege group.
+         ================================================================ -->
+
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[
+            Command.link(ref('group_esmis_system_admin')),
+            Command.link(ref('group_esmis_security_manager')),
+            Command.link(ref('group_esmis_dpo')),
+            Command.link(ref('group_esmis_audit_officer')),
+        ]"/>
+    </record>
 </odoo>
