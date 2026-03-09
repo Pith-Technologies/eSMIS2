@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Privilege that controls which users can be assigned to Registrar groups.
+         Appears as a single radio selection on the user form under the
+         eSMIS / Student Management category. -->
+    <record id="privilege_esmis_registrar" model="res.groups.privilege">
+        <field name="name">Registrar</field>
+        <field name="category_id" ref="category_esmis_student"/>
+    </record>
+</odoo>

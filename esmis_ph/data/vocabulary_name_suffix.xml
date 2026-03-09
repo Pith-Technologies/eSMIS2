@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Philippine name suffixes used in formal records -->
+    <record id="vocab_name_suffix" model="esmis.vocabulary">
+        <field name="name">Name Suffix</field>
+        <field name="namespace_uri">urn:esmis:name-suffix</field>
+        <field name="version">1.0</field>
+        <field name="description">Personal name suffixes used in Philippine records. Includes generational suffixes (Jr., Sr.) and professional designations.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">regulatory</field>
+    </record>
+
+    <record id="code_suffix_jr" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">jr</field>
+        <field name="display">Jr.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_suffix_sr" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">sr</field>
+        <field name="display">Sr.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_suffix_ii" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">ii</field>
+        <field name="display">II</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_suffix_iii" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">iii</field>
+        <field name="display">III</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_suffix_iv" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">iv</field>
+        <field name="display">IV</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_suffix_phd" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">phd</field>
+        <field name="display">PhD</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_suffix_md" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">md</field>
+        <field name="display">MD</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_suffix_edd" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">edd</field>
+        <field name="display">EdD</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_suffix_llb" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">llb</field>
+        <field name="display">LLB</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="code_suffix_cpa" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">cpa</field>
+        <field name="display">CPA</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="code_suffix_rn" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_name_suffix"/>
+        <field name="code">rn</field>
+        <field name="display">RN</field>
+        <field name="sequence">110</field>
+    </record>
+</odoo>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Philippine government-issued and institutional identifier types -->
+    <record id="vocab_identifier_type_ph" model="esmis.vocabulary">
+        <field name="name">Identifier Type (Philippines)</field>
+        <field name="namespace_uri">urn:esmis:identifier-type-ph</field>
+        <field name="version">1.0</field>
+        <field name="description">Philippine government-issued and institutional identifier types. Used for esmis.identifier records to classify student ID numbers by issuing authority.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">regulatory</field>
+    </record>
+
+    <record id="code_identifier_philsys" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_identifier_type_ph"/>
+        <field name="code">philsys</field>
+        <field name="display">PhilSys (PSN)</field>
+        <field name="definition">Philippine Identification System number issued by the Philippine Statistics Authority under RA 11055.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_identifier_lrn" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_identifier_type_ph"/>
+        <field name="code">lrn</field>
+        <field name="display">Learner Reference Number</field>
+        <field name="definition">DepEd learner tracking number assigned at Grade 1 or first enrollment in the Philippine basic education system.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_identifier_tin" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_identifier_type_ph"/>
+        <field name="code">tin</field>
+        <field name="display">Tax Identification Number</field>
+        <field name="definition">BIR Tax Identification Number.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_identifier_sss" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_identifier_type_ph"/>
+        <field name="code">sss</field>
+        <field name="display">SSS Number</field>
+        <field name="definition">Social Security System membership number.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_identifier_gsis" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_identifier_type_ph"/>
+        <field name="code">gsis</field>
+        <field name="display">GSIS Number</field>
+        <field name="definition">Government Service Insurance System membership number.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_identifier_pwd_id" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_identifier_type_ph"/>
+        <field name="code">pwd_id</field>
+        <field name="display">PWD ID</field>
+        <field name="definition">Person with Disability identification card number issued per RA 7277/10754.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_identifier_solo_parent_id" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_identifier_type_ph"/>
+        <field name="code">solo_parent_id</field>
+        <field name="display">Solo Parent ID</field>
+        <field name="definition">Solo Parent identification card issued per RA 8972/11861.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_identifier_passport" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_identifier_type_ph"/>
+        <field name="code">passport</field>
+        <field name="display">Passport Number</field>
+        <field name="definition">Philippine passport number issued by the Department of Foreign Affairs.</field>
+        <field name="sequence">80</field>
+    </record>
+</odoo>

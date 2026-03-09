@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Students sub-menu under eSMIS main menu -->
+    <menuitem
+        id="menu_esmis_students"
+        name="Students"
+        parent="esmis_base.menu_esmis_main"
+        sequence="10"
+        groups="esmis_student.group_esmis_registrar_viewer"
+    />
+
+    <menuitem
+        id="menu_esmis_students_all"
+        name="All Students"
+        parent="menu_esmis_students"
+        action="action_student_list"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_esmis_identifiers"
+        name="Identifiers"
+        parent="menu_esmis_students"
+        action="action_esmis_identifier_list"
+        sequence="20"
+    />
+
+    <!-- Action for Education Level vocabulary codes (filtered) -->
+    <record id="action_vocabulary_education_levels" model="ir.actions.act_window">
+        <field name="name">Education Levels</field>
+        <field name="res_model">esmis.vocabulary.code</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('namespace_uri', '=', 'urn:esmis:education-level')]</field>
+        <field name="context">{'default_vocabulary_id': ref('esmis_student.vocab_education_level')}</field>
+    </record>
+
+    <!-- Configuration under Settings > eSMIS (superuser-only) -->
+    <menuitem
+        id="menu_esmis_student_config"
+        name="Student Management"
+        parent="esmis_base.menu_esmis_root"
+        sequence="10"
+        groups="base.group_system"
+    />
+
+    <menuitem
+        id="menu_esmis_student_config_education_levels"
+        name="Education Levels"
+        parent="menu_esmis_student_config"
+        sequence="10"
+        action="action_vocabulary_education_levels"
+    />
+</odoo>

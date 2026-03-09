@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Sample PSGC regions — real PSA codes, subset for testing.
+         The full 17-region dataset should be added before production use. -->
+    <record id="psgc_region_ncr" model="esmis.psgc.region">
+        <field name="name">NCR</field>
+        <field name="psgc_code">130000000</field>
+        <field name="designation">National Capital Region</field>
+    </record>
+
+    <record id="psgc_region_3" model="esmis.psgc.region">
+        <field name="name">Region III</field>
+        <field name="psgc_code">030000000</field>
+        <field name="designation">Central Luzon</field>
+    </record>
+
+    <record id="psgc_region_4a" model="esmis.psgc.region">
+        <field name="name">Region IV-A</field>
+        <field name="psgc_code">040000000</field>
+        <field name="designation">CALABARZON</field>
+    </record>
+</odoo>

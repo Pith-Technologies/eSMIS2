@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Sample PSGC cities and municipalities — real PSA codes, subset for testing.
+         Full dataset (~1,600 records) should be added before production use. -->
+    <record id="psgc_city_quezon" model="esmis.psgc.city.municipality">
+        <field name="name">Quezon City</field>
+        <field name="psgc_code">137404000</field>
+        <field name="province_id" ref="psgc_province_ncr_district"/>
+        <field name="is_city" eval="True"/>
+        <field name="zip_code">1100</field>
+    </record>
+
+    <record id="psgc_city_malolos" model="esmis.psgc.city.municipality">
+        <field name="name">Malolos</field>
+        <field name="psgc_code">031405000</field>
+        <field name="province_id" ref="psgc_province_bulacan"/>
+        <field name="is_city" eval="True"/>
+        <field name="zip_code">3000</field>
+    </record>
+
+    <record id="psgc_city_dasmarinas" model="esmis.psgc.city.municipality">
+        <field name="name">Dasmarinas</field>
+        <field name="psgc_code">042105000</field>
+        <field name="province_id" ref="psgc_province_cavite"/>
+        <field name="is_city" eval="True"/>
+        <field name="zip_code">4114</field>
+    </record>
+</odoo>

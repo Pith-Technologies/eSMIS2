@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_psgc_region_system,esmis.psgc.region / System,model_esmis_psgc_region,base.group_system,1,1,1,1
+access_psgc_region_user,esmis.psgc.region / User,model_esmis_psgc_region,base.group_user,1,0,0,0
+access_psgc_province_system,esmis.psgc.province / System,model_esmis_psgc_province,base.group_system,1,1,1,1
+access_psgc_province_user,esmis.psgc.province / User,model_esmis_psgc_province,base.group_user,1,0,0,0
+access_psgc_city_municipality_system,esmis.psgc.city.municipality / System,model_esmis_psgc_city_municipality,base.group_system,1,1,1,1
+access_psgc_city_municipality_user,esmis.psgc.city.municipality / User,model_esmis_psgc_city_municipality,base.group_user,1,0,0,0
+access_psgc_barangay_system,esmis.psgc.barangay / System,model_esmis_psgc_barangay,base.group_system,1,1,1,1
+access_psgc_barangay_user,esmis.psgc.barangay / User,model_esmis_psgc_barangay,base.group_user,1,0,0,0
