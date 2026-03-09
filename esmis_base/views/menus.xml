@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Top-level eSMIS application menu for academic workflows.
+         Domain modules add their sub-menus here. -->
+    <menuitem id="menu_esmis_main" name="eSMIS" sequence="80" />
+
     <!-- Root eSMIS configuration menu under Settings.
          All eSMIS modules requiring a configuration interface should
          parent their config menus under this menuitem. -->

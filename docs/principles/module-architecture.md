@@ -280,43 +280,70 @@ class Enrollment(models.Model):
 
 ## Configuration Menu Convention
 
-All eSMIS configuration interfaces live under a single **eSMIS** menu in Odoo's Settings. The root menu is defined by `esmis_base`:
+eSMIS uses a dual pattern for configuration menus. The right location depends on who needs access
+and what is being configured. See [ADR-018](../architecture/decisions/ADR-018-menu-architecture.md)
+for the full menu architecture.
+
+### Pattern 1: Module's own Configuration sub-menu (officers and managers)
+
+Domain configuration that registrar officers or managers should control without IT involvement
+lives in the module's own menu as a **Configuration** sub-menu at sequence 99:
 
 ```
-Settings (base.menu_administration)
-└── eSMIS (esmis_base.menu_esmis_root)
-    ├── Vocabularies (esmis_vocabulary, seq 50)
-    ├── Consent (esmis_consent, seq 61)
-    ├── Approvals (esmis_approval, seq 62)
-    └── ... (future modules)
+eSMIS → Grading → Configuration (seq 99, group_esmis_security_manager)
 ```
-
-### Adding a configuration menu
-
-Modules that need a configuration interface should add their menus as children of `esmis_base.menu_esmis_root` in their own `views/menus.xml`:
 
 ```xml
 <menuitem
-    id="menu_esmis_myfeature_root"
-    name="My Feature"
-    parent="esmis_base.menu_esmis_root"
-    groups="esmis_security.group_esmis_security_officer"
-    sequence="70"
+    id="menu_esmis_grading_configuration"
+    name="Configuration"
+    parent="menu_esmis_grading"
+    sequence="99"
+    groups="esmis_security.group_esmis_security_manager"
 />
 <menuitem
-    id="menu_esmis_myfeature_config"
-    name="Configuration"
-    parent="menu_esmis_myfeature_root"
-    action="action_esmis_myfeature_config"
+    id="menu_esmis_grading_configuration_scales"
+    name="Grading Scales"
+    parent="menu_esmis_grading_configuration"
+    action="action_esmis_grading_scale"
     sequence="10"
+    groups="esmis_security.group_esmis_security_manager"
 />
 ```
 
-**Rules:**
+For modules with an independent top-level menu (billing, faculty, documents, alumni, consent,
+approvals), the same seq 99 Configuration sub-menu pattern applies within that top-level menu.
+
+### Pattern 2: Settings → eSMIS (superuser-only)
+
+Technical or foundational configuration requiring `base.group_system` lives exclusively under
+the Settings → eSMIS menu defined by `esmis_base`:
+
+```
+Settings (base.menu_administration)
+└── eSMIS (esmis_base.menu_esmis_root)      [base.group_system]
+    ├── General Settings  (seq 10, future)
+    ├── Vocabularies      (seq 50, esmis_vocabulary)
+    └── Technical         (seq 90, future)
+```
+
+```xml
+<menuitem
+    id="menu_esmis_configuration_vocabularies"
+    name="Vocabularies"
+    parent="esmis_base.menu_esmis_root"
+    sequence="50"
+    groups="base.group_system"
+/>
+```
+
+### Rules
+
 - Each module owns its own sub-menu — never modify another module's menu definitions
-- Use `groups` to control visibility based on eSMIS security groups
-- Pick a `sequence` that places your menu in a logical position among siblings
-- The root `esmis_base.menu_esmis_root` is restricted to `base.group_system` (Settings access)
+- `groups=` must be set on every `<menuitem>` — no menu is unguarded
+- Configuration sub-menus are always at seq 99 and always the last child of their parent
+- Superuser-only config (`base.group_system`) goes under Settings → eSMIS only
+- Maximum 3 levels of nesting (top-level → section → item)
 
 ## Partner Abstraction
 
