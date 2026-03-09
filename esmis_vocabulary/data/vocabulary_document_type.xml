@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Academic document types issued by Philippine HEIs -->
+    <record id="vocab_document_type" model="esmis.vocabulary">
+        <field name="name">Document Type</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:document-type</field>
+        <field name="description">Classification of official academic documents issued by Philippine higher education institutions, including CHED-regulated documents such as the CAV.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">academic</field>
+    </record>
+
+    <record id="code_document_type_transcript_of_records" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">transcript_of_records</field>
+        <field name="display">Transcript of Records</field>
+        <field name="definition">An official document listing all subjects taken, units earned, and grades received by a student throughout their enrollment at the institution.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_document_type_diploma" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">diploma</field>
+        <field name="display">Diploma</field>
+        <field name="definition">The official credential document awarded to a student upon completion of all program requirements and conferral of their degree.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_document_type_certificate_of_enrollment" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">certificate_of_enrollment</field>
+        <field name="display">Certificate of Enrollment</field>
+        <field name="definition">An official document certifying that a student is currently enrolled for a specific academic term.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_document_type_certificate_of_good_moral" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">certificate_of_good_moral</field>
+        <field name="display">Certificate of Good Moral Character</field>
+        <field name="definition">An official document attesting to a student's satisfactory conduct and character during their enrollment at the institution.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_document_type_honorable_dismissal" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">honorable_dismissal</field>
+        <field name="display">Honorable Dismissal</field>
+        <field name="definition">An official document issued to a student in good standing who is leaving the institution voluntarily, required for transfer to another institution.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_document_type_certificate_of_grades" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">certificate_of_grades</field>
+        <field name="display">Certificate of Grades</field>
+        <field name="definition">An official document listing grades earned by a student for a specific term or set of subjects, as distinct from the full transcript of records.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_document_type_certificate_of_completion" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">certificate_of_completion</field>
+        <field name="display">Certificate of Completion</field>
+        <field name="definition">An official document certifying that a student has completed all requirements of a non-degree program, short course, or training.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_document_type_certification_authentication_verification" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">certification_authentication_verification</field>
+        <field name="display">Certification, Authentication and Verification (CAV)</field>
+        <field name="definition">A document issued by CHED certifying the authenticity of academic credentials, required for use of Philippine degrees abroad.</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_document_type_student_id_card" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">student_id_card</field>
+        <field name="display">Student ID Card</field>
+        <field name="definition">The official identification card issued by the institution to enrolled students for the current academic year.</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="code_document_type_clearance" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_document_type"/>
+        <field name="code">clearance</field>
+        <field name="display">Clearance</field>
+        <field name="definition">An official document certifying that a student has no outstanding financial, library, laboratory, or other obligations to the institution.</field>
+        <field name="sequence">100</field>
+    </record>
+</odoo>

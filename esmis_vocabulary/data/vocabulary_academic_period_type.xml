@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Types of academic periods used in Philippine HEIs -->
+    <record id="vocab_academic_period_type" model="esmis.vocabulary">
+        <field name="name">Academic Period Type</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:academic-period-type</field>
+        <field name="description">Classification of academic term structures used by Philippine higher education institutions, as recognized by CHED.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">academic</field>
+    </record>
+
+    <record id="code_academic_period_type_semester" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_academic_period_type"/>
+        <field name="code">semester</field>
+        <field name="display">Semester</field>
+        <field name="definition">A term dividing the academic year into two approximately equal halves, typically 18 weeks each.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_academic_period_type_trimester" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_academic_period_type"/>
+        <field name="code">trimester</field>
+        <field name="display">Trimester</field>
+        <field name="definition">A term dividing the academic year into three approximately equal periods.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_academic_period_type_quarter" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_academic_period_type"/>
+        <field name="code">quarter</field>
+        <field name="display">Quarter</field>
+        <field name="definition">A term dividing the academic year into four approximately equal periods of roughly 10 weeks each.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_academic_period_type_summer" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_academic_period_type"/>
+        <field name="code">summer</field>
+        <field name="display">Summer</field>
+        <field name="definition">A condensed term offered between the regular academic year terms, typically 6 to 8 weeks.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_academic_period_type_midyear" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_academic_period_type"/>
+        <field name="code">midyear</field>
+        <field name="display">Midyear</field>
+        <field name="definition">A short term offered between the first and second semesters of the academic year.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_academic_period_type_intersession" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_academic_period_type"/>
+        <field name="code">intersession</field>
+        <field name="display">Intersession</field>
+        <field name="definition">A brief term offered between regular terms, often used for intensive or bridging courses.</field>
+        <field name="sequence">60</field>
+    </record>
+</odoo>

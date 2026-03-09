@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Contact relationship type to student -->
+    <record id="vocab_relationship_type" model="esmis.vocabulary">
+        <field name="name">Relationship Type</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:relationship-type</field>
+        <field name="description">Classification of a contact person's relationship to the student, used for emergency contacts, parental consent, and financial guarantors.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">student</field>
+    </record>
+
+    <record id="code_relationship_type_father" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">father</field>
+        <field name="display">Father</field>
+        <field name="definition">The biological or legally adoptive father of the student.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_relationship_type_mother" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">mother</field>
+        <field name="display">Mother</field>
+        <field name="definition">The biological or legally adoptive mother of the student.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_relationship_type_guardian" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">guardian</field>
+        <field name="display">Guardian</field>
+        <field name="definition">A person who has legal or informal responsibility for the student's welfare, other than a biological or adoptive parent.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_relationship_type_spouse" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">spouse</field>
+        <field name="display">Spouse</field>
+        <field name="definition">The husband or wife of the student.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_relationship_type_sibling" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">sibling</field>
+        <field name="display">Sibling</field>
+        <field name="definition">A brother or sister of the student.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_relationship_type_grandparent" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">grandparent</field>
+        <field name="display">Grandparent</field>
+        <field name="definition">A grandparent of the student.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_relationship_type_uncle_aunt" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">uncle_aunt</field>
+        <field name="display">Uncle / Aunt</field>
+        <field name="definition">An uncle or aunt of the student.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_relationship_type_employer" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">employer</field>
+        <field name="display">Employer</field>
+        <field name="definition">The employer of the student, relevant for working students or scholarship sponsors.</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_relationship_type_emergency_contact" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_relationship_type"/>
+        <field name="code">emergency_contact</field>
+        <field name="display">Emergency Contact</field>
+        <field name="definition">A person designated by the student to be notified in case of emergency, whose specific relationship does not fall under other categories.</field>
+        <field name="sequence">90</field>
+    </record>
+</odoo>

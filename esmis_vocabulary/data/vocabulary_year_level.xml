@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Student year standing / year level classification -->
+    <record id="vocab_year_level" model="esmis.vocabulary">
+        <field name="name">Year Level</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:year-level</field>
+        <field name="description">Classification of a student's year standing within a degree program, covering undergraduate through graduate levels.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">academic</field>
+    </record>
+
+    <record id="code_year_level_first_year" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_year_level"/>
+        <field name="code">first_year</field>
+        <field name="display">First Year</field>
+        <field name="definition">A student in the first year of an undergraduate degree program.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_year_level_second_year" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_year_level"/>
+        <field name="code">second_year</field>
+        <field name="display">Second Year</field>
+        <field name="definition">A student in the second year of an undergraduate degree program.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_year_level_third_year" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_year_level"/>
+        <field name="code">third_year</field>
+        <field name="display">Third Year</field>
+        <field name="definition">A student in the third year of an undergraduate degree program.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_year_level_fourth_year" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_year_level"/>
+        <field name="code">fourth_year</field>
+        <field name="display">Fourth Year</field>
+        <field name="definition">A student in the fourth year of an undergraduate degree program.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_year_level_fifth_year" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_year_level"/>
+        <field name="code">fifth_year</field>
+        <field name="display">Fifth Year</field>
+        <field name="definition">A student in the fifth year of an undergraduate degree program, typically for programs such as Architecture or Engineering.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_year_level_graduate_1" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_year_level"/>
+        <field name="code">graduate_1</field>
+        <field name="display">Graduate Year 1</field>
+        <field name="definition">A student in the first year of a graduate (master's or doctoral) degree program.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_year_level_graduate_2" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_year_level"/>
+        <field name="code">graduate_2</field>
+        <field name="display">Graduate Year 2</field>
+        <field name="definition">A student in the second year of a graduate degree program.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_year_level_graduate_3" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_year_level"/>
+        <field name="code">graduate_3</field>
+        <field name="display">Graduate Year 3</field>
+        <field name="definition">A student in the third year or beyond of a graduate degree program, typically doctoral candidates.</field>
+        <field name="sequence">80</field>
+    </record>
+</odoo>

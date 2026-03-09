@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Financial aid and scholarship program types per RA 10931, RA 10687, RA 7277, and RA 8972/11861 -->
+    <record id="vocab_scholarship_type" model="esmis.vocabulary">
+        <field name="name">Scholarship Type</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:scholarship-type</field>
+        <field name="description">Classification of financial aid and scholarship programs available to students in Philippine HEIs, covering government programs under RA 10931 (Free Tuition), RA 10687 (UniFAST), statutory benefits under RA 7277 and RA 8972/11861, institutional grants, and external scholarships.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">financial</field>
+    </record>
+
+    <record id="code_scholarship_type_government_tes" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">government_tes</field>
+        <field name="display">Government - Tertiary Education Subsidy (TES)</field>
+        <field name="definition">Financial assistance provided under RA 10931 (Universal Access to Quality Tertiary Education Act) to qualified students enrolled in private HEIs, administered by UniFAST.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_scholarship_type_government_dost" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">government_dost</field>
+        <field name="display">Government - DOST Scholarship</field>
+        <field name="definition">A merit-based science and technology scholarship administered by the Department of Science and Technology (DOST) for students in priority science and engineering programs.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_scholarship_type_government_ched" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">government_ched</field>
+        <field name="display">Government - CHED Scholarship</field>
+        <field name="definition">A scholarship program administered directly by the Commission on Higher Education (CHED), including programs such as the CHED-StuFAPs.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_scholarship_type_institutional_academic" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">institutional_academic</field>
+        <field name="display">Institutional - Academic Merit</field>
+        <field name="definition">A scholarship awarded by the institution based on academic merit, such as honor scholarships or dean's list grants.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_scholarship_type_institutional_athletic" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">institutional_athletic</field>
+        <field name="display">Institutional - Athletic</field>
+        <field name="definition">A scholarship awarded by the institution to students who represent the institution in recognized sports competitions.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_scholarship_type_institutional_need_based" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">institutional_need_based</field>
+        <field name="display">Institutional - Need-Based</field>
+        <field name="definition">A financial grant awarded by the institution based on demonstrated financial need, independent of academic merit.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_scholarship_type_external_private" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">external_private</field>
+        <field name="display">External - Private Organization</field>
+        <field name="definition">A scholarship or financial grant awarded by a private company, foundation, or non-government organization external to the institution.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_scholarship_type_statutory_pwd" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">statutory_pwd</field>
+        <field name="display">Statutory - PWD Benefit (RA 7277 / RA 10754)</field>
+        <field name="definition">The mandatory 20% discount on tuition and fees granted to qualified Persons with Disability under RA 7277 as amended by RA 10754.</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_scholarship_type_statutory_solo_parent" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">statutory_solo_parent</field>
+        <field name="display">Statutory - Solo Parent Benefit (RA 8972 / RA 11861)</field>
+        <field name="definition">Educational benefits and scholarships available to qualified solo parent students or dependents of solo parents under RA 8972 as amended by RA 11861.</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="code_scholarship_type_legislative" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_scholarship_type"/>
+        <field name="code">legislative</field>
+        <field name="display">Legislative - Congressional / Senatorial</field>
+        <field name="definition">A scholarship funded through the allocation of a national legislator (congressman or senator) from their Priority Development Assistance Fund (PDAF) or equivalent.</field>
+        <field name="sequence">100</field>
+    </record>
+</odoo>

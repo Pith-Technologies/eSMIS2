@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Grade completion remarks per CHED MORPHE and standard Philippine HEI practice -->
+    <record id="vocab_grade_remark" model="esmis.vocabulary">
+        <field name="name">Grade Remark</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:grade-remark</field>
+        <field name="description">Standardized remarks indicating the completion status of a subject grade, aligned with CHED MORPHE grading conventions.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">academic</field>
+    </record>
+
+    <record id="code_grade_remark_passed" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">passed</field>
+        <field name="display">Passed</field>
+        <field name="definition">The student met or exceeded the minimum passing grade for the subject and has earned the corresponding credit units.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_grade_remark_failed" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">failed</field>
+        <field name="display">Failed</field>
+        <field name="definition">The student did not meet the minimum passing grade for the subject and has not earned the corresponding credit units.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_grade_remark_incomplete" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">incomplete</field>
+        <field name="display">Incomplete (INC)</field>
+        <field name="definition">The student did not complete all course requirements due to a valid reason. The incomplete grade must be resolved within the period prescribed by institutional policy.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_grade_remark_dropped" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">dropped</field>
+        <field name="display">Dropped (DRP)</field>
+        <field name="definition">The student officially dropped the subject within the allowable dropping period. No grade penalty is incurred.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_grade_remark_withdrawn" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">withdrawn</field>
+        <field name="display">Withdrawn (W)</field>
+        <field name="definition">The student withdrew from the subject after the official dropping period. The withdrawal is recorded on the transcript without a numeric grade.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_grade_remark_no_grade" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">no_grade</field>
+        <field name="display">No Grade (NG)</field>
+        <field name="definition">No grade has been submitted by the instructor. This is a temporary status pending submission of official grades.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_grade_remark_in_progress" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">in_progress</field>
+        <field name="display">In Progress (IP)</field>
+        <field name="definition">The subject spans multiple terms and the student is still actively completing it. A final grade will be issued upon completion.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_grade_remark_credit" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">credit</field>
+        <field name="display">Credit (CR)</field>
+        <field name="definition">The student has been granted credit for the subject, typically through credit by examination, prior learning assessment, or transfer credit evaluation.</field>
+        <field name="sequence">80</field>
+    </record>
+
+    <record id="code_grade_remark_no_credit" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">no_credit</field>
+        <field name="display">No Credit (NC)</field>
+        <field name="definition">The student completed the subject but did not earn credit units, typically applicable to audit enrollments that did not meet performance thresholds.</field>
+        <field name="sequence">90</field>
+    </record>
+
+    <record id="code_grade_remark_audit" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_grade_remark"/>
+        <field name="code">audit</field>
+        <field name="display">Audit (AUD)</field>
+        <field name="definition">The student enrolled in the subject for informational purposes only, with no credit units earned and no grade recorded.</field>
+        <field name="sequence">100</field>
+    </record>
+</odoo>

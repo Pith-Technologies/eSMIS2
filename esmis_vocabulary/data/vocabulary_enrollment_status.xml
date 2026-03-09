@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Per-term enrollment state (transient, per enrollment record) -->
+    <record id="vocab_enrollment_status" model="esmis.vocabulary">
+        <field name="name">Enrollment Status</field>
+        <field name="namespace_uri">urn:esmis:vocabulary:enrollment-status</field>
+        <field name="description">Classification of a student's enrollment state within a specific academic term, used for CHED MORPHE headcount and attrition reporting.</field>
+        <field name="is_system" eval="True"/>
+        <field name="domain">academic</field>
+    </record>
+
+    <record id="code_enrollment_status_pre_enrolled" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_enrollment_status"/>
+        <field name="code">pre_enrolled</field>
+        <field name="display">Pre-Enrolled</field>
+        <field name="definition">A student who has submitted an enrollment application for the term but has not yet been assessed or officially enrolled.</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="code_enrollment_status_assessed" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_enrollment_status"/>
+        <field name="code">assessed</field>
+        <field name="display">Assessed</field>
+        <field name="definition">A student whose fees have been assessed for the term but who has not yet completed payment or other enrollment requirements.</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="code_enrollment_status_enrolled" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_enrollment_status"/>
+        <field name="code">enrolled</field>
+        <field name="display">Enrolled</field>
+        <field name="definition">A student who has completed all enrollment requirements and is officially registered for the term.</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="code_enrollment_status_officially_dropped" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_enrollment_status"/>
+        <field name="code">officially_dropped</field>
+        <field name="display">Officially Dropped</field>
+        <field name="definition">A student who has formally withdrawn from the term within the official dropping period, typically with no academic penalty.</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="code_enrollment_status_unofficially_dropped" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_enrollment_status"/>
+        <field name="code">unofficially_dropped</field>
+        <field name="display">Unofficially Dropped</field>
+        <field name="definition">A student who has stopped attending without formally withdrawing, resulting in failing grades for all enrolled subjects.</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="code_enrollment_status_withdrawn" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_enrollment_status"/>
+        <field name="code">withdrawn</field>
+        <field name="display">Withdrawn</field>
+        <field name="definition">A student who has formally withdrawn from the term after the official dropping period, with academic penalties as defined by institutional policy.</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="code_enrollment_status_completed" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_enrollment_status"/>
+        <field name="code">completed</field>
+        <field name="display">Completed</field>
+        <field name="definition">A student who has completed the term and whose final grades have been submitted and recorded.</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="code_enrollment_status_leave_of_absence" model="esmis.vocabulary.code">
+        <field name="vocabulary_id" ref="vocab_enrollment_status"/>
+        <field name="code">leave_of_absence</field>
+        <field name="display">Leave of Absence</field>
+        <field name="definition">A student granted a formal leave of absence for this specific term, with enrollment deferred to a future term.</field>
+        <field name="sequence">80</field>
+    </record>
+</odoo>
