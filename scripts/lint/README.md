@@ -161,14 +161,14 @@ python scripts/lint/check_naming.py --format json my_module/models/*.py
 
 Validates XML record IDs follow conventions:
 
-| Model                   | Pattern                  | Example                |
-| ----------------------- | ------------------------ | ---------------------- |
+| Model                   | Pattern                  | Example                  |
+| ----------------------- | ------------------------ | ------------------------ |
 | `ir.ui.view`            | `view_{model}_{type}`    | `view_esmis_entity_form` |
 | `ir.actions.act_window` | `action_{model}`         | `action_esmis_entity`    |
 | `ir.ui.menu`            | `menu_{model}`           | `menu_esmis_entity`      |
-| `res.groups`            | `group_{domain}_{level}` | `group_entity_officer` |
+| `res.groups`            | `group_{domain}_{level}` | `group_entity_officer`   |
 | `ir.module.category`    | `category_{domain}`      | `category_esmis_entity`  |
-| `ir.rule`               | `rule_{model}_{purpose}` | `rule_partner_company` |
+| `ir.rule`               | `rule_{model}_{purpose}` | `rule_partner_company`   |
 
 ```bash
 # Check specific module

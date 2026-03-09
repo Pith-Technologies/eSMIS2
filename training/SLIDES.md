@@ -889,12 +889,12 @@ Layer 0 ── ODOO CORE          (base, hr, stock, account, portal)
 
 This transforms the template:
 
-| From                   | To                           |
-| ---------------------- | ---------------------------- |
+| From                     | To                           |
+| ------------------------ | ---------------------------- |
 | `esmis_vocabulary/`      | `sis_vocabulary/`            |
 | `esmis.vocabulary`       | `sis.vocabulary`             |
 | `model_esmis_vocabulary` | `model_sis_vocabulary`       |
-| `eSMIS`            | `Student Information System` |
+| `eSMIS`                  | `Student Information System` |
 
 - Renames directories, updates all references in `.py`, `.xml`, `.csv`, `.md`
 - Run once — then build your own modules on top
