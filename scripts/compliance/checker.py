@@ -13,7 +13,7 @@ Checks performed:
 6. Action restrictions
 
 Usage:
-    python -m scripts.compliance.checker tpl_vocabulary
+    python -m scripts.compliance.checker esmis_vocabulary
     python -m scripts.compliance.checker --all
     python -m scripts.compliance.checker --all --report --format markdown
 """
@@ -630,7 +630,7 @@ class ComplianceChecker:
             return
 
         # Look for the admin extension record
-        admin_ext_id = "tpl_security.group_tpl_admin"
+        admin_ext_id = "esmis_security.group_esmis_admin"
         found_link = False
 
         for xml_id, record in self._groups_xml.items():
@@ -645,7 +645,7 @@ class ComplianceChecker:
 
         if not found_link:
             admin_link_suggestion = (
-                f'Add: <record id="tpl_security.group_tpl_admin">'
+                f'Add: <record id="esmis_security.group_esmis_admin">'
                 f'<field name="implied_ids" '
                 f"eval=\"[Command.link(ref('{self.spec.admin_link_group}'))]\"/>"
                 f"</record>"
@@ -857,7 +857,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s tpl_vocabulary    # Check single module
+  %(prog)s esmis_vocabulary    # Check single module
   %(prog)s --all                       # Check all modules with compliance.yaml
   %(prog)s --all --report              # Generate detailed report
   %(prog)s --all --format json         # JSON output for CI

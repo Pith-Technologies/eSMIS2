@@ -4,24 +4,24 @@ How to create, structure, and ship a new module from scratch using TDD and Claud
 
 ## Module Naming
 
-All project modules use the `tpl_*` prefix:
+All project modules use the `esmis_*` prefix:
 
 | Pattern | Example | When to use |
 |---------|---------|-------------|
-| `tpl_{domain}` | `tpl_warehouse` | Single-domain module |
-| `tpl_{domain}_{feature}` | `tpl_warehouse_barcode` | Feature within a domain |
+| `esmis_{domain}` | `esmis_warehouse` | Single-domain module |
+| `esmis_{domain}_{feature}` | `esmis_warehouse_barcode` | Feature within a domain |
 
-Models inside a module use the `tpl.*` prefix: `tpl.warehouse`, `tpl.warehouse.barcode`.
+Models inside a module use the `esmis.*` prefix: `esmis.warehouse`, `esmis.warehouse.barcode`.
 
 ## Standard Directory Structure
 
 ```
-tpl_inventory/
+esmis_inventory/
 ├── __init__.py
 ├── __manifest__.py
 ├── models/
 │   ├── __init__.py
-│   └── tpl_stock_move.py
+│   └── esmis_stock_move.py
 ├── views/
 │   └── stock_move_views.xml
 ├── security/
@@ -46,7 +46,7 @@ Every subdirectory that contains Python files needs an `__init__.py`. Every dire
 {
     "name": "Inventory Extensions",
     "version": "19.0.1.0.0",
-    "category": "{Project}/{Domain}",
+    "category": "eSMIS/{Domain}",
     "summary": "Custom stock move tracking for warehouse operations",
     "author": "Your Organization",
     "website": "https://example.com",
@@ -54,7 +54,7 @@ Every subdirectory that contains Python files needs an `__init__.py`. Every dire
     "development_status": "Alpha",
     "maintainers": [],
     "depends": [
-        "tpl_vocabulary",
+        "esmis_vocabulary",
         "stock",
     ],
     "external_dependencies": {"python": ["somelib"]},  # only when needed
@@ -75,19 +75,19 @@ Every subdirectory that contains Python files needs an `__init__.py`. Every dire
 
 | Setting | Value | When |
 |---------|-------|------|
-| `application` | `True` | **Only** starter modules (`tpl_starter_{variant}`) — the single entry point users install |
-| `application` | `False` | All `tpl_*` domain modules (foundation, bridges, extensions, API, infra) |
+| `application` | `True` | **Only** starter modules (`esmis_starter_{variant}`) — the single entry point users install |
+| `application` | `False` | All `esmis_*` domain modules (foundation, bridges, extensions, API, infra) |
 | `auto_install` | `["dep1", "dep2"]` | Non-variant bridge module that activates when both deps are installed |
 | `auto_install` | `True` | Non-variant single-dependency extension that always activates with its parent |
-| `auto_install` | `False` | Manual install required (most modules), **always** for variant modules (`tpl_*_{variant}`) |
+| `auto_install` | `False` | Manual install required (most modules), **always** for variant modules (`esmis_*_{variant}`) |
 
-> **Variant modules** (`tpl_{domain}_{variant}`) must always set `auto_install=False`. They are installed exclusively via starter modules (`tpl_starter_{variant}`).
+> **Variant modules** (`esmis_{domain}_{variant}`) must always set `auto_install=False`. They are installed exclusively via starter modules (`esmis_starter_{variant}`).
 
 ### Starter module pattern
 
-A starter module (`tpl_starter_{variant}`) is the single `application=True` entry point for a variant deployment. It contains:
+A starter module (`esmis_starter_{variant}`) is the single `application=True` entry point for a variant deployment. It contains:
 
-1. **Dependencies** on all variant modules (`tpl_*_{variant}`)
+1. **Dependencies** on all variant modules (`esmis_*_{variant}`)
 2. **Configuration data** (`data/res_company_data.xml`) that configures the database for the target locale/variant
 
 Template for `data/res_company_data.xml`:
@@ -121,18 +121,18 @@ Use `noupdate="1"` so these defaults are applied once on install and do not over
 
 ### Category hierarchy
 
-Use `{Project}/{Domain}` with domain names relevant to your project (e.g., `Core`, `Operations`, `Integration`, `Reporting`).
+Use `eSMIS/{Domain}` with domain names relevant to your project (e.g., `Core`, `Operations`, `Integration`, `Reporting`).
 
 ## Layer Architecture
 
 Dependencies must flow downward. Never create circular dependencies.
 
 ```
-Layer 3: EXTENSIONS           (tpl_reporting, tpl_api)
+Layer 3: EXTENSIONS           (esmis_reporting, esmis_api)
     ↓
-Layer 2: DOMAIN CORE          (tpl_project, tpl_warehouse, tpl_service)
+Layer 2: DOMAIN CORE          (esmis_project, esmis_warehouse, esmis_service)
     ↓
-Layer 1: FOUNDATION           (tpl_security, tpl_vocabulary)
+Layer 1: FOUNDATION           (esmis_security, esmis_vocabulary)
     ↓
 Layer 0: ODOO CORE            (base, hr, stock, account, calendar)
 ```
@@ -145,7 +145,7 @@ These patterns are enforced across all project modules. See `docs/principles/mod
 
 ### Variant-specific modules
 
-Fields and logic specific to a single variant (e.g., country or deployment) go in a variant-suffixed module (`tpl_{domain}_{variant}`), never in the base domain module. The domain module must remain variant-agnostic.
+Fields and logic specific to a single variant (e.g., country or deployment) go in a variant-suffixed module (`esmis_{domain}_{variant}`), never in the base domain module. The domain module must remain variant-agnostic.
 
 ### Identifiers as a separate model
 
@@ -153,18 +153,18 @@ External IDs (tax numbers, registration codes, national IDs, passport numbers) a
 
 ### Vocabulary over static selections
 
-Use `tpl_vocabulary` (Many2one to `tpl.vocabulary.code`) instead of `fields.Selection` for values that may grow or vary by deployment (e.g., categories, types, statuses). Static selections are acceptable only for internal workflow states.
+Use `esmis_vocabulary` (Many2one to `esmis.vocabulary.code`) instead of `fields.Selection` for values that may grow or vary by deployment (e.g., categories, types, statuses). Static selections are acceptable only for internal workflow states.
 
 ### Configuration menu placement
 
 Configuration items belong under the shared app-level Configuration menu, not nested inside domain menus. To add a configuration menu item from a new module:
 
 ```xml
-<!-- tpl_warehouse/views/menus.xml -->
+<!-- esmis_warehouse/views/menus.xml -->
 <odoo>
-    <menuitem id="menu_tpl_configuration_locations"
+    <menuitem id="menu_esmis_configuration_locations"
               name="Warehouse Locations"
-              parent="tpl_vocabulary.menu_tpl_configuration"
+              parent="esmis_vocabulary.menu_esmis_configuration"
               action="action_warehouse_location"
               sequence="20"/>
 </odoo>
@@ -172,7 +172,7 @@ Configuration items belong under the shared app-level Configuration menu, not ne
 
 Key points:
 
-- **Parent** — always `tpl_vocabulary.menu_tpl_configuration` (module-qualified, since `tpl_vocabulary` defines it).
+- **Parent** — always `esmis_vocabulary.menu_esmis_configuration` (module-qualified, since `esmis_vocabulary` defines it).
 - **Sequence** — pick a number that orders logically among other config items (Vocabularies is 10).
 - **Groups** — the parent menu already gates on `base.group_system`. Add additional group restrictions on the child only if a narrower audience is needed.
 
@@ -183,7 +183,7 @@ The required order is: write a failing test, run it (watch it fail), implement t
 ### Step 1: Write the failing test
 
 ```python
-# tpl_inventory/tests/test_stock_move.py
+# esmis_inventory/tests/test_stock_move.py
 from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase
 
@@ -192,21 +192,21 @@ class TestStockMove(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.warehouse = self.env["tpl.warehouse"].create({
+        self.warehouse = self.env["esmis.warehouse"].create({
             "name": "Main Warehouse",
         })
 
     def test_quantity_must_be_positive(self):
         """Stock move quantity must be a positive number."""
         with self.assertRaises(ValidationError):
-            self.env["tpl.stock.move"].create({
+            self.env["esmis.stock.move"].create({
                 "warehouse_id": self.warehouse.id,
                 "quantity": -10,
             })
 
     def test_stock_move_linked_to_warehouse(self):
         """Creating a stock move links it to the warehouse."""
-        move = self.env["tpl.stock.move"].create({
+        move = self.env["esmis.stock.move"].create({
             "warehouse_id": self.warehouse.id,
             "quantity": 50,
             "product_name": "Widget A",
@@ -217,7 +217,7 @@ class TestStockMove(TransactionCase):
 ### Step 2: Run the test — confirm it fails
 
 ```bash
-./scripts/test_single_module.sh tpl_inventory
+./scripts/test_single_module.sh esmis_inventory
 ```
 
 The test must fail at this stage. If it passes without implementation, the test is not actually testing the right thing.
@@ -225,7 +225,7 @@ The test must fail at this stage. If it passes without implementation, the test 
 ### Step 3: Implement the model
 
 ```python
-# tpl_inventory/models/tpl_stock_move.py
+# esmis_inventory/models/esmis_stock_move.py
 import logging
 
 from odoo import _, api, fields, models
@@ -235,11 +235,11 @@ _logger = logging.getLogger(__name__)
 
 
 class PrefixStockMove(models.Model):
-    _name = "tpl.stock.move"
+    _name = "esmis.stock.move"
     _description = "Stock Move"
 
     warehouse_id = fields.Many2one(
-        "tpl.warehouse",
+        "esmis.warehouse",
         string="Warehouse",
         required=True,
         ondelete="cascade",
@@ -256,21 +256,21 @@ class PrefixStockMove(models.Model):
 
 ### Step 4: Add the ACL file
 
-Every model must have an entry in `security/ir.model.access.csv`. Every custom `tpl.*` model must include a `base.group_system` row with full CRUD as the first data row — this ensures the admin/superuser always has access:
+Every model must have an entry in `security/ir.model.access.csv`. Every custom `esmis.*` model must include a `base.group_system` row with full CRUD as the first data row — this ensures the admin/superuser always has access:
 
 ```csv
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_tpl_stock_move_system,tpl.stock.move / System,model_tpl_stock_move,base.group_system,1,1,1,1
-access_tpl_stock_move_officer,tpl.stock.move officer,model_tpl_stock_move,tpl_security.group_tpl_officer,1,1,1,0
-access_tpl_stock_move_manager,tpl.stock.move manager,model_tpl_stock_move,tpl_security.group_tpl_manager,1,1,1,1
+access_esmis_stock_move_system,esmis.stock.move / System,model_esmis_stock_move,base.group_system,1,1,1,1
+access_esmis_stock_move_officer,esmis.stock.move officer,model_esmis_stock_move,esmis_security.group_esmis_officer,1,1,1,0
+access_esmis_stock_move_manager,esmis.stock.move manager,model_esmis_stock_move,esmis_security.group_esmis_manager,1,1,1,1
 ```
 
-> **Note:** The `tpl_security` module provides cross-project security groups. If your project has not created this module yet, define module-specific groups (see the [Security groups template](#security-groups-securitysecurity_groupsxml) below) and reference those instead.
+> **Note:** The `esmis_security` module provides cross-project security groups. If your project has not created this module yet, define module-specific groups (see the [Security groups template](#security-groups-securitysecurity_groupsxml) below) and reference those instead.
 
 ### Step 5: Run the test — confirm it passes
 
 ```bash
-./scripts/test_single_module.sh tpl_inventory
+./scripts/test_single_module.sh esmis_inventory
 ```
 
 All tests must pass before moving on.
@@ -285,7 +285,7 @@ Every module should include documentation at four levels: module-level (`DESCRIP
 
 ```python
 class PrefixStockMove(models.Model):
-    _name = "tpl.stock.move"
+    _name = "esmis.stock.move"
     _description = "Stock Move"
 ```
 
@@ -293,7 +293,7 @@ Add a **class-level docstring** when the model's purpose is not obvious from `_n
 
 ```python
 class PrefixOrderDisposition(models.Model):
-    _name = "tpl.order.disposition"
+    _name = "esmis.order.disposition"
     _description = "Order Disposition"
     """Tracks how an order was resolved (fulfilled, cancelled, returned, partial).
     Used by reporting modules to determine order completion metrics."""
@@ -385,20 +385,20 @@ and links each move to the originating warehouse record.
 
 ## Key Models
 
-- `tpl.stock.move` — one stock move record per warehouse operation
+- `esmis.stock.move` — one stock move record per warehouse operation
 
 ## UI Location
 
-{Project} > Inventory > Warehouses > [warehouse] > Stock Moves tab
+eSMIS > Inventory > Warehouses > [warehouse] > Stock Moves tab
 
 ## Security
 
-- `tpl_security.group_tpl_officer` — create and edit
-- `tpl_security.group_tpl_manager` — full access including delete
+- `esmis_security.group_esmis_officer` — create and edit
+- `esmis_security.group_esmis_manager` — full access including delete
 
 ## Dependencies
 
-- `tpl_vocabulary` — vocabulary infrastructure
+- `esmis_vocabulary` — vocabulary infrastructure
 - `stock` — Odoo stock module
 ```
 
@@ -408,10 +408,10 @@ No marketing language ("robust", "seamless", "comprehensive"). Every claim must 
 
 Before marking any task complete, confirm all items below:
 
-- [ ] Module name follows `tpl_{domain}` or `tpl_{domain}_{feature}`
-- [ ] All models use `tpl.*` prefix
+- [ ] Module name follows `esmis_{domain}` or `esmis_{domain}_{feature}`
+- [ ] All models use `esmis.*` prefix
 - [ ] `ir.model.access.csv` exists with an entry for every model
-- [ ] Every custom `tpl.*` model has a `base.group_system` full CRUD row
+- [ ] Every custom `esmis.*` model has a `base.group_system` full CRUD row
 - [ ] ACL entry IDs follow `access_{model}_{group}` pattern
 - [ ] No `print()` — use `_logger`
 - [ ] No bare `except:` — catch specific exceptions
@@ -419,7 +419,7 @@ Before marking any task complete, confirm all items below:
 - [ ] No PII in log messages
 - [ ] Boolean fields use `is_*` or `has_*` prefix
 - [ ] Many2one fields use `{model}_id`, One2many/M2m use `{model}_ids`
-- [ ] No variant-specific fields in base modules (use `tpl_*_{variant}` modules)
+- [ ] No variant-specific fields in base modules (use `esmis_*_{variant}` modules)
 - [ ] No static `Selection` for values that should be vocabulary-backed
 - [ ] External IDs stored in identifier model, not as direct fields
 - [ ] `application` and `auto_install` set correctly
@@ -432,17 +432,17 @@ Before marking any task complete, confirm all items below:
 
 ## Module Scaffold Reference
 
-Use these templates when creating a new module from scratch. Every file below is the minimal starting point for a `tpl_{domain}` module.
+Use these templates when creating a new module from scratch. Every file below is the minimal starting point for a `esmis_{domain}` module.
 
 ### Required Files
 
-#### `tpl_{domain}/__manifest__.py`
+#### `esmis_{domain}/__manifest__.py`
 
 ```python
 {
     "name": "{Domain}",
     "version": "19.0.1.0.0",
-    "category": "{Project}/{Domain}",
+    "category": "eSMIS/{Domain}",
     "summary": "One-line description of what this module does",
     "author": "Your Organization",
     "website": "",
@@ -450,7 +450,7 @@ Use these templates when creating a new module from scratch. Every file below is
     "development_status": "Alpha",
     "maintainers": [],
     "depends": [
-        "tpl_vocabulary",  # foundation dependency
+        "esmis_vocabulary",  # foundation dependency
     ],
     "data": [
         "security/ir.model.access.csv",
@@ -464,19 +464,19 @@ Use these templates when creating a new module from scratch. Every file below is
 }
 ```
 
-#### `tpl_{domain}/__init__.py`
+#### `esmis_{domain}/__init__.py`
 
 ```python
 from . import models
 ```
 
-#### `tpl_{domain}/models/__init__.py`
+#### `esmis_{domain}/models/__init__.py`
 
 ```python
 from . import {domain}
 ```
 
-#### `tpl_{domain}/models/{domain}.py`
+#### `esmis_{domain}/models/{domain}.py`
 
 ```python
 import logging
@@ -490,7 +490,7 @@ _logger = logging.getLogger(__name__)
 class Prefix{Domain}(models.Model):
     """Short description of what this model represents."""
 
-    _name = "tpl.{domain}"
+    _name = "esmis.{domain}"
     _description = "{Domain}"
     _order = "name"
 
@@ -505,14 +505,14 @@ class Prefix{Domain}(models.Model):
                 raise ValidationError(_("Name cannot be blank."))
 ```
 
-#### `tpl_{domain}/views/{domain}_views.xml`
+#### `esmis_{domain}/views/{domain}_views.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_tpl_{domain}_form" model="ir.ui.view">
-        <field name="name">tpl.{domain}.form</field>
-        <field name="model">tpl.{domain}</field>
+    <record id="view_esmis_{domain}_form" model="ir.ui.view">
+        <field name="name">esmis.{domain}.form</field>
+        <field name="model">esmis.{domain}</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -534,9 +534,9 @@ class Prefix{Domain}(models.Model):
         </field>
     </record>
 
-    <record id="view_tpl_{domain}_list" model="ir.ui.view">
-        <field name="name">tpl.{domain}.list</field>
-        <field name="model">tpl.{domain}</field>
+    <record id="view_esmis_{domain}_list" model="ir.ui.view">
+        <field name="name">esmis.{domain}.list</field>
+        <field name="model">esmis.{domain}</field>
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
@@ -544,15 +544,15 @@ class Prefix{Domain}(models.Model):
         </field>
     </record>
 
-    <record id="action_tpl_{domain}" model="ir.actions.act_window">
+    <record id="action_esmis_{domain}" model="ir.actions.act_window">
         <field name="name">{Domain}</field>
-        <field name="res_model">tpl.{domain}</field>
+        <field name="res_model">esmis.{domain}</field>
         <field name="view_mode">list,form</field>
     </record>
 </odoo>
 ```
 
-#### `tpl_{domain}/views/menus.xml`
+#### `esmis_{domain}/views/menus.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -567,30 +567,30 @@ class Prefix{Domain}(models.Model):
         id="menu_{domain}_list"
         name="{Domain} Records"
         parent="menu_{domain}_root"
-        action="action_tpl_{domain}"
+        action="action_esmis_{domain}"
         sequence="10"
     />
 </odoo>
 ```
 
-#### `tpl_{domain}/security/ir.model.access.csv`
+#### `esmis_{domain}/security/ir.model.access.csv`
 
 ```csv
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_tpl_{domain}_system,tpl.{domain} / System,model_tpl_{domain},base.group_system,1,1,1,1
-access_tpl_{domain}_officer,tpl.{domain} / Officer,model_tpl_{domain},tpl_security.group_tpl_officer,1,1,1,0
-access_tpl_{domain}_manager,tpl.{domain} / Manager,model_tpl_{domain},tpl_security.group_tpl_manager,1,1,1,1
+access_esmis_{domain}_system,esmis.{domain} / System,model_esmis_{domain},base.group_system,1,1,1,1
+access_esmis_{domain}_officer,esmis.{domain} / Officer,model_esmis_{domain},esmis_security.group_esmis_officer,1,1,1,0
+access_esmis_{domain}_manager,esmis.{domain} / Manager,model_esmis_{domain},esmis_security.group_esmis_manager,1,1,1,1
 ```
 
-> **Note:** The `tpl_security` module provides cross-project security groups. If your project has not created this module yet, define module-specific groups (see the [Security groups template](#security-groups-securitysecurity_groupsxml) below) and reference those instead.
+> **Note:** The `esmis_security` module provides cross-project security groups. If your project has not created this module yet, define module-specific groups (see the [Security groups template](#security-groups-securitysecurity_groupsxml) below) and reference those instead.
 
-#### `tpl_{domain}/tests/__init__.py`
+#### `esmis_{domain}/tests/__init__.py`
 
 ```python
 from . import test_{domain}
 ```
 
-#### `tpl_{domain}/tests/test_{domain}.py`
+#### `esmis_{domain}/tests/test_{domain}.py`
 
 ```python
 from odoo.tests import TransactionCase
@@ -600,7 +600,7 @@ class TestPrefix{Domain}(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.record = self.env["tpl.{domain}"].create({
+        self.record = self.env["esmis.{domain}"].create({
             "name": "Test Record",
         })
 
@@ -613,10 +613,10 @@ class TestPrefix{Domain}(TransactionCase):
         self.assertTrue(self.record.active)
 ```
 
-#### `tpl_{domain}/readme/DESCRIPTION.md`
+#### `esmis_{domain}/readme/DESCRIPTION.md`
 
 ```markdown
-Short overview of what tpl_{domain} provides.
+Short overview of what esmis_{domain} provides.
 
 ## Key Capabilities
 
@@ -625,23 +625,23 @@ Short overview of what tpl_{domain} provides.
 
 ## Key Models
 
-- `tpl.{domain}` — description of the model
+- `esmis.{domain}` — description of the model
 
 ## UI Location
 
-{Project} > {Domain} > Records
+eSMIS > {Domain} > Records
 
 ## Security
 
-- `tpl_security.group_tpl_officer` — create and edit
-- `tpl_security.group_tpl_manager` — full access including delete
+- `esmis_security.group_esmis_officer` — create and edit
+- `esmis_security.group_esmis_manager` — full access including delete
 
 ## Dependencies
 
-- `tpl_vocabulary` — vocabulary infrastructure
+- `esmis_vocabulary` — vocabulary infrastructure
 ```
 
-#### `tpl_{domain}/pyproject.toml`
+#### `esmis_{domain}/pyproject.toml`
 
 ```toml
 [build-system]
@@ -666,7 +666,7 @@ class ResConfigSettings(models.TransientModel):
 
     {domain}_feature_enabled = fields.Boolean(
         string="Enable {Domain} Feature",
-        config_parameter="tpl_{domain}.feature_enabled",
+        config_parameter="esmis_{domain}.feature_enabled",
     )
 ```
 
@@ -676,7 +676,7 @@ Companion view in `views/res_config_settings_views.xml`:
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.form.inherit.tpl_{domain}</field>
+        <field name="name">res.config.settings.form.inherit.esmis_{domain}</field>
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
@@ -699,19 +699,19 @@ Add both files to `__manifest__.py` `data` list and add `"models/res_config_sett
 
 #### Security groups: `security/security_groups.xml`
 
-When your module defines its own permission groups (instead of relying on `tpl_security`):
+When your module defines its own permission groups (instead of relying on `esmis_security`):
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="category_tpl_{domain}" model="ir.module.category">
-        <field name="name">tpl {Domain}</field>
+    <record id="category_esmis_{domain}" model="ir.module.category">
+        <field name="name">esmis {Domain}</field>
         <field name="sequence">10</field>
     </record>
 
     <record id="privilege_{domain}_officer" model="res.groups.privilege">
         <field name="name">{Domain} Officer</field>
-        <field name="category_id" ref="category_tpl_{domain}"/>
+        <field name="category_id" ref="category_esmis_{domain}"/>
     </record>
 
     <record id="group_{domain}_viewer" model="res.groups">
@@ -740,31 +740,31 @@ When your module ships with reference data using vocabulary codes:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <record id="{domain}_default_record" model="tpl.{domain}">
+    <record id="{domain}_default_record" model="esmis.{domain}">
         <field name="name">Default Record</field>
-        <field name="type_id" ref="tpl_vocabulary.code_some_type"/>
+        <field name="type_id" ref="esmis_vocabulary.code_some_type"/>
     </record>
 </odoo>
 ```
 
 Use `noupdate="1"` for data that should not be overwritten on module upgrade.
 
-## `tpl_vocabulary` Foundation
+## `esmis_vocabulary` Foundation
 
-The `tpl_vocabulary` module provides the foundation vocabulary infrastructure for all project modules. It should be included in `depends` for any module that uses vocabulary-backed fields.
+The `esmis_vocabulary` module provides the foundation vocabulary infrastructure for all project modules. It should be included in `depends` for any module that uses vocabulary-backed fields.
 
 ### What It Provides
 
 | Model | Purpose |
 |-------|---------|
-| `tpl.vocabulary` | Named collection of codes with a globally unique namespace URI |
-| `tpl.vocabulary.code` | Individual code within a vocabulary — has a code, display label, and computed URI |
+| `esmis.vocabulary` | Named collection of codes with a globally unique namespace URI |
+| `esmis.vocabulary.code` | Individual code within a vocabulary — has a code, display label, and computed URI |
 
 Key features:
 - **Namespace URIs** for interoperability (`urn:iso:std:iso:5218`, `urn:tpl:vocab:{name}`)
 - **System protection** — system vocabularies (`is_system=True`) prevent user edits
 - **Cached lookups** — `get_code(namespace_uri, code)` and `resolve_by_uri(uri)` with ORM cache
-- **Configuration menu** — owns the top-level `menu_tpl_configuration` used by all modules
+- **Configuration menu** — owns the top-level `menu_esmis_configuration` used by all modules
 
 ### Seed Vocabularies
 
@@ -783,7 +783,7 @@ Create a data file (e.g., `data/vocabulary_{name}.xml`) and add it to `__manifes
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <record id="vocab_priority" model="tpl.vocabulary">
+    <record id="vocab_priority" model="esmis.vocabulary">
         <field name="name">Priority Level</field>
         <field name="namespace_uri">urn:tpl:vocab:priority</field>
         <field name="description">Priority classification for work items</field>
@@ -791,21 +791,21 @@ Create a data file (e.g., `data/vocabulary_{name}.xml`) and add it to `__manifes
         <field name="domain">administrative</field>
     </record>
 
-    <record id="code_priority_low" model="tpl.vocabulary.code">
+    <record id="code_priority_low" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_priority"/>
         <field name="code">low</field>
         <field name="display">Low</field>
         <field name="sequence">10</field>
     </record>
 
-    <record id="code_priority_medium" model="tpl.vocabulary.code">
+    <record id="code_priority_medium" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_priority"/>
         <field name="code">medium</field>
         <field name="display">Medium</field>
         <field name="sequence">20</field>
     </record>
 
-    <record id="code_priority_high" model="tpl.vocabulary.code">
+    <record id="code_priority_high" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_priority"/>
         <field name="code">high</field>
         <field name="display">High</field>
@@ -823,12 +823,12 @@ from odoo import fields, models
 
 
 class PrefixWorkItem(models.Model):
-    _name = "tpl.work.item"
+    _name = "esmis.work.item"
     _description = "Work Item"
 
     name = fields.Char(required=True)
     priority_id = fields.Many2one(
-        comodel_name="tpl.vocabulary.code",
+        comodel_name="esmis.vocabulary.code",
         string="Priority",
         domain="[('namespace_uri', '=', 'urn:tpl:vocab:priority')]",
         help="Priority level from the Priority vocabulary",
@@ -848,10 +848,10 @@ Use `no_create` and `no_open` to prevent users from creating or editing vocabula
 
 ```python
 # By namespace + code
-code = self.env["tpl.vocabulary.code"].get_code("urn:tpl:vocab:priority", "high")
+code = self.env["esmis.vocabulary.code"].get_code("urn:tpl:vocab:priority", "high")
 
 # By full URI
-code = self.env["tpl.vocabulary.code"].resolve_by_uri("urn:tpl:vocab:priority#high")
+code = self.env["esmis.vocabulary.code"].resolve_by_uri("urn:tpl:vocab:priority#high")
 ```
 
 Both methods use the ORM cache for fast repeated lookups.

@@ -17,10 +17,10 @@ Many of these issues are now detected automatically by pre-commit hooks:
 **Auto-fix Command API tuples:**
 ```bash
 # Preview changes
-python scripts/lint/check_odoo19.py --fix --dry-run tpl_vocabulary/models/*.py
+python scripts/lint/check_odoo19.py --fix --dry-run esmis_vocabulary/models/*.py
 
 # Apply fixes
-python scripts/lint/check_odoo19.py --fix tpl_vocabulary/models/*.py
+python scripts/lint/check_odoo19.py --fix esmis_vocabulary/models/*.py
 
 # Bulk fix all modules
 ./scripts/fix-odoo19.sh
@@ -135,7 +135,7 @@ return {"title": title}
 
 **Don't**: Create approval definitions without required fields
 ```python
-cls.env["tpl.approval.definition"].create({
+cls.env["esmis.approval.definition"].create({
     "name": "Test",
     "model_id": model_id,
 })  # Fails: approval_group_id required
@@ -144,7 +144,7 @@ cls.env["tpl.approval.definition"].create({
 **Do**: Include approval group when using default type
 ```python
 cls.test_group = cls.env["res.groups"].create({"name": "Test Group"})
-cls.env["tpl.approval.definition"].create({
+cls.env["esmis.approval.definition"].create({
     "name": "Test",
     "model_id": model_id,
     "approval_type": "group",

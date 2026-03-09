@@ -12,7 +12,7 @@ Usage:
     python -m scripts.compliance.checker --all
 
     # Generate tests from compliance spec
-    python -m scripts.compliance.test_generator tpl_vocabulary
+    python -m scripts.compliance.test_generator esmis_vocabulary
 
     # Generate compliance report
     python -m scripts.compliance.checker --report --format markdown

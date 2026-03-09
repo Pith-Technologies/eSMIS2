@@ -1,6 +1,6 @@
 # Access Rights Principles
 
-Security architecture for {Project} using Odoo 19's `res.groups.privilege` system.
+Security architecture for eSMIS using Odoo 19's `res.groups.privilege` system.
 
 ## Core Principles
 
@@ -13,8 +13,8 @@ Security architecture for {Project} using Odoo 19's `res.groups.privilege` syste
 
 ```
 TIER 1: ROLES (Composite)           ← Cross-domain, optional
-├── role_tpl_field_officer
-└── role_tpl_supervisor
+├── role_esmis_field_officer
+└── role_esmis_supervisor
 
 TIER 2: FUNCTIONAL PRIVILEGES       ← User-facing, per domain
 ├── group_inventory_viewer
@@ -71,15 +71,15 @@ This ensures that any module or user can display reference data without requirin
 |-------|--------|---------|
 | `res.country` | base | Country codes |
 | `res.currency` | base | Currency codes |
-| `tpl.vocabulary` | tpl_vocabulary | Vocabulary definitions |
-| `tpl.vocabulary.code` | tpl_vocabulary | Vocabulary code values |
+| `esmis.vocabulary` | esmis_vocabulary | Vocabulary definitions |
+| `esmis.vocabulary.code` | esmis_vocabulary | Vocabulary code values |
 
 ### ACL Pattern
 
 ```csv
 # Reference data: read-only for all internal users
-access_tpl_vocabulary_user,tpl.vocabulary user,model_tpl_vocabulary,base.group_user,1,0,0,0
-access_tpl_vocabulary_code_user,tpl.vocabulary.code user,model_tpl_vocabulary_code,base.group_user,1,0,0,0
+access_esmis_vocabulary_user,esmis.vocabulary user,model_esmis_vocabulary,base.group_user,1,0,0,0
+access_esmis_vocabulary_code_user,esmis.vocabulary.code user,model_esmis_vocabulary_code,base.group_user,1,0,0,0
 ```
 
 Write/create/delete permissions remain restricted to domain-specific groups (Vocabulary Officer, Manager).
@@ -88,11 +88,11 @@ Write/create/delete permissions remain restricted to domain-specific groups (Voc
 
 | What | Where | Why |
 |------|-------|-----|
-| Category hierarchy | `tpl_security` | Consistent UI |
-| Admin group | `tpl_security` | Always needed |
-| Inventory groups | `tpl_inventory` | Only when installed |
-| Vocabulary groups | `tpl_vocabulary` | Only when installed |
-| Composite roles | `tpl_roles` (optional) | For pre-built role combinations |
+| Category hierarchy | `esmis_security` | Consistent UI |
+| Admin group | `esmis_security` | Always needed |
+| Inventory groups | `esmis_inventory` | Only when installed |
+| Vocabulary groups | `esmis_vocabulary` | Only when installed |
+| Composite roles | `esmis_roles` (optional) | For pre-built role combinations |
 
 ## Record Rules
 
@@ -154,11 +154,11 @@ All record rules MUST follow these requirements:
 
 ### Superuser Access (REQUIRED)
 
-Every custom `tpl.*` model MUST include a `base.group_system` ACL row with full CRUD permissions. This ensures the admin/superuser can always access all {Project} models without needing domain-specific group membership. Place it as the first data row in the CSV.
+Every custom `esmis.*` model MUST include a `base.group_system` ACL row with full CRUD permissions. This ensures the admin/superuser can always access all eSMIS models without needing domain-specific group membership. Place it as the first data row in the CSV.
 
 ```csv
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_tpl_mymodel_system,tpl.mymodel / System,model_tpl_mymodel,base.group_system,1,1,1,1
+access_esmis_mymodel_system,esmis.mymodel / System,model_esmis_mymodel,base.group_system,1,1,1,1
 ```
 
 This does NOT apply to inherited Odoo models (e.g., `res.partner`) since they already have admin access from Odoo core.
@@ -167,30 +167,30 @@ This does NOT apply to inherited Odoo models (e.g., `res.partner`) since they al
 
 ACL entry IDs MUST follow the pattern: `access_{model}_{group}`
 
-- `{model}` - Model name with underscores (e.g., `tpl_order`, `res_partner`)
+- `{model}` - Model name with underscores (e.g., `esmis_order`, `res_partner`)
 - `{group}` - Short group identifier (e.g., `viewer`, `officer`, `manager`, `system`)
 
 ```csv
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_tpl_mymodel_system,tpl.mymodel / System,model_tpl_mymodel,base.group_system,1,1,1,1
+access_esmis_mymodel_system,esmis.mymodel / System,model_esmis_mymodel,base.group_system,1,1,1,1
 access_res_partner_inventory_viewer,res.partner viewer,base.model_res_partner,group_inventory_viewer,1,0,0,0
 access_res_partner_inventory_officer,res.partner officer,base.model_res_partner,group_inventory_officer,1,1,1,0
 ```
 
 **Anti-patterns to avoid:**
-- `user_access_tpl_api_log` - Don't prefix with user/manager
-- `tpl_order_admin` - Don't use model name as ID prefix
-- `report_details_tpl_admin` - Don't use report-style names
+- `user_access_esmis_api_log` - Don't prefix with user/manager
+- `esmis_order_admin` - Don't use model name as ID prefix
+- `report_details_esmis_admin` - Don't use report-style names
 
 ## Checklist
 
 ### Module Security Checklist
 
-- [ ] Module depends on `tpl_security`
+- [ ] Module depends on `esmis_security`
 - [ ] Groups use `privilege_id` for user-facing groups
 - [ ] Groups have `comment` field documentation
 - [ ] ACL entries for all models
-- [ ] Every custom `tpl.*` model has a `base.group_system` full CRUD row
+- [ ] Every custom `esmis.*` model has a `base.group_system` full CRUD row
 - [ ] No duplicate group definitions
 - [ ] No references to deprecated groups
 
@@ -253,9 +253,9 @@ Since V2 allows breaking compatibility, the following legacy patterns should be 
 
 1. **Deprecated group aliases** - Remove backward-compatibility groups that just imply new groups
 2. **Duplicate group IDs** - Each group ID must be unique across all modules
-3. **Namespace** - All XML IDs must use `tpl_*` prefix, all model references must use `tpl.*`
+3. **Namespace** - All XML IDs must use `esmis_*` prefix, all model references must use `esmis.*`
 4. **Base group modifications** - Modules must not modify `base.group_user` or `base.group_erp_manager`
-5. **Old XML ID prefixes** - Use `tpl_*` consistently for all XML IDs
+5. **Old XML ID prefixes** - Use `esmis_*` consistently for all XML IDs
 
 ## Demo & Test Environment
 
@@ -321,7 +321,7 @@ self.env["res.partner"].create({...})  # create_uid = OdooBot
 
 ```python
 # GOOD: Create as the intended user
-demo_officer = self.env.ref("tpl_inventory.demo_officer")
+demo_officer = self.env.ref("esmis_inventory.demo_officer")
 self.env["res.partner"].with_user(demo_officer).create({...})
 
 # GOOD: Or assign manager group so admin can see all records

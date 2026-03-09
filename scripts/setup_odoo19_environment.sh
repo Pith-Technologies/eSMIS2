@@ -526,7 +526,7 @@ main() {
     echo ""
     echo -e "${YELLOW}Next Steps:${NC}"
     echo -e "  Run tests: ${GREEN}./scripts/test_single_module.sh <module_name>${NC}"
-    echo -e "  Example:   ${GREEN}./scripts/test_single_module.sh tpl_vocabulary${NC}"
+    echo -e "  Example:   ${GREEN}./scripts/test_single_module.sh esmis_vocabulary${NC}"
     echo ""
     echo -e "${YELLOW}Important Paths:${NC}"
     echo -e "  Odoo 19:     ${GREEN}$ODOO_PATH${NC}"

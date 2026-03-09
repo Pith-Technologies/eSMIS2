@@ -4,7 +4,7 @@ Standardized patterns for approval workflows.
 
 ## Core Principles
 
-1. **Mixin-Based** - Use `tpl.approval.mixin` for approvable models
+1. **Mixin-Based** - Use `esmis.approval.mixin` for approvable models
 2. **Consistent States** - Same state names across all modules
 3. **Audit Trail** - Every approval tracked with who/when/why
 4. **Activity Integration** - Use Odoo's `mail.activity` for notifications
@@ -39,7 +39,7 @@ The `approval_state` field (not `state`) is used by the mixin:
 ```python
 class MyModel(models.Model):
     _name = "my.model"
-    _inherit = "tpl.approval.mixin"
+    _inherit = "esmis.approval.mixin"
 
     def _on_submit(self):
         """Custom validation before submission"""
@@ -53,7 +53,7 @@ class MyModel(models.Model):
 
 ## Audit Fields (Provided by Mixin)
 
-These fields are automatically added by `tpl.approval.mixin`:
+These fields are automatically added by `esmis.approval.mixin`:
 
 ```python
 # Submission tracking
@@ -79,7 +79,7 @@ def action_reject(self):
     return {
         'type': 'ir.actions.act_window',
         'name': 'Reject',
-        'res_model': 'tpl.rejection.wizard',
+        'res_model': 'esmis.rejection.wizard',
         'view_mode': 'form',
         'target': 'new',
     }
@@ -97,7 +97,7 @@ For large volumes, use async:
 
 ## Multi-Stage Approval
 
-Use `tpl.approval.definition` for configurable approval sequences:
+Use `esmis.approval.definition` for configurable approval sequences:
 
 ```
 Stage 1: Local validator →

@@ -5,25 +5,25 @@
 **Implementation Date:** 2025-12-04
 **Deciders:** Architecture Team
 
-> **Post-refactor:** Code examples updated to current model names. `tpl.identifier` (was `tpl.registry.id`),
-> `tpl.vocabulary.code` (was `tpl.id.type`), `type_id` (was `id_type_id`), `system_uri` (was `namespace_uri`).
+> **Post-refactor:** Code examples updated to current model names. `esmis.identifier` (was `esmis.registry.id`),
+> `esmis.vocabulary.code` (was `esmis.id.type`), `type_id` (was `id_type_id`), `system_uri` (was `namespace_uri`).
 > The identifier model is defined in the domain module that implements identifiers.
 
 ### Implementation Summary
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| `namespace_uri` on identifier type | ✅ Complete | Now on `tpl.vocabulary.code` via vocabulary |
-| Denormalized on `tpl.identifier` | ✅ Complete | `system_uri` related from `type_id.uri`, stored, indexed |
+| `namespace_uri` on identifier type | ✅ Complete | Now on `esmis.vocabulary.code` via vocabulary |
+| Denormalized on `esmis.identifier` | ✅ Complete | `system_uri` related from `type_id.uri`, stored, indexed |
 | URN format validation | ✅ Complete | Via `id_validation` regex on vocabulary code (added by identifier domain module via `_inherit`) |
 | Seed data | ✅ Complete | national-id, passport, tax-id, birth-certificate |
 | API v2 integration | ✅ Complete | Namespace-based lookups |
 
-**Code Location:** The domain module implementing identifiers (e.g., `models/identifier.py`), `tpl_vocabulary/models/vocabulary_code.py`
+**Code Location:** The domain module implementing identifiers (e.g., `models/identifier.py`), `esmis_vocabulary/models/vocabulary_code.py`
 
 ## Context
 
-The system supports multiple identifier types per entity via `tpl.vocabulary.code` (identifier types) and `tpl.identifier`. Current implementation uses human-readable names (e.g., "National ID", "Tax ID") but lacks globally unique identifiers for interoperability.
+The system supports multiple identifier types per entity via `esmis.vocabulary.code` (identifier types) and `esmis.identifier`. Current implementation uses human-readable names (e.g., "National ID", "Tax ID") but lacks globally unique identifiers for interoperability.
 
 **Problems with current approach:**
 1. Name collisions across deployments ("National ID" means different things in different countries)
@@ -35,19 +35,19 @@ The system supports multiple identifier types per entity via `tpl.vocabulary.cod
 
 ## Decision
 
-Add a `namespace_uri` field to `tpl.vocabulary.code` (the vocabulary code model used for identifier types) that provides a globally unique identifier for each ID type.
+Add a `namespace_uri` field to `esmis.vocabulary.code` (the vocabulary code model used for identifier types) that provides a globally unique identifier for each ID type.
 
 ## Implementation
 
 ### 1. Schema Changes
 
-**File:** `tpl_vocabulary/models/vocabulary_code.py`
+**File:** `esmis_vocabulary/models/vocabulary_code.py`
 
-> Simplified — see actual implementation in `tpl_vocabulary/models/vocabulary_code.py`.
+> Simplified — see actual implementation in `esmis_vocabulary/models/vocabulary_code.py`.
 
 ```python
 class VocabularyCode(models.Model):
-    _name = "tpl.vocabulary.code"
+    _name = "esmis.vocabulary.code"
 
     # namespace_uri is a related field from the parent vocabulary's URI,
     # combined with the code value to produce a globally unique URI per code.
@@ -67,11 +67,11 @@ class VocabularyCode(models.Model):
 
 ### 2. Denormalized Field on Registry ID (for query performance)
 
-**File:** The domain module implementing `tpl.identifier` (e.g., `models/identifier.py`)
+**File:** The domain module implementing `esmis.identifier` (e.g., `models/identifier.py`)
 
 ```python
 class Identifier(models.Model):
-    _inherit = "tpl.identifier"
+    _inherit = "esmis.identifier"
 
     system_uri = fields.Char(
         related="type_id.uri",
@@ -81,9 +81,9 @@ class Identifier(models.Model):
     )
 ```
 
-This enables fast lookups without joining to `tpl_vocabulary_code`:
+This enables fast lookups without joining to `esmis_vocabulary_code`:
 ```python
-identifier = self.env["tpl.identifier"].search([
+identifier = self.env["esmis.identifier"].search([
     ("system_uri", "=", "urn:gov:us:ssa:ssn"),
     ("value", "=", "123456789"),
 ], limit=1)
@@ -104,13 +104,13 @@ identifier = self.env["tpl.identifier"].search([
 
 **File:** Domain module data (e.g., `data/vocabulary_identifier_type.xml`)
 
-> The `id_validation` and `target_type` fields are added to `tpl.vocabulary.code` by the domain module implementing identifiers (via `_inherit`), not by the base `tpl_vocabulary` module.
+> The `id_validation` and `target_type` fields are added to `esmis.vocabulary.code` by the domain module implementing identifiers (via `_inherit`), not by the base `esmis_vocabulary` module.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- Generic identifier types within the identifier-type vocabulary -->
-    <record id="code_id_national_id" model="tpl.vocabulary.code">
+    <record id="code_id_national_id" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_identifier_type"/>
         <field name="code">national-id</field>
         <field name="display">National ID</field>
@@ -118,21 +118,21 @@ identifier = self.env["tpl.identifier"].search([
         <field name="target_type">both</field>
     </record>
 
-    <record id="code_id_passport" model="tpl.vocabulary.code">
+    <record id="code_id_passport" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_identifier_type"/>
         <field name="code">passport</field>
         <field name="display">Passport</field>
         <field name="target_type">individual</field>
     </record>
 
-    <record id="code_id_tax_id" model="tpl.vocabulary.code">
+    <record id="code_id_tax_id" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_identifier_type"/>
         <field name="code">tax-id</field>
         <field name="display">Tax ID</field>
         <field name="target_type">both</field>
     </record>
 
-    <record id="code_id_birth_certificate" model="tpl.vocabulary.code">
+    <record id="code_id_birth_certificate" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_identifier_type"/>
         <field name="code">birth-certificate</field>
         <field name="display">Birth Certificate</field>
@@ -141,27 +141,27 @@ identifier = self.env["tpl.identifier"].search([
 </odoo>
 ```
 
-**File:** `tpl_contact_{cc}/data/identifier_types.xml` (country override example)
+**File:** `esmis_contact_{cc}/data/identifier_types.xml` (country override example)
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- Override generic national ID with country-specific version -->
-    <record id="tpl_vocabulary.code_id_national_id" model="tpl.vocabulary.code">
+    <record id="esmis_vocabulary.code_id_national_id" model="esmis.vocabulary.code">
         <field name="display">National ID Card</field>
         <field name="namespace_uri">urn:gov:{cc}:{agency}:national-id</field>
         <field name="id_validation">^[0-9]{9}$</field>
     </record>
 
     <!-- Country-specific ID types -->
-    <record id="id_type_social_security" model="tpl.vocabulary.code">
+    <record id="id_type_social_security" model="esmis.vocabulary.code">
         <field name="display">Social Security Number</field>
         <field name="namespace_uri">urn:gov:{cc}:{agency}:ssn</field>
         <field name="id_validation">^[0-9]{3}-[0-9]{2}-[0-9]{4}$</field>
         <field name="target_type">individual</field>
     </record>
 
-    <record id="id_type_drivers_license" model="tpl.vocabulary.code">
+    <record id="id_type_drivers_license" model="esmis.vocabulary.code">
         <field name="display">Driver's License</field>
         <field name="namespace_uri">urn:gov:{cc}:{agency}:license</field>
         <field name="id_validation">^[A-Z0-9-]+$</field>
@@ -172,13 +172,13 @@ identifier = self.env["tpl.identifier"].search([
 
 ### 5. View Updates
 
-**File:** `tpl_vocabulary/views/vocabulary_code_views.xml`
+**File:** `esmis_vocabulary/views/vocabulary_code_views.xml`
 
 ```xml
 <!-- Vocabulary code form already includes URI field -->
 <record id="view_vocabulary_code_form" model="ir.ui.view">
-    <field name="name">tpl.vocabulary.code.form</field>
-    <field name="model">tpl.vocabulary.code</field>
+    <field name="name">esmis.vocabulary.code.form</field>
+    <field name="model">esmis.vocabulary.code</field>
     <field name="arch" type="xml">
         <form>
             <group>
@@ -200,9 +200,9 @@ identifier = self.env["tpl.identifier"].search([
 def migrate(cr, version):
     """Populate system_uri on identifiers from vocabulary code URIs"""
     cr.execute("""
-        UPDATE tpl_identifier ident
+        UPDATE esmis_identifier ident
         SET system_uri = vc.uri
-        FROM tpl_vocabulary_code vc
+        FROM esmis_vocabulary_code vc
         WHERE ident.type_id = vc.id
           AND (ident.system_uri IS NULL OR ident.system_uri = '')
     """)
@@ -219,7 +219,7 @@ Namespace URIs can be mapped to FHIR NamingSystem URLs for interoperability:
 | `urn:gov:{cc}:{agency}:license` | `DL` (Driver's License) | Driver's license |
 | `urn:tpl:id:passport` | `PPN` (Passport) | Passport number |
 
-The FHIR module performs this mapping when translating `tpl.identifier` records to FHIR `Identifier` elements.
+The FHIR module performs this mapping when translating `esmis.identifier` records to FHIR `Identifier` elements.
 
 ## Consequences
 
@@ -255,7 +255,7 @@ The FHIR module performs this mapping when translating `tpl.identifier` records 
 **Country-specific deployments:**
 Override the generic ID types by creating XML data files that reference the base record IDs:
 ```xml
-<record id="tpl_vocabulary.code_id_national_id" model="tpl.vocabulary.code">
+<record id="esmis_vocabulary.code_id_national_id" model="esmis.vocabulary.code">
     <field name="display">Kenya National ID</field>
     <field name="namespace_uri">urn:gov:ke:iprs:national-id</field>
 </record>
@@ -266,7 +266,7 @@ Override the generic ID types by creating XML data files that reference the base
 **Looking up records by system URI:**
 ```python
 # Fast lookup using indexed system_uri field
-identifier = self.env["tpl.identifier"].search([
+identifier = self.env["esmis.identifier"].search([
     ("system_uri", "=", "urn:gov:us:ssa:ssn"),
     ("value", "=", "123-45-6789"),
 ], limit=1)
@@ -277,8 +277,8 @@ if identifier:
 
 **Creating identifier types programmatically** (requires the identifier domain module that adds `id_validation` via `_inherit`):
 ```python
-vocab = self.env.ref("tpl_vocabulary.vocab_identifier_type")
-id_type = self.env["tpl.vocabulary.code"].create({
+vocab = self.env.ref("esmis_vocabulary.vocab_identifier_type")
+id_type = self.env["esmis.vocabulary.code"].create({
     "vocabulary_id": vocab.id,
     "code": "social-security",
     "display": "Social Security",
@@ -289,17 +289,17 @@ id_type = self.env["tpl.vocabulary.code"].create({
 **Pre-defined ID types (from seed data):**
 | XML ID | Name | Namespace URI |
 |--------|------|---------------|
-| `tpl_vocabulary.code_id_national_id` | National ID | `urn:tpl:id:national-id` |
-| `tpl_vocabulary.code_id_passport` | Passport | `urn:tpl:id:passport` |
-| `tpl_vocabulary.code_id_tax_id` | Tax ID | `urn:tpl:id:tax-id` |
-| `tpl_vocabulary.code_id_birth_certificate` | Birth Certificate | `urn:tpl:id:birth-certificate` |
+| `esmis_vocabulary.code_id_national_id` | National ID | `urn:tpl:id:national-id` |
+| `esmis_vocabulary.code_id_passport` | Passport | `urn:tpl:id:passport` |
+| `esmis_vocabulary.code_id_tax_id` | Tax ID | `urn:tpl:id:tax-id` |
+| `esmis_vocabulary.code_id_birth_certificate` | Birth Certificate | `urn:tpl:id:birth-certificate` |
 
 ## Implementation Checklist
 
-- [x] Add `uri` field to `tpl.vocabulary.code` (identifier types)
+- [x] Add `uri` field to `esmis.vocabulary.code` (identifier types)
 - [x] Add constraint for URI format validation
-- [x] Add denormalized `system_uri` to `tpl.identifier`
-- [x] Update form/tree views for `tpl.vocabulary.code`
+- [x] Add denormalized `system_uri` to `esmis.identifier`
+- [x] Update form/tree views for `esmis.vocabulary.code`
 - [x] Create seed data with standard ID types
 - [x] Write migration script for existing data
 - [ ] Update API to support namespace-based lookups

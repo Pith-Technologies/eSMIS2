@@ -25,7 +25,7 @@ User-friendly URLs via Odoo's `path` field on `ir.actions.act_window`.
 <record id="action_case" model="ir.actions.act_window">
     <field name="name">Cases</field>
     <field name="path">cases</field>
-    <field name="res_model">tpl.case</field>
+    <field name="res_model">esmis.case</field>
     ...
 </record>
 ```

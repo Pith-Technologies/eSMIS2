@@ -5,10 +5,10 @@
 # It transforms old tuple patterns like (0, 0, {...}) to Command.create({...}).
 #
 # Usage:
-#   ./scripts/fix-odoo19.sh                        # Fix all tpl_* modules
-#   ./scripts/fix-odoo19.sh tpl_vocabulary       # Fix specific module
+#   ./scripts/fix-odoo19.sh                        # Fix all esmis_* modules
+#   ./scripts/fix-odoo19.sh esmis_vocabulary       # Fix specific module
 #   ./scripts/fix-odoo19.sh --dry-run              # Preview changes without applying
-#   ./scripts/fix-odoo19.sh tpl_vocabulary --dry-run
+#   ./scripts/fix-odoo19.sh esmis_vocabulary --dry-run
 
 set -e
 
@@ -29,14 +29,14 @@ while [[ $# -gt 0 ]]; do
             echo "Usage: $0 [module_name] [--dry-run]"
             echo ""
             echo "Options:"
-            echo "  module_name   Specific module to fix (e.g., tpl_vocabulary)"
+            echo "  module_name   Specific module to fix (e.g., esmis_vocabulary)"
             echo "  --dry-run     Preview changes without applying them"
             echo ""
             echo "Examples:"
-            echo "  $0                             # Fix all tpl_* modules"
-            echo "  $0 tpl_vocabulary           # Fix specific module"
+            echo "  $0                             # Fix all esmis_* modules"
+            echo "  $0 esmis_vocabulary           # Fix specific module"
             echo "  $0 --dry-run                   # Preview all changes"
-            echo "  $0 tpl_vocabulary --dry-run # Preview specific module"
+            echo "  $0 esmis_vocabulary --dry-run # Preview specific module"
             exit 0
             ;;
         *)
@@ -71,10 +71,10 @@ if [ -n "$MODULE" ]; then
     # shellcheck disable=SC2086
     python scripts/lint/check_odoo19.py --fix $DRY_RUN "${FILES[@]}"
 else
-    # Fix all tpl_* modules (excluding tests and archived)
+    # Fix all esmis_* modules (excluding tests and archived)
     echo "Fixing Command API tuples in all custom modules..."
 
-    mapfile -t FILES < <(find tpl_* -name "*.py" \
+    mapfile -t FILES < <(find esmis_* -name "*.py" \
         \( -path "*/models/*" -o -path "*/wizard/*" \) \
         -not -path "*/tests/*" \
         -not -path "*archived*" \

@@ -1,6 +1,6 @@
 # UI Performance at Scale
 
-Performance patterns for handling millions of records in {Project}.
+Performance patterns for handling millions of records in eSMIS.
 
 ---
 
@@ -157,7 +157,7 @@ def _get_search_panel_config(self):
 
     # Check feature flag
     enable = self.env['ir.config_parameter'].sudo().get_param(
-        'tpl.ui.enable_search_panels', 'True'
+        'esmis.ui.enable_search_panels', 'True'
     ) == 'True'
 
     return {'enabled': enable, 'counters': True}
@@ -225,7 +225,7 @@ def _get_search_panel_config(self):
 
 <!-- Separate action for full view with search -->
 <record id="action_view_items" model="ir.actions.act_window">
-    <field name="res_model">tpl.order.line</field>
+    <field name="res_model">esmis.order.line</field>
     <field name="view_mode">list,form</field>
     <field name="domain">[('order_id', '=', active_id)]</field>
 </record>
@@ -233,7 +233,7 @@ def _get_search_panel_config(self):
 
 **Why**: Readonly lists paginate automatically, editable lists load all records
 
-**Reference**: `tpl_order/views/order_view.xml` (planned)
+**Reference**: `esmis_order/views/order_view.xml` (planned)
 
 ---
 
@@ -263,7 +263,7 @@ def _get_search_panel_config(self):
 
 **Why**: Browser crashes loading >10k rows, import is more efficient
 
-**Import pattern**: See `tpl_area/wizards/area_import_wizard.py`
+**Import pattern**: See `esmis_area/wizards/area_import_wizard.py`
 
 ---
 
@@ -323,7 +323,7 @@ def _get_search_panel_config(self):
 1. Define a dashboard metric model to store aggregated values:
 ```python
 class DashboardMetric(models.Model):
-    _name = "tpl.dashboard.metric"
+    _name = "esmis.dashboard.metric"
     _description = "Pre-aggregated dashboard metric"
 
     name = fields.Char(required=True)
@@ -336,7 +336,7 @@ class DashboardMetric(models.Model):
 ```xml
 <record id="cron_compute_metrics" model="ir.cron">
     <field name="name">Compute Dashboard Metrics</field>
-    <field name="model_id" ref="model_tpl_dashboard_metric"/>
+    <field name="model_id" ref="model_esmis_dashboard_metric"/>
     <field name="state">code</field>
     <field name="code">model._cron_compute_monthly_metrics()</field>
     <field name="interval_number">1</field>
@@ -346,7 +346,7 @@ class DashboardMetric(models.Model):
 
 3. Display in spreadsheet dashboard
 
-**Reference**: `tpl_dashboard/` (planned)
+**Reference**: `esmis_dashboard/` (planned)
 
 ---
 
@@ -375,14 +375,14 @@ item_count = fields.Integer(compute='_compute_item_count')
 
 def _compute_item_count(self):
     for rec in self:
-        rec.item_count = self.env['tpl.order.line'].search_count([
+        rec.item_count = self.env['esmis.order.line'].search_count([
             ('order_id', '=', rec.id)
         ])
 ```
 
 **Why**: `search_count` runs expensive queries, stored fields use cached values
 
-**Reference**: `tpl_order/models/order.py` (planned)
+**Reference**: `esmis_order/models/order.py` (planned)
 
 ---
 
@@ -397,13 +397,13 @@ class ResConfigSettings(models.TransientModel):
 
     enable_search_panels = fields.Boolean(
         string='Enable Search Panels',
-        config_parameter='tpl.ui.enable_search_panels',
+        config_parameter='esmis.ui.enable_search_panels',
         help='Disable on large deployments for performance'
     )
 
     search_panel_max_records = fields.Integer(
         string='Search Panel Threshold',
-        config_parameter='tpl.ui.search_panel_max_records',
+        config_parameter='esmis.ui.search_panel_max_records',
         default=100000,
         help='Disable search panels if records exceed this count'
     )
@@ -417,10 +417,10 @@ class ResConfigSettings(models.TransientModel):
 
 | Pattern | File | Lines |
 |---------|------|-------|
-| Readonly O2M + wizard | `tpl_order/views/order_view.xml` (planned) | — |
-| Stat button counts | `tpl_order/models/order.py` (planned) | — |
-| Import wizard | `tpl_area/wizards/area_import_wizard.py` | Full file |
-| Dashboard pattern | `tpl_dashboard/` (planned) | — |
+| Readonly O2M + wizard | `esmis_order/views/order_view.xml` (planned) | — |
+| Stat button counts | `esmis_order/models/order.py` (planned) | — |
+| Import wizard | `esmis_area/wizards/area_import_wizard.py` | Full file |
+| Dashboard pattern | `esmis_dashboard/` (planned) | — |
 | Settings UI | See `res_config_settings.py` patterns | Full file |
 
 ---

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- UN Standard for marital status in population censuses -->
-    <record id="vocab_civil_status" model="tpl.vocabulary">
+    <record id="vocab_civil_status" model="esmis.vocabulary">
         <field name="name">Civil Status</field>
         <field name="namespace_uri">urn:un:unsd:pop-census:marital-status</field>
         <field name="description">United Nations recommended classification for marital status used in population and housing censuses.</field>
@@ -10,7 +10,7 @@
         <field name="domain">core</field>
     </record>
 
-    <record id="code_civil_never_married" model="tpl.vocabulary.code">
+    <record id="code_civil_never_married" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_civil_status"/>
         <field name="code">S</field>
         <field name="display">Never Married</field>
@@ -18,7 +18,7 @@
         <field name="sequence">10</field>
     </record>
 
-    <record id="code_civil_married" model="tpl.vocabulary.code">
+    <record id="code_civil_married" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_civil_status"/>
         <field name="code">M</field>
         <field name="display">Married</field>
@@ -26,7 +26,7 @@
         <field name="sequence">20</field>
     </record>
 
-    <record id="code_civil_widowed" model="tpl.vocabulary.code">
+    <record id="code_civil_widowed" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_civil_status"/>
         <field name="code">W</field>
         <field name="display">Widowed</field>
@@ -34,7 +34,7 @@
         <field name="sequence">30</field>
     </record>
 
-    <record id="code_civil_divorced" model="tpl.vocabulary.code">
+    <record id="code_civil_divorced" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_civil_status"/>
         <field name="code">D</field>
         <field name="display">Divorced</field>
@@ -42,7 +42,7 @@
         <field name="sequence">40</field>
     </record>
 
-    <record id="code_civil_separated" model="tpl.vocabulary.code">
+    <record id="code_civil_separated" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_civil_status"/>
         <field name="code">L</field>
         <field name="display">Separated</field>
@@ -50,7 +50,7 @@
         <field name="sequence">50</field>
     </record>
 
-    <record id="code_civil_consensual_union" model="tpl.vocabulary.code">
+    <record id="code_civil_consensual_union" model="esmis.vocabulary.code">
         <field name="vocabulary_id" ref="vocab_civil_status"/>
         <field name="code">C</field>
         <field name="display">Consensual Union</field>

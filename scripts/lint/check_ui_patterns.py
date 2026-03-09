@@ -104,7 +104,7 @@ class UIPatternChecker:
         if model_name in self.large_models:
             return True
 
-        # Pattern match (e.g., tpl.billing.*)
+        # Pattern match (e.g., esmis.billing.*)
         for pattern in self.large_models:
             if pattern.endswith(".*"):
                 prefix = pattern[:-2]

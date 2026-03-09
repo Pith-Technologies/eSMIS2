@@ -3,8 +3,8 @@
 Odoo Naming Conventions Checker
 
 Validates naming conventions as defined in docs/principles/naming-conventions.md:
-- Modules: tpl_{domain} or tpl_{domain}_{feature} (configurable prefix)
-- Models: tpl.{domain} or tpl.{domain}.{entity} (configurable prefix)
+- Modules: esmis_{domain} or esmis_{domain}_{feature} (configurable prefix)
+- Models: esmis.{domain} or esmis.{domain}.{entity} (configurable prefix)
 - Fields: Boolean (is_*/has_*/can_*), Many2one (*_id), One2many/Many2many (*_ids)
 
 Features:
@@ -31,7 +31,7 @@ try:
 except ImportError:
     from common import LintConfig, OutputFormatter, Severity, Violation, add_common_args, print_summary
 
-# Whitelist for modules that don't follow tpl_* naming
+# Whitelist for modules that don't follow esmis_* naming
 MODULE_WHITELIST = {
     "base_user_role",
     "queue_job",
@@ -45,7 +45,7 @@ MODULE_WHITELIST = {
     "scripts",
 }
 
-# Standard Odoo models that don't need to follow tpl.* naming
+# Standard Odoo models that don't need to follow esmis.* naming
 STANDARD_MODEL_WHITELIST = {
     "res.partner",
     "res.users",
@@ -58,7 +58,7 @@ STANDARD_MODEL_WHITELIST = {
     "mail.activity.mixin",
 }
 
-# Third-party models that don't need to follow tpl.* naming
+# Third-party models that don't need to follow esmis.* naming
 # These are from external/third-party modules we depend on
 THIRD_PARTY_MODEL_WHITELIST = {
     # queue_job module
@@ -97,7 +97,7 @@ MANY2ONE_EXCEPTIONS = {
     "user",
     "categ",
     # Fields where the name already implies ID or type
-    "id_type",  # tpl.id.type - "id_type_id" would be redundant
+    "id_type",  # esmis.id.type - "id_type_id" would be redundant
     "source",
     "destination",  # Relationship endpoints
     "relation",  # Relationship type
@@ -160,7 +160,7 @@ class NamingChecker:
         self.namespace_exceptions = STANDARD_MODEL_WHITELIST | THIRD_PARTY_MODEL_WHITELIST | config_namespace_exceptions
 
     def check_module_names(self) -> list[Violation]:
-        """Check that module directory names follow tpl_* pattern."""
+        """Check that module directory names follow esmis_* pattern."""
         violations = []
 
         # Skip check if no module prefix is configured

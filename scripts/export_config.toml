@@ -6,7 +6,7 @@
 # Odoo module directories to export (each must contain __manifest__.py)
 modules = [
     # Foundation
-    "tpl_vocabulary",
+    "esmis_vocabulary",
 ]
 
 # Non-module directories to export

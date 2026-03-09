@@ -3,12 +3,12 @@ from odoo.tests.common import TransactionCase
 
 
 class TestVocabulary(TransactionCase):
-    """Tests for the tpl.vocabulary model."""
+    """Tests for the esmis.vocabulary model."""
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.Vocabulary = cls.env["tpl.vocabulary"]
+        cls.Vocabulary = cls.env["esmis.vocabulary"]
 
     def test_create_vocabulary(self):
         """A vocabulary can be created with required fields."""
@@ -67,14 +67,14 @@ class TestVocabulary(TransactionCase):
         )
         self.assertEqual(vocab.code_count, 0)
 
-        self.env["tpl.vocabulary.code"].create(
+        self.env["esmis.vocabulary.code"].create(
             {
                 "vocabulary_id": vocab.id,
                 "code": "A",
                 "display": "Alpha",
             }
         )
-        self.env["tpl.vocabulary.code"].create(
+        self.env["esmis.vocabulary.code"].create(
             {
                 "vocabulary_id": vocab.id,
                 "code": "B",
@@ -126,5 +126,5 @@ class TestVocabulary(TransactionCase):
             }
         )
         action = vocab.action_view_codes()
-        self.assertEqual(action["res_model"], "tpl.vocabulary.code")
+        self.assertEqual(action["res_model"], "esmis.vocabulary.code")
         self.assertEqual(action["domain"], [("vocabulary_id", "=", vocab.id)])

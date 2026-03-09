@@ -5,7 +5,7 @@ Checks compliance with V2 access rights principles without requiring Odoo runtim
 
 Usage:
     ./scripts/audit_security_static.py                    # Audit all modules
-    ./scripts/audit_security_static.py tpl_api       # Audit single module
+    ./scripts/audit_security_static.py esmis_api       # Audit single module
     ./scripts/audit_security_static.py --json             # JSON output
     ./scripts/audit_security_static.py --check=acl        # Only ACL checks
 """
@@ -55,7 +55,7 @@ class StaticSecurityAuditor:
         # Groups that are external references (extending other modules)
         # These should not be flagged as missing privilege_id
         self.external_group_prefixes = [
-            "tpl_security.",  # References to tpl_security module groups
+            "esmis_security.",  # References to esmis_security module groups
             "base.",  # References to base module groups
         ]
 
@@ -193,10 +193,10 @@ class StaticSecurityAuditor:
         for py_file in models_dir.rglob("*.py"):
             try:
                 content = py_file.read_text(encoding="utf-8")
-                # Look for _name = "tpl.*" or _name = 'tpl.*'
+                # Look for _name = "esmis.*" or _name = 'esmis.*'
                 matches = re.findall(r'_name\s*=\s*["\']([a-z0-9_.]+)["\']', content)
                 for match in matches:
-                    if match.startswith("tpl."):
+                    if match.startswith("esmis."):
                         models.add(match)
             except Exception:
                 pass
@@ -532,7 +532,7 @@ def main():
         epilog="""
 Examples:
   %(prog)s                          # Audit all modules
-  %(prog)s tpl_api             # Audit single module
+  %(prog)s esmis_api             # Audit single module
   %(prog)s --json                   # JSON output
   %(prog)s --check=acl              # Only ACL checks
   %(prog)s --check=acl,rules        # Multiple specific checks

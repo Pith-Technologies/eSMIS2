@@ -54,10 +54,10 @@ if [ -z "$MODULE_NAME" ]; then
     echo "  --log-level=...  Override log level"
     echo ""
     echo "Examples:"
-    echo "  $0 tpl_vocabulary                       # Run all tests"
-    echo "  $0 tpl_vocabulary --coverage            # Run tests with coverage"
-    echo "  $0 tpl_vocabulary --test-tags=post_install # Run only post_install tests"
-    echo "  $0 tpl_vocabulary --docker              # Force Docker mode"
+    echo "  $0 esmis_vocabulary                       # Run all tests"
+    echo "  $0 esmis_vocabulary --coverage            # Run tests with coverage"
+    echo "  $0 esmis_vocabulary --test-tags=post_install # Run only post_install tests"
+    echo "  $0 esmis_vocabulary --docker              # Force Docker mode"
     exit 1
 fi
 

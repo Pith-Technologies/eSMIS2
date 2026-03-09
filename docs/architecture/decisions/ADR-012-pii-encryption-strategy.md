@@ -7,8 +7,8 @@
 **Date:** 2025-11-28
 **Accepted Date:** 2025-12-04
 
-> **Post-refactor:** Code examples updated to current model names. `tpl.identifier` (was `tpl.registry.id`).
-> Identifier encryption is in `tpl_pii_encryption`. The identifier model is defined in the domain module that implements identifiers.
+> **Post-refactor:** Code examples updated to current model names. `esmis.identifier` (was `esmis.registry.id`).
+> Identifier encryption is in `esmis_pii_encryption`. The identifier model is defined in the domain module that implements identifiers.
 
 ### Implementation Summary
 
@@ -18,14 +18,14 @@
 | Blind Indexes | ✅ Complete | HMAC-SHA256, exact/partial/phonetic |
 | Key Management | ✅ Complete | 6 providers (config, DB, Vault, AWS, GCP, Azure) |
 | Data Classification | ✅ Complete | 9 PII categories, 4 classification levels |
-| Identifier Encryption | ✅ Complete | `tpl_pii_encryption` module |
+| Identifier Encryption | ✅ Complete | `esmis_pii_encryption` module |
 | Phone Number Encryption | ✅ Complete | With normalization |
 | Email/Address | ✅ Complete | Selective encryption |
 | Payment Data Encryption | ❌ Not started | Phase 2 |
 | Masked Field Widget | ✅ Complete | JS widget exists |
 | Widget Deployment in Views | ⚠️ Pending | Widget not yet in form views |
 
-**Modules:** `tpl_pii_encryption` (planned), `tpl_key_management` (planned), `tpl_data_classification` (planned)
+**Modules:** `esmis_pii_encryption` (planned), `esmis_key_management` (planned), `esmis_data_classification` (planned)
 
 **Note:** Core infrastructure is production-ready. Phase 2 needed for payment encryption and UI widget deployment.
 
@@ -35,16 +35,16 @@ The system stores sensitive PII. Current state analysis reveals:
 
 | Field Type | Example Location | Current State | Risk |
 |------------|------------------|---------------|------|
-| National IDs | `tpl.identifier.value` | Plaintext | Critical |
-| Bank Accounts | `tpl.payment.account_number` (planned) | Plaintext | Critical |
-| Phone Numbers | `tpl.phone.number.phone_no` | Plaintext | High |
+| National IDs | `esmis.identifier.value` | Plaintext | Critical |
+| Bank Accounts | `esmis.payment.account_number` (planned) | Plaintext | Critical |
+| Phone Numbers | `esmis.phone.number.phone_no` | Plaintext | High |
 | Names | `res.partner.name` | Plaintext | High |
 | Addresses | `res.partner.address` | Plaintext | Medium |
 | DOB | Individual model | Plaintext | Medium |
 
 ### Existing Infrastructure
 
-The `tpl_encryption` module provides:
+The `esmis_encryption` module provides:
 - RSA-OAEP with A256GCM encryption
 - JWK-based key storage
 - JWT signing (RS256)
@@ -102,7 +102,7 @@ We will implement a **hybrid encryption strategy** combining:
 │                              │                                               │
 │                              ▼                                               │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                    Application Layer (tpl_pii_encryption)            │    │
+│  │                    Application Layer (esmis_pii_encryption)            │    │
 │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────┐  │    │
 │  │  │ Encrypted   │  │   Blind     │  │  Masking    │  │  Audit    │  │    │
 │  │  │ Field Mixin │  │   Indexes   │  │  Widget     │  │  Logger   │  │    │
@@ -162,12 +162,12 @@ db_tde_provider = rds  # or native, azure, volume
 
 ```python
 class EncryptedFieldMixin(models.AbstractModel):
-    _name = "tpl.encrypted.field.mixin"
+    _name = "esmis.encrypted.field.mixin"
     _description = "Mixin for models with encrypted fields"
 
     def _get_encryption_provider(self):
         """Get configured encryption provider"""
-        return self.env['tpl.encryption.provider'].get_active_provider()
+        return self.env['esmis.encryption.provider'].get_active_provider()
 
     def _encrypt_value(self, value, field_name):
         """Encrypt a value for storage"""
@@ -229,8 +229,8 @@ class EncryptedFieldMixin(models.AbstractModel):
 
 ```python
 class Identifier(models.Model):
-    _name = "tpl.identifier"
-    _inherit = ["tpl.identifier", "tpl.encrypted.field.mixin"]
+    _name = "esmis.identifier"
+    _inherit = ["esmis.identifier", "esmis.encrypted.field.mixin"]
 
     # Original field becomes storage for encrypted data
     value = fields.Char(string="ID Value (Encrypted)")
@@ -284,7 +284,7 @@ class Identifier(models.Model):
 
 ```python
 class KeyManagementProvider(models.AbstractModel):
-    _name = "tpl.key.provider"
+    _name = "esmis.key.provider"
     _description = "Key management provider interface"
 
     def get_data_key(self, key_id, version=None):
@@ -327,8 +327,8 @@ class KeyManagementProvider(models.AbstractModel):
 
 ```python
 class ConfigKeyProvider(models.AbstractModel):
-    _name = "tpl.key.provider.config"
-    _inherit = "tpl.key.provider"
+    _name = "esmis.key.provider.config"
+    _inherit = "esmis.key.provider"
     _description = "Configuration file based key provider"
 
     def get_data_key(self, key_id, version=None):
@@ -371,8 +371,8 @@ index_salt_default = <base64_encoded_32_byte_salt>
 
 ```python
 class DatabaseKeyProvider(models.AbstractModel):
-    _name = "tpl.key.provider.database"
-    _inherit = "tpl.key.provider"
+    _name = "esmis.key.provider.database"
+    _inherit = "esmis.key.provider"
     _description = "Database stored key provider with envelope encryption"
 
     def get_data_key(self, key_id, version=None):
@@ -380,7 +380,7 @@ class DatabaseKeyProvider(models.AbstractModel):
         Retrieve key from database.
         Keys are encrypted with master key from config.
         """
-        key_record = self.env['tpl.encryption.key'].sudo().search([
+        key_record = self.env['esmis.encryption.key'].sudo().search([
             ('key_id', '=', key_id),
             ('version', '=', version) if version else ('is_current', '=', True),
         ], limit=1)
@@ -394,7 +394,7 @@ class DatabaseKeyProvider(models.AbstractModel):
 
 
 class EncryptionKey(models.Model):
-    _name = "tpl.encryption.key"
+    _name = "esmis.encryption.key"
     _description = "Encrypted key storage"
 
     key_id = fields.Char(required=True, index=True)
@@ -417,8 +417,8 @@ class EncryptionKey(models.Model):
 
 ```python
 class VaultKeyProvider(models.AbstractModel):
-    _name = "tpl.key.provider.vault"
-    _inherit = "tpl.key.provider"
+    _name = "esmis.key.provider.vault"
+    _inherit = "esmis.key.provider"
     _description = "HashiCorp Vault key provider"
 
     def _get_vault_client(self):
@@ -496,8 +496,8 @@ vault_transit_mount = transit
 
 ```python
 class AWSKMSProvider(models.AbstractModel):
-    _name = "tpl.key.provider.aws_kms"
-    _inherit = "tpl.key.provider"
+    _name = "esmis.key.provider.aws_kms"
+    _inherit = "esmis.key.provider"
     _description = "AWS KMS key provider"
 
     def get_data_key(self, key_id, version=None):
@@ -668,7 +668,7 @@ class PIIAccessController(http.Controller):
         user = request.env.user
 
         # Check classification
-        classification = request.env['tpl.field.classification'].search([
+        classification = request.env['esmis.field.classification'].search([
             ('model_id.model', '=', model),
             ('field_id.name', '=', field),
         ], limit=1)
@@ -682,7 +682,7 @@ class PIIAccessController(http.Controller):
                 return {'require_reauth': True}
 
         # Log access
-        request.env['tpl.pii.access.log'].sudo().create({
+        request.env['esmis.pii.access.log'].sudo().create({
             'user_id': user.id,
             'model': model,
             'res_id': record_id,
@@ -699,7 +699,7 @@ class PIIAccessController(http.Controller):
 ### Module Structure
 
 ```
-tpl_pii_encryption/
+esmis_pii_encryption/
 ├── __manifest__.py
 ├── __init__.py
 ├── models/
@@ -743,9 +743,9 @@ tpl_pii_encryption/
 ### Implementation for Core Models
 
 ```python
-# The domain module implementing tpl.identifier (e.g., models/identifier.py)
+# The domain module implementing esmis.identifier (e.g., models/identifier.py)
 class Identifier(models.Model):
-    _inherit = ["tpl.identifier", "tpl.encrypted.field.mixin"]
+    _inherit = ["esmis.identifier", "esmis.encrypted.field.mixin"]
 
     # Encrypted storage (replaces original 'value')
     value_encrypted = fields.Char(string="Encrypted Value")
@@ -888,8 +888,8 @@ class Identifier(models.Model):
 | 2 | Encrypted field mixin | 1 week | P0 |
 | 3 | Blind index implementation | 1 week | P0 |
 | 4 | Masked field widget | 3-4 days | P0 |
-| 5 | Encrypt `tpl.identifier.value` | 3-4 days | P0 |
-| 6 | Encrypt `tpl.payment.account_number` (planned) | 2-3 days | P0 |
+| 5 | Encrypt `esmis.identifier.value` | 3-4 days | P0 |
+| 6 | Encrypt `esmis.payment.account_number` (planned) | 2-3 days | P0 |
 | 7 | Database key provider | 1 week | P1 |
 | 8 | Vault provider | 1-2 weeks | P2 |
 | 9 | AWS/Azure KMS providers | 1-2 weeks | P2 |
@@ -907,7 +907,7 @@ class Identifier(models.Model):
 
 ```python
 class PIIEncryptionMigration(models.TransientModel):
-    _name = "tpl.pii.encryption.migration"
+    _name = "esmis.pii.encryption.migration"
 
     model_id = fields.Many2one('ir.model', required=True)
     field_name = fields.Char(required=True)
@@ -948,7 +948,7 @@ class PIIEncryptionMigration(models.TransientModel):
 1. **Key Storage**: Master keys never in database; config/Vault/KMS only
 2. **Key Rotation**: Support concurrent key versions during rotation
 3. **Audit Logging**: Log all PII access (not values, just access events)
-4. **Access Control**: Integrate with `tpl_security` for field-level permissions
+4. **Access Control**: Integrate with `esmis_security` for field-level permissions
 5. **Secure Deletion**: Crypto-shredding via key destruction
 6. **Memory Protection**: Clear plaintext from memory after use
 7. **Transport Security**: TLS for all key management communications

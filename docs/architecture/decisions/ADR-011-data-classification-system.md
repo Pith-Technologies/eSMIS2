@@ -8,32 +8,32 @@
 **Accepted Date:** 2025-12-04
 **Implementation Date:** 2025-12-04
 
-> **Post-refactor:** Code examples updated to current model names. `tpl.identifier` (was `tpl.registry.id`).
+> **Post-refactor:** Code examples updated to current model names. `esmis.identifier` (was `esmis.registry.id`).
 > The identifier model is defined in the domain module that implements identifiers.
 
 ### Implementation Summary
 
-The `tpl_data_classification` module (v19.0.1.0.0) implements this ADR with **2,523 lines of model code**.
+The `esmis_data_classification` module (v19.0.1.0.0) implements this ADR with **2,523 lines of model code**.
 
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Classification Levels | ✅ Complete | 4 default levels (PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED) |
 | Field Classification Registry | ✅ Complete | All 10 PII categories, 22 ACL rules |
 | Auto-Detection Patterns | ✅ Complete | 15 built-in patterns, runs at model load |
-| Policy Enforcement (Masking) | ✅ Complete | Pattern-based masking via `tpl.pii.aware` mixin |
+| Policy Enforcement (Masking) | ✅ Complete | Pattern-based masking via `esmis.pii.aware` mixin |
 | Policy Enforcement (Access Control) | ✅ Complete | Group-based via `min_group_id` field |
-| Policy Enforcement (Audit) | ✅ Complete | Dedicated `tpl.pii.access.log` model |
+| Policy Enforcement (Audit) | ✅ Complete | Dedicated `esmis.pii.access.log` model |
 | DSAR Management | ✅ Complete | All request types and workflows |
 | Data Retention | ✅ Complete | Exceeds proposal with scheduler and policies |
-| Consent Integration | ✅ Delegated | Uses external `tpl_consent` module |
+| Consent Integration | ✅ Delegated | Uses external `esmis_consent` module |
 | UI Wizards | ⏭️ Skipped | Auto-classification at model load instead |
 
 ### Implementation Differences from Proposal
 
-1. **Model Naming**: DSAR model is `tpl.dsar.request` (not `tpl.data.subject.request` as proposed)
-2. **Policy Enforcer**: Uses `tpl.pii.aware` mixin pattern instead of abstract service model
+1. **Model Naming**: DSAR model is `esmis.dsar.request` (not `esmis.data.subject.request` as proposed)
+2. **Policy Enforcer**: Uses `esmis.pii.aware` mixin pattern instead of abstract service model
 3. **Auto-Detection**: Runs programmatically at model load, not via wizard UI
-4. **Consent Models**: Delegated to `tpl_consent` module (correct separation of concerns)
+4. **Consent Models**: Delegated to `esmis_consent` module (correct separation of concerns)
 5. **Bonus Features**: Data retention scheduler and PII access logging exceed original proposal
 
 ## Context
@@ -52,11 +52,11 @@ Analysis of the codebase reveals:
 
 | Model | PII Fields | Current Protection |
 |-------|------------|-------------------|
-| `tpl.identifier` | National ID, passport, tax ID | None (plaintext) |
-| `tpl.payment` | Bank account number | None (plaintext) |
-| `tpl.phone.number` | Phone numbers | None (plaintext) |
+| `esmis.identifier` | National ID, passport, tax ID | None (plaintext) |
+| `esmis.payment` | Bank account number | None (plaintext) |
+| `esmis.phone.number` | Phone numbers | None (plaintext) |
 | `res.partner` | Names, addresses, DOB, email | None (plaintext) |
-| `tpl.registry.relationship` | Family/personal ties | None (plaintext) |
+| `esmis.registry.relationship` | Family/personal ties | None (plaintext) |
 
 ### Problems
 
@@ -75,7 +75,7 @@ Analysis of the codebase reveals:
 
 ## Decision
 
-We will implement a **Data Classification System** as a foundational module (`tpl_data_classification`) that provides:
+We will implement a **Data Classification System** as a foundational module (`esmis_data_classification`) that provides:
 
 1. Classification levels with configurable policies
 2. Field-level classification registry
@@ -99,7 +99,7 @@ We will implement a **Data Classification System** as a foundational module (`tp
 │          │                   │                   │                           │
 │          ▼                   ▼                   ▼                           │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
-│  │                    tpl_data_classification                           │    │
+│  │                    esmis_data_classification                           │    │
 │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐ │    │
 │  │  │   Policy    │  │  Auto-      │  │   Consent   │  │   DSAR     │ │    │
 │  │  │  Enforcer   │  │  Detection  │  │  Management │  │  Handler   │ │    │
@@ -109,7 +109,7 @@ We will implement a **Data Classification System** as a foundational module (`tp
 │         ┌────────────────────┼────────────────────┐                         │
 │         ▼                    ▼                    ▼                         │
 │  ┌──────────────────┐ ┌─────────────┐      ┌─────────────┐                 │
-│  │tpl_pii_encryption│ │  tpl_audit  │      │tpl_security │                 │
+│  │esmis_pii_encryption│ │  esmis_audit  │      │esmis_security │                 │
 │  │ (planned)        │ │ (planned)   │      │ (consumer)  │                 │
 │  └──────────────────┘ └─────────────┘      └─────────────┘                 │
 │                                                                              │
@@ -118,13 +118,13 @@ We will implement a **Data Classification System** as a foundational module (`tp
 
 ### Core Components
 
-#### 1. Classification Levels (`tpl.data.classification.level`)
+#### 1. Classification Levels (`esmis.data.classification.level`)
 
 Predefined sensitivity levels with associated policies:
 
 ```python
 class DataClassificationLevel(models.Model):
-    _name = "tpl.data.classification.level"
+    _name = "esmis.data.classification.level"
     _description = "Data sensitivity classification level"
     _order = "sequence"
 
@@ -178,13 +178,13 @@ class DataClassificationLevel(models.Model):
 | Confidential | `CONFIDENTIAL` | Recommended | Yes | Yes | Names, DOB, addresses |
 | Restricted | `RESTRICTED` | Required | Yes | Yes | National IDs, bank accounts |
 
-#### 2. Field Classification Registry (`tpl.field.classification`)
+#### 2. Field Classification Registry (`esmis.field.classification`)
 
 Maps model fields to classification levels:
 
 ```python
 class FieldClassification(models.Model):
-    _name = "tpl.field.classification"
+    _name = "esmis.field.classification"
     _description = "PII classification for model fields"
     _rec_name = "display_name"
 
@@ -196,7 +196,7 @@ class FieldClassification(models.Model):
         domain="[('model_id', '=', model_id)]"
     )
     classification_id = fields.Many2one(
-        'tpl.data.classification.level',
+        'esmis.data.classification.level',
         required=True
     )
 
@@ -240,7 +240,7 @@ class FieldClassification(models.Model):
 
     # Processing purposes
     purpose_ids = fields.Many2many(
-        'tpl.data.purpose',
+        'esmis.data.purpose',
         help="Legitimate purposes for processing this data"
     )
 
@@ -268,7 +268,7 @@ Wizard to scan models and suggest classifications:
 
 ```python
 class FieldClassificationDetector(models.TransientModel):
-    _name = "tpl.field.classification.detector"
+    _name = "esmis.field.classification.detector"
     _description = "Auto-detect PII fields"
 
     # Detection patterns (configurable via XML data)
@@ -296,7 +296,7 @@ class FieldClassificationDetector(models.TransientModel):
         help="Include fields that already have classifications"
     )
     suggestion_ids = fields.One2many(
-        'tpl.field.classification.suggestion',
+        'esmis.field.classification.suggestion',
         'wizard_id'
     )
 
@@ -315,13 +315,13 @@ Abstract model providing enforcement hooks:
 
 ```python
 class ClassificationPolicyEnforcer(models.AbstractModel):
-    _name = "tpl.classification.policy.enforcer"
+    _name = "esmis.classification.policy.enforcer"
     _description = "Enforce data classification policies"
 
     @api.model
     def get_field_classification(self, model_name, field_name):
         """Get classification for a specific field"""
-        return self.env['tpl.field.classification'].search([
+        return self.env['esmis.field.classification'].search([
             ('model_id.model', '=', model_name),
             ('field_id.name', '=', field_name),
         ], limit=1)
@@ -367,7 +367,7 @@ class ClassificationPolicyEnforcer(models.AbstractModel):
 
 ```python
 class DataSubjectRequest(models.Model):
-    _name = "tpl.data.subject.request"
+    _name = "esmis.data.subject.request"
     _description = "Data Subject Access Request"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
@@ -413,7 +413,7 @@ class DataSubjectRequest(models.Model):
     def action_generate_export(self):
         """Generate complete data export for access/portability requests"""
         self.ensure_one()
-        classifications = self.env['tpl.field.classification'].search([])
+        classifications = self.env['esmis.field.classification'].search([])
 
         export_data = {}
         for classification in classifications:
@@ -437,7 +437,7 @@ class DataSubjectRequest(models.Model):
 
 ```python
 class DataProcessingPurpose(models.Model):
-    _name = "tpl.data.purpose"
+    _name = "esmis.data.purpose"
     _description = "Data processing purpose"
 
     name = fields.Char(required=True, translate=True)
@@ -457,12 +457,12 @@ class DataProcessingPurpose(models.Model):
 
 
 class DataConsent(models.Model):
-    _name = "tpl.data.consent"
+    _name = "esmis.data.consent"
     _description = "Data processing consent record"
     _inherit = ["mail.thread"]
 
     partner_id = fields.Many2one('res.partner', required=True, index=True)
-    purpose_id = fields.Many2one('tpl.data.purpose', required=True)
+    purpose_id = fields.Many2one('esmis.data.purpose', required=True)
 
     # Consent state
     granted = fields.Boolean(tracking=True)
@@ -491,7 +491,7 @@ class DataConsent(models.Model):
     @api.model
     def check_consent(self, partner_id, purpose_code):
         """Check if partner has valid consent for purpose"""
-        purpose = self.env['tpl.data.purpose'].search([
+        purpose = self.env['esmis.data.purpose'].search([
             ('code', '=', purpose_code)
         ], limit=1)
 
@@ -515,7 +515,7 @@ class DataConsent(models.Model):
 ### Module Structure
 
 ```
-tpl_data_classification/
+esmis_data_classification/
 ├── __manifest__.py
 ├── __init__.py
 ├── models/
@@ -560,11 +560,11 @@ tpl_data_classification/
 
 | Module | Integration |
 |--------|-------------|
-| `tpl_pii_encryption` (planned) | Uses classifications to determine what to encrypt |
-| `tpl_audit` (planned) | Uses classifications to determine what to audit |
-| `tpl_security` | Uses classifications for field-level access control |
-| `tpl_contact` | Pre-classifies contact fields |
-| `tpl_order` (planned) | Pre-classifies order fields |
+| `esmis_pii_encryption` (planned) | Uses classifications to determine what to encrypt |
+| `esmis_audit` (planned) | Uses classifications to determine what to audit |
+| `esmis_security` | Uses classifications for field-level access control |
+| `esmis_contact` | Pre-classifies contact fields |
+| `esmis_order` (planned) | Pre-classifies order fields |
 
 ### Simplified Integration: "Secure by Default"
 
@@ -605,7 +605,7 @@ class Individual(models.Model):
 **Implementation**: Extend Odoo's field system:
 
 ```python
-# tpl_data_classification/models/fields.py
+# esmis_data_classification/models/fields.py
 from odoo import fields as odoo_fields
 
 # Patch Field class to accept classification attributes
@@ -632,7 +632,7 @@ class BaseModel(models.AbstractModel):
     def _setup_complete(self):
         super()._setup_complete()
         # Auto-register classified fields
-        self.env['tpl.field.classification']._register_model_fields(self._name)
+        self.env['esmis.field.classification']._register_model_fields(self._name)
 ```
 
 #### Approach 2: Auto-Detection with Smart Defaults
@@ -657,8 +657,8 @@ class Individual(models.Model):
 **Configuration via system parameter** (not code):
 
 ```xml
-<!-- tpl_data_classification/data/detection_patterns.xml -->
-<record id="pattern_national_id" model="tpl.classification.pattern">
+<!-- esmis_data_classification/data/detection_patterns.xml -->
+<record id="pattern_national_id" model="esmis.classification.pattern">
     <field name="pattern">(national|passport|ssn|tax|identity).*id</field>
     <field name="classification_id" ref="level_restricted"/>
     <field name="pii_category">direct_id</field>
@@ -673,20 +673,20 @@ Models just inherit a mixin - everything else is automatic:
 ```python
 class Individual(models.Model):
     _name = "res.partner"
-    _inherit = ["res.partner", "tpl.pii.aware"]  # Just add this!
+    _inherit = ["res.partner", "esmis.pii.aware"]  # Just add this!
 
     # All fields are now:
     # - Auto-scanned for PII patterns
     # - Auto-masked based on classification
     # - Auto-audited if required
-    # - Auto-encrypted if required (with tpl_pii_encryption)
+    # - Auto-encrypted if required (with esmis_pii_encryption)
 ```
 
 **What the mixin does**:
 
 ```python
 class PIIAwareMixin(models.AbstractModel):
-    _name = "tpl.pii.aware"
+    _name = "esmis.pii.aware"
     _description = "PII-aware model mixin"
 
     @api.model
@@ -697,8 +697,8 @@ class PIIAwareMixin(models.AbstractModel):
 
     def _auto_classify_fields(self):
         """Scan fields and apply classification based on patterns"""
-        Classification = self.env['tpl.field.classification'].sudo()
-        patterns = self.env['tpl.classification.pattern'].search([])
+        Classification = self.env['esmis.field.classification'].sudo()
+        patterns = self.env['esmis.classification.pattern'].search([])
 
         for field_name, field in self._fields.items():
             # Skip if already explicitly classified
@@ -720,7 +720,7 @@ class PIIAwareMixin(models.AbstractModel):
 
     def _apply_pii_masking(self, records_data, fields):
         """Apply masking based on classification and user access"""
-        enforcer = self.env['tpl.classification.policy.enforcer']
+        enforcer = self.env['esmis.classification.policy.enforcer']
         # ... masking logic
         return records_data
 ```
@@ -730,10 +730,10 @@ class PIIAwareMixin(models.AbstractModel):
 Modules declare classification scope in manifest:
 
 ```python
-# tpl_contact/__manifest__.py
+# esmis_contact/__manifest__.py
 {
     'name': 'Contact Module',
-    'depends': ['tpl_data_classification'],
+    'depends': ['esmis_data_classification'],
     'pii_aware': True,  # Enable auto-classification for all models in this module
 }
 ```
@@ -743,7 +743,7 @@ Or with more control:
 ```python
 {
     'pii_aware': {
-        'models': ['res.partner', 'tpl.identifier', 'tpl.phone.number'],
+        'models': ['res.partner', 'esmis.identifier', 'esmis.phone.number'],
         'auto_detect': True,
         'default_level': 'confidential',
     }
@@ -766,13 +766,13 @@ Or with more control:
 #### At Module Install
 
 ```
-[INFO] tpl_contact: Auto-classified 12 PII fields
+[INFO] esmis_contact: Auto-classified 12 PII fields
 [INFO]   - res.partner.family_name → CONFIDENTIAL (direct_id)
 [INFO]   - res.partner.birthdate → CONFIDENTIAL (quasi_id)
-[INFO]   - tpl.identifier.value → RESTRICTED (direct_id)
-[WARNING] tpl_contact: 2 fields may contain PII but are not classified:
+[INFO]   - esmis.identifier.value → RESTRICTED (direct_id)
+[WARNING] esmis_contact: 2 fields may contain PII but are not classified:
 [WARNING]   - res.partner.custom_field_1 (matches pattern: *_id)
-[WARNING]   - tpl.order.custom_notes (contains 'address' in help text)
+[WARNING]   - esmis.order.custom_notes (contains 'address' in help text)
 [WARNING] Run 'Settings > Data Classification > Review Suggestions' to classify
 ```
 
@@ -781,7 +781,7 @@ Or with more control:
 ```bash
 $ pre-commit run tpl-pii-check
 
-tpl_contact/models/contact.py:45
+esmis_contact/models/contact.py:45
   WARNING: Field 'emergency_contact' may contain PII (matches: contact)
   Add classification or mark as safe:
     emergency_contact = fields.Char(pii=True)  # or
@@ -811,22 +811,22 @@ For modules needing more control, these patterns are available:
 Modules declare their PII fields in XML data files loaded at install:
 
 ```xml
-<!-- tpl_contact/data/field_classifications.xml -->
+<!-- esmis_contact/data/field_classifications.xml -->
 <odoo>
-    <record id="classification_national_id_value" model="tpl.field.classification">
-        <field name="model_id" ref="model_tpl_identifier"/>
-        <field name="field_id" ref="field_tpl_identifier__value"/>
-        <field name="classification_id" ref="tpl_data_classification.level_restricted"/>
+    <record id="classification_national_id_value" model="esmis.field.classification">
+        <field name="model_id" ref="model_esmis_identifier"/>
+        <field name="field_id" ref="field_esmis_identifier__value"/>
+        <field name="classification_id" ref="esmis_data_classification.level_restricted"/>
         <field name="pii_category">direct_id</field>
         <field name="mask_pattern">****-****-####</field>
         <field name="search_strategy">blind_index</field>
         <field name="legal_basis">legal</field>
     </record>
 
-    <record id="classification_partner_birthdate" model="tpl.field.classification">
+    <record id="classification_partner_birthdate" model="esmis.field.classification">
         <field name="model_id" ref="base.model_res_partner"/>
-        <field name="field_id" ref="tpl_contact.field_res_partner__birthdate"/>
-        <field name="classification_id" ref="tpl_data_classification.level_confidential"/>
+        <field name="field_id" ref="esmis_contact.field_res_partner__birthdate"/>
+        <field name="classification_id" ref="esmis_data_classification.level_confidential"/>
         <field name="pii_category">quasi_id</field>
         <field name="search_strategy">range</field>
     </record>
@@ -843,21 +843,21 @@ class MyModel(models.Model):
 
     def get_classified_fields(self):
         """Get all classified fields for this model"""
-        return self.env['tpl.field.classification'].search([
+        return self.env['esmis.field.classification'].search([
             ('model_id.model', '=', self._name),
         ])
 
     def get_fields_requiring_encryption(self):
         """Get fields that must be encrypted"""
-        return self.env['tpl.field.classification'].search([
+        return self.env['esmis.field.classification'].search([
             ('model_id.model', '=', self._name),
             ('classification_id.requires_encryption', '=', True),
         ])
 
     def get_restricted_fields(self):
         """Get RESTRICTED level fields"""
-        restricted = self.env.ref('tpl_data_classification.level_restricted')
-        return self.env['tpl.field.classification'].search([
+        restricted = self.env.ref('esmis_data_classification.level_restricted')
+        return self.env['esmis.field.classification'].search([
             ('model_id.model', '=', self._name),
             ('classification_id', '=', restricted.id),
         ])
@@ -869,8 +869,8 @@ Modules inherit the policy enforcer for automatic enforcement:
 
 ```python
 class EhIdentifier(models.Model):
-    _name = "tpl.identifier"
-    _inherit = ["tpl.identifier", "tpl.classification.policy.mixin"]
+    _name = "esmis.identifier"
+    _inherit = ["esmis.identifier", "esmis.classification.policy.mixin"]
 
     # Mixin automatically:
     # - Masks fields based on classification when reading
@@ -884,7 +884,7 @@ Modules can extend classification behavior:
 
 ```python
 class FieldClassification(models.Model):
-    _inherit = "tpl.field.classification"
+    _inherit = "esmis.field.classification"
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -893,7 +893,7 @@ class FieldClassification(models.Model):
         for record in records:
             if record.classification_id.requires_encryption:
                 # Trigger encryption setup for this field
-                self.env['tpl.encryption.manager'].setup_field_encryption(
+                self.env['esmis.encryption.manager'].setup_field_encryption(
                     record.model_id.model,
                     record.field_id.name,
                 )
@@ -906,11 +906,11 @@ Modules can export classification data for external systems:
 
 ```python
 class ClassificationExporter(models.AbstractModel):
-    _name = "tpl.classification.exporter"
+    _name = "esmis.classification.exporter"
 
     def export_to_data_catalog(self):
         """Export classifications to external data catalog"""
-        classifications = self.env['tpl.field.classification'].search([])
+        classifications = self.env['esmis.field.classification'].search([])
         return [{
             'model': c.model_id.model,
             'field': c.field_id.name,
@@ -949,7 +949,7 @@ class ContactAPI(http.Controller):
         clearance = self._get_api_clearance(request.env.user)
 
         # Filter response based on classification
-        enforcer = request.env['tpl.classification.policy.enforcer']
+        enforcer = request.env['esmis.classification.policy.enforcer']
         return enforcer.filter_record_for_api(
             patient,
             clearance_level=clearance,
@@ -963,11 +963,11 @@ Background jobs respect classification policies:
 
 ```python
 class DataExportJob(models.Model):
-    _name = "tpl.data.export.job"
+    _name = "esmis.data.export.job"
 
     def _export_with_classification(self, records, user):
         """Export records respecting classification"""
-        enforcer = self.env['tpl.classification.policy.enforcer']
+        enforcer = self.env['esmis.classification.policy.enforcer']
 
         exported = []
         for record in records:
@@ -993,11 +993,11 @@ class DataExportJob(models.Model):
 
 #### Pattern 9: Audit Log Integration (planned)
 
-`tpl_audit` (planned) uses classification to determine what to audit:
+`esmis_audit` (planned) uses classification to determine what to audit:
 
 ```python
 class AuditRule(models.Model):
-    _inherit = "tpl.audit.rule"
+    _inherit = "esmis.audit.rule"
 
     use_classification = fields.Boolean(
         default=True,
@@ -1010,7 +1010,7 @@ class AuditRule(models.Model):
             return super()._get_fields_to_audit()
 
         # Get all fields where classification requires audit
-        classifications = self.env['tpl.field.classification'].search([
+        classifications = self.env['esmis.field.classification'].search([
             ('model_id', '=', self.model_id.id),
             ('classification_id.requires_audit', '=', True),
         ])
@@ -1030,7 +1030,7 @@ class Contact(models.Model):
         self.ensure_one()
 
         # Check consent for contact purpose
-        if not self.env['tpl.data.consent'].check_consent(
+        if not self.env['esmis.data.consent'].check_consent(
             self.id, 'contact_communication'
         ):
             raise UserError(_(
@@ -1044,47 +1044,47 @@ class Contact(models.Model):
         }
 ```
 
-### Example: tpl_contact Integration
+### Example: esmis_contact Integration
 
 ```python
-# tpl_contact/__manifest__.py
+# esmis_contact/__manifest__.py
 {
     'name': 'Contact Module',
-    'depends': ['tpl_data_classification'],  # Add dependency
+    'depends': ['esmis_data_classification'],  # Add dependency
     'data': [
         'data/field_classifications.xml',  # Declare PII fields
     ],
 }
 
-# tpl_contact/models/contact.py
+# esmis_contact/models/contact.py
 class Contact(models.Model):
     _name = "res.partner"
-    _inherit = ["res.partner", "tpl.classification.policy.mixin"]
+    _inherit = ["res.partner", "esmis.classification.policy.mixin"]
 
     # Fields are automatically:
     # - Masked based on classification
     # - Audited if classification requires
-    # - Encrypted if classification requires (via tpl_pii_encryption)
+    # - Encrypted if classification requires (via esmis_pii_encryption)
 ```
 
 ```xml
-<!-- tpl_contact/data/field_classifications.xml -->
+<!-- esmis_contact/data/field_classifications.xml -->
 <odoo noupdate="1">
     <!-- Phone Number -->
-    <record id="classify_phone_number" model="tpl.field.classification">
-        <field name="model_id" ref="tpl_contact.model_tpl_phone_number"/>
-        <field name="field_id" ref="tpl_contact.field_tpl_phone_number__phone_no"/>
-        <field name="classification_id" ref="tpl_data_classification.level_confidential"/>
+    <record id="classify_phone_number" model="esmis.field.classification">
+        <field name="model_id" ref="esmis_contact.model_esmis_phone_number"/>
+        <field name="field_id" ref="esmis_contact.field_esmis_phone_number__phone_no"/>
+        <field name="classification_id" ref="esmis_data_classification.level_confidential"/>
         <field name="pii_category">contact</field>
         <field name="mask_pattern">***-***-####</field>
         <field name="search_strategy">partial_index</field>
     </record>
 
     <!-- Registry ID Value -->
-    <record id="classify_registry_id_value" model="tpl.field.classification">
-        <field name="model_id" ref="model_tpl_identifier"/>
-        <field name="field_id" ref="field_tpl_identifier__value"/>
-        <field name="classification_id" ref="tpl_data_classification.level_restricted"/>
+    <record id="classify_registry_id_value" model="esmis.field.classification">
+        <field name="model_id" ref="model_esmis_identifier"/>
+        <field name="field_id" ref="field_esmis_identifier__value"/>
+        <field name="classification_id" ref="esmis_data_classification.level_restricted"/>
         <field name="pii_category">direct_id</field>
         <field name="mask_pattern">****-****-####</field>
         <field name="search_strategy">blind_index</field>
@@ -1094,10 +1094,10 @@ class Contact(models.Model):
     </record>
 
     <!-- Individual Name -->
-    <record id="classify_individual_family_name" model="tpl.field.classification">
+    <record id="classify_individual_family_name" model="esmis.field.classification">
         <field name="model_id" ref="base.model_res_partner"/>
-        <field name="field_id" ref="tpl_contact.field_res_partner__family_name"/>
-        <field name="classification_id" ref="tpl_data_classification.level_confidential"/>
+        <field name="field_id" ref="esmis_contact.field_res_partner__family_name"/>
+        <field name="classification_id" ref="esmis_data_classification.level_confidential"/>
         <field name="pii_category">direct_id</field>
         <field name="search_strategy">phonetic</field>
     </record>

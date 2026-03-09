@@ -1,6 +1,6 @@
 # UI Design Principles
 
-Guidelines for consistent, space-efficient, and extensible user interfaces in {Project}.
+Guidelines for consistent, space-efficient, and extensible user interfaces in eSMIS.
 
 **See also:**
 - [ui-entity-classification.md](ui-entity-classification.md) - Choose patterns based on entity type
@@ -11,7 +11,7 @@ Guidelines for consistent, space-efficient, and extensible user interfaces in {P
 
 ## Design Personality
 
-{Project} is an **Odoo 19 application** designed for dense, professional workflows.
+eSMIS is an **Odoo 19 application** designed for dense, professional workflows.
 
 ### Core Values
 
@@ -67,7 +67,7 @@ Guidelines for consistent, space-efficient, and extensible user interfaces in {P
 
 ## Menu Hierarchy
 
-{Project} uses two menu locations: **Settings** for foundational configuration (vocabularies, system-wide settings) and a shared **Configuration** menu under the app root for domain-specific config items.
+eSMIS uses two menu locations: **Settings** for foundational configuration (vocabularies, system-wide settings) and a shared **Configuration** menu under the app root for domain-specific config items.
 
 ### Structure
 
@@ -91,21 +91,21 @@ base.menu_custom (Odoo built-in)
 ### Rules
 
 1. **Foundational config goes in Settings** — System-wide configuration (vocabularies, global settings) lives under `base.menu_administration`. Use `groups="base.group_system"` to restrict to administrators.
-2. **Domain config goes in Configuration** — `menu_tpl_configuration` is defined by `tpl_vocabulary` under `base.menu_custom`. Domain modules add their config items as children of this menu.
+2. **Domain config goes in Configuration** — `menu_esmis_configuration` is defined by `esmis_vocabulary` under `base.menu_custom`. Domain modules add their config items as children of this menu.
 3. **Sequence 90** — Configuration always renders last under the app root. Domain menus use sequences 10–80.
 4. **Admin-only gate** — both Settings items and the Configuration menu require `groups="base.group_system"`. Individual config items can add additional group restrictions if needed.
-5. **Adding domain config items** — use `parent="tpl_vocabulary.menu_tpl_configuration"` with the module-qualified XML ID.
+5. **Adding domain config items** — use `parent="esmis_vocabulary.menu_esmis_configuration"` with the module-qualified XML ID.
 6. **Adding Settings items** — use `parent="base.menu_administration"` with an appropriate sequence (avoid conflicts with Odoo built-in items).
 
 ### XML ID Naming
 
 | Menu level | Pattern | Example |
 |---|---|---|
-| App root | `menu_{app}_root` | `menu_tpl_root` |
+| App root | `menu_{app}_root` | `menu_esmis_root` |
 | Domain menu | `menu_{domain}` | `menu_order` |
 | Domain item | `menu_{domain}_{action}` | `menu_order_all` |
-| App configuration | `menu_{app}_configuration` | `menu_tpl_configuration` |
-| Config child | `menu_{app}_configuration_{feature}` | `menu_tpl_configuration_vocabularies` |
+| App configuration | `menu_{app}_configuration` | `menu_esmis_configuration` |
+| Config child | `menu_{app}_configuration_{feature}` | `menu_esmis_configuration_vocabularies` |
 
 ---
 
@@ -227,7 +227,7 @@ For orders, requests, approvals, workflows (<10k records, state-based workflow)
 </form>
 ```
 
-**Reference**: `tpl_order/views/order_view.xml` (planned)
+**Reference**: `esmis_order/views/order_view.xml` (planned)
 
 ---
 
@@ -283,7 +283,7 @@ def _compute_config_status(self):
         rec.{config}_configured = bool(rec.{config_field})
 ```
 
-**Reference**: `tpl_order/views/order_config_cards_view.xml` (planned)
+**Reference**: `esmis_order/views/order_config_cards_view.xml` (planned)
 
 ---
 
@@ -346,9 +346,9 @@ Use invisible `<div>` or `<group>` with `name` attribute:
 | Section | XPath Target | Used By |
 |---------|--------------|---------|
 | Identifiers | `//group[@name='identifier_section']` | domain module (planned) |
-| Area | `//group[@name='contact_section']` | tpl_area |
-| Orders | `//div[@name='orders_section']` | tpl_order (planned) |
-| Custom | `//div[@name='custom_section']` | tpl_extension (planned) |
+| Area | `//group[@name='contact_section']` | esmis_area |
+| Orders | `//div[@name='orders_section']` | esmis_order (planned) |
+| Custom | `//div[@name='custom_section']` | esmis_extension (planned) |
 
 ---
 
@@ -704,10 +704,10 @@ For time-based records (cycles, appointments, events):
 
 | Pattern | File | Lines |
 |---------|------|-------|
-| Workflow Entity Form | `tpl_order/views/order_view.xml` (planned) | — |
-| Configuration Cards | `tpl_order/views/order_config_cards_view.xml` (planned) | — |
-| Master Data Form | `tpl_area/views/area.xml` | Full file |
-| Master Data Form (Vocabulary) | `tpl_vocabulary/views/vocabulary_views.xml` | Full file |
+| Workflow Entity Form | `esmis_order/views/order_view.xml` (planned) | — |
+| Configuration Cards | `esmis_order/views/order_config_cards_view.xml` (planned) | — |
+| Master Data Form | `esmis_area/views/area.xml` | Full file |
+| Master Data Form (Vocabulary) | `esmis_vocabulary/views/vocabulary_views.xml` | Full file |
 
 ---
 

@@ -14,7 +14,7 @@ class VocabularyCode(models.Model):
     interoperability.
     """
 
-    _name = "tpl.vocabulary.code"
+    _name = "esmis.vocabulary.code"
     _description = "Vocabulary Code"
     _order = "sequence, code"
     _rec_name = "display"
@@ -29,7 +29,7 @@ class VocabularyCode(models.Model):
         return "install_xmlid" in self.env.context or self.env.context.get("_test_bypass_system_protection")
 
     vocabulary_id = fields.Many2one(
-        comodel_name="tpl.vocabulary",
+        comodel_name="esmis.vocabulary",
         string="Vocabulary",
         required=True,
         ondelete="restrict",
@@ -115,7 +115,7 @@ class VocabularyCode(models.Model):
             for vals in vals_list:
                 vocab_id = vals.get("vocabulary_id")
                 if vocab_id:
-                    vocab = self.env["tpl.vocabulary"].browse(vocab_id)
+                    vocab = self.env["esmis.vocabulary"].browse(vocab_id)
                     if vocab.is_system:
                         raise UserError(
                             _(
@@ -133,7 +133,7 @@ class VocabularyCode(models.Model):
                     [("vocabulary_id", "=", vocab_id), ("code", "=", code)]
                 )
                 if existing:
-                    vocab = self.env["tpl.vocabulary"].browse(vocab_id)
+                    vocab = self.env["esmis.vocabulary"].browse(vocab_id)
                     raise ValidationError(
                         _("Code '%(code)s' already exists in vocabulary '%(vocab)s'.")
                         % {"code": code, "vocab": vocab.name}
@@ -175,7 +175,7 @@ class VocabularyCode(models.Model):
                     ]
                 )
                 if existing:
-                    vocab = self.env["tpl.vocabulary"].browse(check_vocab)
+                    vocab = self.env["esmis.vocabulary"].browse(check_vocab)
                     raise ValidationError(
                         _("Code '%(code)s' already exists in vocabulary '%(vocab)s'.")
                         % {"code": check_code, "vocab": vocab.name}

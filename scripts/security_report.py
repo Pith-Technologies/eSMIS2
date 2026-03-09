@@ -17,7 +17,7 @@ Usage (in Odoo shell):
     >>> report.generate_mermaid()
 
 Or run specific filters:
-    >>> report.print_hierarchy(filter_prefix='tpl_')
+    >>> report.print_hierarchy(filter_prefix='esmis_')
     >>> report.print_matrix(filter_groups=['group_{domain}_manager'])
     >>> report.get_user_permissions('admin')
 """
@@ -46,7 +46,7 @@ class SecurityReport:
         Build group inheritance tree.
 
         Args:
-            filter_prefix: Only include groups starting with this prefix (e.g., 'tpl_')
+            filter_prefix: Only include groups starting with this prefix (e.g., 'esmis_')
 
         Returns:
             dict: Nested structure of groups with their implied groups
@@ -91,7 +91,7 @@ class SecurityReport:
 
         Args:
             filter_groups: List of group XML IDs to include
-            filter_models: List of model names to include (e.g., ['tpl.{model}'])
+            filter_models: List of model names to include (e.g., ['esmis.{model}'])
 
         Returns:
             dict: {
@@ -151,8 +151,8 @@ class SecurityReport:
                 if any(fg in gdata["xml_id"] or fg in gdata["name"] for fg in filter_groups)
             }
 
-        # Sort models (tpl.* first)
-        models_sorted = sorted(models_set, key=lambda m: (not m.startswith("tpl."), m))
+        # Sort models (esmis.* first)
+        models_sorted = sorted(models_set, key=lambda m: (not m.startswith("esmis."), m))
 
         groups_sorted = sorted(groups_dict.values(), key=lambda g: g["name"])
 
@@ -230,7 +230,7 @@ class SecurityReport:
         Get all record rules organized by model.
 
         Args:
-            filter_models: List of model names to filter (e.g., ['tpl.{model}'])
+            filter_models: List of model names to filter (e.g., ['esmis.{model}'])
 
         Returns:
             dict: {model_name: [rule_data, ...]}
@@ -383,7 +383,7 @@ class SecurityReport:
         header = " " * max_group_name + " │ "
         for model in models:
             # Shorten model name if needed
-            model_short = model.replace("tpl.", "")[:10]
+            model_short = model.replace("esmis.", "")[:10]
             header += f"{model_short:^{model_col_width}}│ "
         print(header)
         print("─" * len(header))
@@ -432,9 +432,9 @@ class SecurityReport:
 
         print(f"\nTotal Groups: {data['all_groups_count']}")
 
-        # Show permissions for tpl.* models
-        print("\nEffective Permissions (tpl.* models):")
-        custom_perms = {k: v for k, v in data["permissions"].items() if k.startswith("tpl.")}
+        # Show permissions for esmis.* models
+        print("\nEffective Permissions (esmis.* models):")
+        custom_perms = {k: v for k, v in data["permissions"].items() if k.startswith("esmis.")}
         for model in sorted(custom_perms.keys())[:20]:
             perms = custom_perms[model]
             perm_str = ""
@@ -940,7 +940,7 @@ class SecurityReport:
         # Header
         html_parts.append("<thead><tr><th>Group</th>")
         for model in models:
-            model_short = model.replace("tpl.", "")
+            model_short = model.replace("esmis.", "")
             html_parts.append(f'<th title="{model}">{model_short}</th>')
         html_parts.append("</tr></thead>")
 
@@ -1154,10 +1154,10 @@ if "env" in dir():
     print("  report.generate_csv('permissions_matrix.csv')")
     print("  report.generate_mermaid()")
     print("\nFiltered examples:")
-    print("  report.print_hierarchy(filter_prefix='tpl_')")
-    print("  report.print_matrix(filter_groups=['{domain}'], filter_models=['tpl.{model}'])")
+    print("  report.print_hierarchy(filter_prefix='esmis_')")
+    print("  report.print_matrix(filter_groups=['{domain}'], filter_models=['esmis.{model}'])")
     print("  report.print_user_permissions('admin')")
-    print("  report.print_record_rules(filter_models=['tpl.{model}'])")
+    print("  report.print_record_rules(filter_models=['esmis.{model}'])")
     print("\nFor documentation:")
-    print("  report.generate_mermaid(filter_prefix='tpl_', filename='security_diagram.md')")
+    print("  report.generate_mermaid(filter_prefix='esmis_', filename='security_diagram.md')")
     print("=" * 80 + "\n")

@@ -132,7 +132,7 @@ check_module_versions() {
     # Check custom modules (should be 19.0)
     print_info "Checking custom modules (should be 19.0)..."
     local custom_modules=(
-        "tpl_vocabulary"
+        "esmis_vocabulary"
     )
 
     for module in "${custom_modules[@]}"; do
@@ -300,7 +300,7 @@ check_module_status() {
                 ELSE '? Unknown'
             END as compatibility
         FROM ir_module_module
-        WHERE name LIKE 'tpl_%'
+        WHERE name LIKE 'esmis_%'
         ORDER BY name;
     "
 }
@@ -310,7 +310,7 @@ install_base_modules() {
     print_header "Installing Base Modules (Odoo 19.0)"
 
     local base_modules=(
-        "tpl_vocabulary"
+        "esmis_vocabulary"
     )
 
     local errors=0
@@ -339,8 +339,8 @@ install_program_modules() {
 
     local program_modules=(
         # Add your domain modules here, e.g.:
-        # "tpl_sale"
-        # "tpl_inventory"
+        # "esmis_sale"
+        # "esmis_inventory"
     )
 
     local errors=0
@@ -368,7 +368,7 @@ test_breaking_changes() {
     print_header "Testing Odoo 19 Breaking Changes"
 
     print_info "Checking for type='json' (should be type='jsonrpc')..."
-    if grep -r "type=['\"]json['\"]" "$ADDONS_DIR"/tpl_* 2>/dev/null; then
+    if grep -r "type=['\"]json['\"]" "$ADDONS_DIR"/esmis_* 2>/dev/null; then
         print_error "Found type='json' - must be changed to type='jsonrpc' for Odoo 19"
         return 1
     else
@@ -376,7 +376,7 @@ test_breaking_changes() {
     fi
 
     print_info "Checking for res.partner.title (removed in Odoo 19)..."
-    if grep -r "res\.partner\.title" "$ADDONS_DIR"/tpl_* 2>/dev/null; then
+    if grep -r "res\.partner\.title" "$ADDONS_DIR"/esmis_* 2>/dev/null; then
         print_error "Found res.partner.title - this model was removed in Odoo 19"
         return 1
     else
@@ -384,7 +384,7 @@ test_breaking_changes() {
     fi
 
     print_info "Checking for deprecated decorators (@api.multi, @api.one)..."
-    if grep -r "@api\.\(multi\|one\)" "$ADDONS_DIR"/tpl_* 2>/dev/null; then
+    if grep -r "@api\.\(multi\|one\)" "$ADDONS_DIR"/esmis_* 2>/dev/null; then
         print_error "Found deprecated decorators"
         return 1
     else
@@ -416,7 +416,7 @@ EOF
         SELECT
             name || ' - ' || state || ' - ' || latest_version
         FROM ir_module_module
-        WHERE name LIKE 'tpl_%'
+        WHERE name LIKE 'esmis_%'
         ORDER BY name;
     " >> "$report_file"
 
@@ -425,8 +425,8 @@ EOF
 Version Summary:
 EOF
 
-    local v19=$(PGPASSWORD=odoo psql -U odoo -h localhost -d $DB_NAME -t -c "SELECT COUNT(*) FROM ir_module_module WHERE name LIKE 'tpl_%' AND latest_version LIKE '19.0%' AND state='installed';" | xargs)
-    local v17=$(PGPASSWORD=odoo psql -U odoo -h localhost -d $DB_NAME -t -c "SELECT COUNT(*) FROM ir_module_module WHERE name LIKE 'tpl_%' AND latest_version LIKE '17.0%' AND state='installed';" | xargs)
+    local v19=$(PGPASSWORD=odoo psql -U odoo -h localhost -d $DB_NAME -t -c "SELECT COUNT(*) FROM ir_module_module WHERE name LIKE 'esmis_%' AND latest_version LIKE '19.0%' AND state='installed';" | xargs)
+    local v17=$(PGPASSWORD=odoo psql -U odoo -h localhost -d $DB_NAME -t -c "SELECT COUNT(*) FROM ir_module_module WHERE name LIKE 'esmis_%' AND latest_version LIKE '17.0%' AND state='installed';" | xargs)
 
     echo "  Odoo 19.0 modules: $v19" >> "$report_file"
     echo "  Odoo 17.0 modules: $v17" >> "$report_file"
@@ -596,7 +596,7 @@ main() {
             echo "Examples:"
             echo "  $0 check                             # Verify Odoo 19 environment"
             echo "  $0 install-all                       # Install all modules in new DB"
-            echo "  $0 install tpl_vocabulary test_db     # Install tpl_vocabulary in test_db"
+            echo "  $0 install esmis_vocabulary test_db     # Install esmis_vocabulary in test_db"
             echo "  $0 full                              # Complete test workflow"
             exit 1
             ;;

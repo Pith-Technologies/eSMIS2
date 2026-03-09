@@ -9,8 +9,8 @@ class TestVocabularySecurity(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.Vocabulary = cls.env["tpl.vocabulary"]
-        cls.Code = cls.env["tpl.vocabulary.code"]
+        cls.Vocabulary = cls.env["esmis.vocabulary"]
+        cls.Code = cls.env["esmis.vocabulary.code"]
 
         cls.user_basic = cls.env["res.users"].create(
             {
@@ -26,7 +26,7 @@ class TestVocabularySecurity(TransactionCase):
                 "name": "Vocab Officer",
                 "login": "vocab_officer",
                 "group_ids": [
-                    Command.set([cls.env.ref("tpl_vocabulary.group_vocabulary_officer").id]),
+                    Command.set([cls.env.ref("esmis_vocabulary.group_vocabulary_officer").id]),
                 ],
             }
         )
@@ -35,7 +35,7 @@ class TestVocabularySecurity(TransactionCase):
                 "name": "Vocab Manager",
                 "login": "vocab_manager",
                 "group_ids": [
-                    Command.set([cls.env.ref("tpl_vocabulary.group_vocabulary_manager").id]),
+                    Command.set([cls.env.ref("esmis_vocabulary.group_vocabulary_manager").id]),
                 ],
             }
         )

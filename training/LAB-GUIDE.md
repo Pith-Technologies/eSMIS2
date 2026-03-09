@@ -29,11 +29,11 @@ Now run the `init` command to transform the template into your Student Informati
 ./odoo-project init sis "Student Information System"
 ```
 
-This replaces all `tpl_` prefixes with `sis_` throughout the project:
+This replaces all `esmis_` prefixes with `sis_` throughout the project:
 
-- `tpl_vocabulary/` → `sis_vocabulary/`
-- `tpl.vocabulary` → `sis.vocabulary`
-- `{Project}` → `Student Information System`
+- `esmis_vocabulary/` → `sis_vocabulary/`
+- `esmis.vocabulary` → `sis.vocabulary`
+- `eSMIS` → `Student Information System`
 
 ### Step 0.2 — Initialize Git
 

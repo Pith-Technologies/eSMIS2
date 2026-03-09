@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="category_tpl_vocabulary" model="ir.module.category">
-        <field name="name">tpl Vocabulary</field>
+    <record id="category_esmis_vocabulary" model="ir.module.category">
+        <field name="name">esmis Vocabulary</field>
         <field name="sequence">5</field>
     </record>
 
     <record id="privilege_vocabulary_officer" model="res.groups.privilege">
         <field name="name">Vocabulary Officer</field>
-        <field name="category_id" ref="category_tpl_vocabulary"/>
+        <field name="category_id" ref="category_esmis_vocabulary"/>
     </record>
 
     <!-- Viewer: extension point for downstream modules to attach

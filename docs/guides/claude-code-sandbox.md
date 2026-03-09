@@ -79,7 +79,7 @@ claude --dangerously-skip-permissions
 Tests work normally inside the container via the Docker socket:
 
 ```bash
-./scripts/test_single_module.sh tpl_vocabulary
+./scripts/test_single_module.sh esmis_vocabulary
 ```
 
 The test script is designed for parallel execution:

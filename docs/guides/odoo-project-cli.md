@@ -26,7 +26,7 @@ Run `./odoo-project doctor` to verify your environment:
 # 4. Open http://localhost:8069 (admin / admin)
 
 # 5. Run tests
-./odoo-project test tpl_vocabulary
+./odoo-project test esmis_vocabulary
 
 # 6. Stop everything
 ./odoo-project stop
@@ -34,10 +34,10 @@ Run `./odoo-project doctor` to verify your environment:
 
 ### init — Initialize from template
 
-Replaces the `tpl` placeholder prefix and `{Project}` name throughout the codebase, then renames `tpl_*` directories to match your project.
+Replaces the `tpl` placeholder prefix and `eSMIS` name throughout the codebase, then renames `esmis_*` directories to match your project.
 
 ```bash
-./odoo-project init eh EHealth             # replace tpl -> eh, {Project} -> EHealth
+./odoo-project init eh EHealth             # replace esmis -> eh, eSMIS -> EHealth
 ./odoo-project init --dry-run eh EHealth   # preview changes without modifying files
 ./odoo-project init myapp "My App"         # any lowercase prefix works
 ```
@@ -52,11 +52,11 @@ What gets replaced:
 
 | Pattern      | Example                              |
 |--------------|--------------------------------------|
-| `tpl_` → `{prefix}_` | `tpl_vocabulary` → `eh_vocabulary` |
-| `tpl.` → `{prefix}.` | `tpl.vocabulary` → `eh.vocabulary` |
-| `tpl/` → `{prefix}/` | `tpl/Core` → `eh/Core`            |
-| `tpl ` → `{prefix} ` | `tpl Vocabulary` → `eh Vocabulary` |
-| `{Project}` → name   | `{Project}` → `EHealth`           |
+| `esmis_` → `{prefix}_` | `esmis_vocabulary` → `eh_vocabulary` |
+| `esmis.` → `{prefix}.` | `esmis.vocabulary` → `eh.vocabulary` |
+| `esmis/` → `{prefix}/` | `esmis/Core` → `eh/Core`            |
+| `esmis ` → `{prefix} ` | `esmis Vocabulary` → `eh Vocabulary` |
+| `eSMIS` → name   | `eSMIS` → `EHealth`           |
 
 Binary files and `.git/` are always skipped.
 
@@ -69,11 +69,11 @@ Every command has a short alias shown in parentheses.
 Runs tests in an isolated container that does not affect your running dev instance.
 
 ```bash
-./odoo-project test tpl_vocabulary
-./odoo-project t tpl_vocabulary                     # alias
-./odoo-project test tpl_vocabulary --tags=post_install
-./odoo-project test tpl_vocabulary --local           # force local mode (no Docker)
-./odoo-project test tpl_vocabulary --docker           # force Docker mode
+./odoo-project test esmis_vocabulary
+./odoo-project t esmis_vocabulary                     # alias
+./odoo-project test esmis_vocabulary --tags=post_install
+./odoo-project test esmis_vocabulary --local           # force local mode (no Docker)
+./odoo-project test esmis_vocabulary --docker           # force Docker mode
 ```
 
 | Option     | Description                        |
@@ -218,7 +218,7 @@ Opens an interactive PostgreSQL shell or executes a query directly.
 
 ```bash
 ./odoo-project sql                                           # interactive psql
-./odoo-project sql "SELECT name FROM tpl_vocabulary"         # run a query
+./odoo-project sql "SELECT name FROM esmis_vocabulary"         # run a query
 ./odoo-project sql -f scripts/report.sql                     # run SQL from file
 ./odoo-project sql -d mydb "SELECT 1"                        # target specific DB
 ```
@@ -248,7 +248,7 @@ Runs `ruff`, `ruff-format`, and `prettier` via pre-commit on specified files.
 
 ```bash
 ./odoo-project lint                                   # lint changed files (git diff)
-./odoo-project lint tpl_vocabulary/models/*.py        # lint specific files
+./odoo-project lint esmis_vocabulary/models/*.py        # lint specific files
 ```
 
 | Option  | Description                                      |
@@ -291,7 +291,7 @@ Applies automatic fixes for Odoo 19 Command API tuples in Python files.
 
 ```bash
 ./odoo-project fix-odoo19                        # fix all modules
-./odoo-project fix-odoo19 tpl_vocabulary          # fix specific module
+./odoo-project fix-odoo19 esmis_vocabulary          # fix specific module
 ./odoo-project fix-odoo19 --dry-run               # preview changes
 ```
 
@@ -305,9 +305,9 @@ Applies automatic fixes for Odoo 19 Command API tuples in Python files.
 Runs ruff, pylint, and prettier across module files and optionally invokes an AI agent for remaining issues.
 
 ```bash
-./odoo-project fix-lint tpl_vocabulary            # fix specific module
+./odoo-project fix-lint esmis_vocabulary            # fix specific module
 ./odoo-project fix-lint                           # fix all modules
-./odoo-project fix-lint tpl_vocabulary --lint-only # linters only, no AI
+./odoo-project fix-lint esmis_vocabulary --lint-only # linters only, no AI
 ```
 
 | Option        | Description                                      |
@@ -320,10 +320,10 @@ Runs ruff, pylint, and prettier across module files and optionally invokes an AI
 Applies mechanical fixes for Odoo 19 security issues (tuple syntax, field renames) and optionally invokes an AI agent for complex issues.
 
 ```bash
-./odoo-project fix-security tpl_vocabulary        # fix specific module
+./odoo-project fix-security esmis_vocabulary        # fix specific module
 ./odoo-project fix-security --all                 # fix all modules with issues
-./odoo-project fix-security --dry-run tpl_api     # preview changes
-./odoo-project fix-security --mechanical-only tpl_api  # no AI
+./odoo-project fix-security --dry-run esmis_api     # preview changes
+./odoo-project fix-security --mechanical-only esmis_api  # no AI
 ```
 
 | Option              | Description                                      |
@@ -339,7 +339,7 @@ Audits modules for access rights compliance using the Python security audit scri
 
 ```bash
 ./odoo-project audit-security                     # audit all modules
-./odoo-project audit-security tpl_vocabulary      # audit specific module
+./odoo-project audit-security esmis_vocabulary      # audit specific module
 ./odoo-project audit-security --report            # generate markdown report
 ./odoo-project audit-security --json              # output as JSON
 ```
@@ -356,7 +356,7 @@ Audits modules against project principles using an AI agent (requires `cursor-ag
 
 ```bash
 ./odoo-project audit-modules                      # audit all modules
-./odoo-project audit-modules tpl_vocabulary       # audit specific module
+./odoo-project audit-modules esmis_vocabulary       # audit specific module
 ./odoo-project audit-modules --fix                # auto-fix simple issues
 ./odoo-project audit-modules --fix --commit       # fix and commit
 ```
@@ -374,7 +374,7 @@ Demo profiles are predefined sets of modules to install:
 
 | Profile | Modules Installed  |
 |---------|--------------------|
-| `base`  | `tpl_vocabulary`   |
+| `base`  | `esmis_vocabulary`   |
 
 Use with `start` or `resetdb`:
 
@@ -432,7 +432,7 @@ echo 'default_profile = "ui"' > ~/.odoo-project.toml
 ./odoo-project start                # start Odoo
 # ... make code changes ...
 ./odoo-project update               # auto-detect and upgrade changed modules
-./odoo-project test tpl_vocabulary   # run tests
+./odoo-project test esmis_vocabulary   # run tests
 ./odoo-project lint                  # lint changed files
 ```
 
@@ -441,17 +441,17 @@ echo 'default_profile = "ui"' > ~/.odoo-project.toml
 ```bash
 ./odoo-project start
 ./odoo-project shell                 # open Odoo shell
->>> env['tpl.vocabulary'].search([])
+>>> env['esmis.vocabulary'].search([])
 
-./odoo-project sql "SELECT * FROM tpl_vocabulary"
+./odoo-project sql "SELECT * FROM esmis_vocabulary"
 ./odoo-project logs -f               # watch logs in real time
 ```
 
 ### Quick test cycle
 
 ```bash
-./odoo-project test tpl_vocabulary
-./odoo-project test tpl_vocabulary --tags=post_install
+./odoo-project test esmis_vocabulary
+./odoo-project test esmis_vocabulary --tags=post_install
 ```
 
 ### Complete reset
@@ -484,7 +484,7 @@ The CLI auto-detects when `Dockerfile` or `requirements.txt` change and prompts 
 Tests run in an isolated container with a temporary database. Check:
 
 ```bash
-./odoo-project test tpl_vocabulary   # re-run tests
+./odoo-project test esmis_vocabulary   # re-run tests
 ./odoo-project logs                  # check logs for errors
 ```
 

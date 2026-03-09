@@ -2,7 +2,7 @@
 # Test all successfully migrated Odoo modules for Odoo 19
 
 MODULES=(
-    "tpl_vocabulary"
+    "esmis_vocabulary"
 )
 
 RESULTS_FILE="/tmp/odoo_test_results_$(date +%Y%m%d_%H%M%S).txt"

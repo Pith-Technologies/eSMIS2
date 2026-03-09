@@ -11,7 +11,7 @@ Usage:
     python scripts/security_audit.py --report
 
 Examples:
-    python scripts/security_audit.py tpl_vocabulary
+    python scripts/security_audit.py esmis_vocabulary
     python scripts/security_audit.py --all
     python scripts/security_audit.py --report > audit_report.md
 """
@@ -29,7 +29,7 @@ from xml.etree import ElementTree as ET
 # Naming convention patterns from ADR-004
 # More flexible to allow special roles and backward compatibility
 NAMING_PATTERNS = {
-    "category": re.compile(r"^category_tpl_[a-z_]+$"),
+    "category": re.compile(r"^category_esmis_[a-z_]+$"),
     "privilege": re.compile(r"^privilege_[a-z_]+_[a-z_]+$"),
     # User groups: group_{domain}_{level} where level can be viewer/officer/manager/admin
     # or special roles like approver, finance_validator, etc.
@@ -39,15 +39,15 @@ NAMING_PATTERNS = {
     # Technical groups: group_{domain}_{action}
     "group_technical": re.compile(r"^group_[a-z_]+_(read|write|create|delete)$"),
     # Backward compat groups (deprecated) - any group with old naming
-    "group_compat": re.compile(r"^(tpl_|group_tpl_)"),
-    "role": re.compile(r"^role_tpl_[a-z_]+$"),
+    "group_compat": re.compile(r"^(esmis_|group_esmis_)"),
+    "role": re.compile(r"^role_esmis_[a-z_]+$"),
     "access_csv": re.compile(r"^access_[a-z0-9_]+$"),
     "rule": re.compile(r"^rule_[a-z_]+$"),
 }
 
 # CUSTOMIZE: Update this list with your project's domain names.
 # These are used to validate security group naming conventions.
-# Add entries matching the {domain} part of your module names (tpl_{domain}).
+# Add entries matching the {domain} part of your module names (esmis_{domain}).
 VALID_DOMAINS = [
     "vocabulary",
     "contact",
@@ -130,7 +130,7 @@ def parse_xml_safe(file_path: Path) -> ET.Element | None:
 def is_deprecated_group(xml_id: str, record: ET.Element) -> bool:
     """Check if a group is marked as deprecated (backward compatibility)."""
     # Check ID patterns
-    if xml_id.startswith("tpl_"):
+    if xml_id.startswith("esmis_"):
         return True
     # Check if name contains "Deprecated"
     for field_elem in record.findall("field"):
@@ -312,15 +312,15 @@ def audit_security_xml(file_path: Path, audit: ModuleAudit) -> None:
             audit.rules_found.append(xml_id)
 
         elif model == "ir.module.category":
-            # Categories should only be in tpl_security
-            if audit.module_name != "tpl_security":
+            # Categories should only be in esmis_security
+            if audit.module_name != "esmis_security":
                 audit.issues.append(
                     Issue(
                         severity="ERROR",
                         category="ARCHITECTURE",
-                        message="Module category defined outside tpl_security",
+                        message="Module category defined outside esmis_security",
                         file_path=rel_path,
-                        suggestion="Categories must be defined in tpl_security module only",
+                        suggestion="Categories must be defined in esmis_security module only",
                     )
                 )
 
@@ -376,23 +376,23 @@ def audit_module(module_path: Path) -> ModuleAudit:
     """Perform a complete audit of a module."""
     audit = ModuleAudit(module_name=module_path.name, module_path=module_path)
 
-    # Check manifest for tpl_security dependency
+    # Check manifest for esmis_security dependency
     manifest = parse_manifest(module_path)
     depends = manifest.get("depends", [])
-    audit.has_security_module_dep = "tpl_security" in depends
+    audit.has_security_module_dep = "esmis_security" in depends
 
-    # tpl_security itself doesn't need the dependency check
-    if audit.module_name == "tpl_security":
+    # esmis_security itself doesn't need the dependency check
+    if audit.module_name == "esmis_security":
         audit.has_security_module_dep = True
 
-    if not audit.has_security_module_dep and audit.module_name not in ["base", "tpl_security"]:
+    if not audit.has_security_module_dep and audit.module_name not in ["base", "esmis_security"]:
         audit.issues.append(
             Issue(
                 severity="WARNING",
                 category="ARCHITECTURE",
-                message="Module should depend on tpl_security",
+                message="Module should depend on esmis_security",
                 file_path="__manifest__.py",
-                suggestion="Add 'tpl_security' to depends list",
+                suggestion="Add 'esmis_security' to depends list",
             )
         )
 
@@ -420,7 +420,7 @@ def audit_module(module_path: Path) -> ModuleAudit:
     audit_views(module_path, audit)
 
     # Check for admin link if module has groups
-    if audit.groups_found and not audit.has_admin_link and audit.module_name != "tpl_security":
+    if audit.groups_found and not audit.has_admin_link and audit.module_name != "esmis_security":
         # Only warn if there are manager-level groups
         has_manager = any("manager" in g for g in audit.groups_found)
         if has_manager:
@@ -428,10 +428,10 @@ def audit_module(module_path: Path) -> ModuleAudit:
                 Issue(
                     severity="INFO",
                     category="ARCHITECTURE",
-                    message="Module should link manager group to tpl_security.group_tpl_admin",
+                    message="Module should link manager group to esmis_security.group_esmis_admin",
                     file_path="security/groups.xml",
                     suggestion=(
-                        'Add: <record id="tpl_security.group_tpl_admin">'
+                        'Add: <record id="esmis_security.group_esmis_admin">'
                         '<field name="implied_ids" eval="[Command.link(ref(\'group_*_manager\'))]"/>'
                         "</record>"
                     ),
@@ -634,7 +634,7 @@ def generate_text_report(audits: list[ModuleAudit]) -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="Audit custom Odoo modules for access rights compliance (ADR-004)")
-    parser.add_argument("module", nargs="?", help="Module name to audit (e.g., tpl_vocabulary)")
+    parser.add_argument("module", nargs="?", help="Module name to audit (e.g., esmis_vocabulary)")
     parser.add_argument("--all", "-a", action="store_true", help="Audit all custom Odoo modules")
     parser.add_argument("--report", "-r", action="store_true", help="Generate full detailed report")
     parser.add_argument(

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Top-level Configuration menu for all tpl modules.
+    <!-- Top-level Configuration menu for all esmis modules.
          Parented under base.menu_custom until a project app module
-         defines menu_tpl_root. -->
+         defines menu_esmis_root. -->
     <menuitem
-        id="menu_tpl_configuration"
+        id="menu_esmis_configuration"
         name="Configuration"
         parent="base.menu_custom"
         groups="base.group_system"
@@ -12,7 +12,7 @@
     />
 
     <menuitem
-        id="menu_tpl_configuration_vocabularies"
+        id="menu_esmis_configuration_vocabularies"
         name="Vocabularies"
         parent="base.menu_administration"
         groups="base.group_system"
@@ -21,15 +21,15 @@
     <menuitem
         id="menu_vocabulary_list"
         name="Vocabularies"
-        parent="menu_tpl_configuration_vocabularies"
-        action="action_tpl_vocabulary"
+        parent="menu_esmis_configuration_vocabularies"
+        action="action_esmis_vocabulary"
         sequence="10"
     />
     <menuitem
         id="menu_vocabulary_code_list"
         name="Codes"
-        parent="menu_tpl_configuration_vocabularies"
-        action="action_tpl_vocabulary_code"
+        parent="menu_esmis_configuration_vocabularies"
+        action="action_esmis_vocabulary_code"
         sequence="20"
     />
 </odoo>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_tpl_vocabulary_code_form" model="ir.ui.view">
-        <field name="name">tpl.vocabulary.code.form</field>
-        <field name="model">tpl.vocabulary.code</field>
+    <record id="view_esmis_vocabulary_code_form" model="ir.ui.view">
+        <field name="name">esmis.vocabulary.code.form</field>
+        <field name="model">esmis.vocabulary.code</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -33,9 +33,9 @@
         </field>
     </record>
 
-    <record id="view_tpl_vocabulary_code_list" model="ir.ui.view">
-        <field name="name">tpl.vocabulary.code.list</field>
-        <field name="model">tpl.vocabulary.code</field>
+    <record id="view_esmis_vocabulary_code_list" model="ir.ui.view">
+        <field name="name">esmis.vocabulary.code.list</field>
+        <field name="model">esmis.vocabulary.code</field>
         <field name="arch" type="xml">
             <list>
                 <field name="sequence" widget="handle"/>
@@ -47,9 +47,9 @@
         </field>
     </record>
 
-    <record id="view_tpl_vocabulary_code_search" model="ir.ui.view">
-        <field name="name">tpl.vocabulary.code.search</field>
-        <field name="model">tpl.vocabulary.code</field>
+    <record id="view_esmis_vocabulary_code_search" model="ir.ui.view">
+        <field name="name">esmis.vocabulary.code.search</field>
+        <field name="model">esmis.vocabulary.code</field>
         <field name="arch" type="xml">
             <search string="Search Vocabulary Codes">
                 <field name="code"/>
@@ -67,9 +67,9 @@
         </field>
     </record>
 
-    <record id="action_tpl_vocabulary_code" model="ir.actions.act_window">
+    <record id="action_esmis_vocabulary_code" model="ir.actions.act_window">
         <field name="name">Vocabulary Codes</field>
-        <field name="res_model">tpl.vocabulary.code</field>
+        <field name="res_model">esmis.vocabulary.code</field>
         <field name="view_mode">list,form</field>
     </record>
 </odoo>

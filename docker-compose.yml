@@ -87,8 +87,8 @@ services:
       # ODOO_QUEUE_JOB_CHANNELS: "root:4"
 
       # Modules to initialize (configurable via env)
-      # For UI dev: ODOO_INIT_MODULES=tpl_vocabulary (or your module)
-      ODOO_INIT_MODULES: "${ODOO_INIT_MODULES:-tpl_vocabulary}"
+      # For UI dev: ODOO_INIT_MODULES=esmis_vocabulary (or your module)
+      ODOO_INIT_MODULES: "${ODOO_INIT_MODULES:-esmis_vocabulary}"
       ODOO_UPDATE_MODULES: "${ODOO_UPDATE_MODULES:-}"
 
       # Logging
@@ -140,7 +140,7 @@ services:
       ODOO_CRON_THREADS: "0"
 
       # Modules to initialize (configurable via env)
-      ODOO_INIT_MODULES: "${ODOO_INIT_MODULES:-tpl_vocabulary}"
+      ODOO_INIT_MODULES: "${ODOO_INIT_MODULES:-esmis_vocabulary}"
       ODOO_UPDATE_MODULES: "${ODOO_UPDATE_MODULES:-}"
 
       # Logging

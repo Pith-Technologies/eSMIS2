@@ -35,8 +35,8 @@ Use this structure. Every section is expected unless marked optional.
 
 | Model              | Description            |
 | ------------------ | ---------------------- |
-| `tpl.example`      | {One-line description} |
-| `tpl.example.line` | {One-line description} |
+| `esmis.example`      | {One-line description} |
+| `esmis.example.line` | {One-line description} |
 
 ### Configuration
 
@@ -55,17 +55,17 @@ After installing:
 
 | Group                            | Access    |
 | -------------------------------- | --------- |
-| `tpl_security.group_tpl_officer` | Read      |
-| `tpl_security.group_tpl_manager` | Full CRUD |
+| `esmis_security.group_esmis_officer` | Read      |
+| `esmis_security.group_esmis_manager` | Full CRUD |
 
 ### Extension Points _(optional)_
 
 - Override `_compute_example()` to customize calculation logic
-- Inherit `tpl.example` to add fields exposed through the API
+- Inherit `esmis.example` to add fields exposed through the API
 
 ### Dependencies
 
-`base`, `mail`, `tpl_security`, `tpl_vocabulary`
+`base`, `mail`, `esmis_security`, `esmis_vocabulary`
 ```
 
 ## Principles
@@ -73,7 +73,7 @@ After installing:
 1. **Say it once.** Never repeat the same capability in multiple sections. The overview paragraph covers "what"; the
    capabilities list covers "how"; the models table covers "which objects". Each section has a distinct job.
 
-2. **Name the models.** Every module introduces or extends models. List them by technical name (`tpl.alert.rule`, not
+2. **Name the models.** Every module introduces or extends models. List them by technical name (`esmis.alert.rule`, not
    "alert rules"). Developers cannot use what they cannot find.
 
 3. **Name the menu paths.** Tell implementers where features appear: `{App} > Orders > Order Types`. Do not
@@ -188,14 +188,14 @@ A module description devotes a paragraph to each dependency:
 
 > **Before (paragraph per dependency):**
 >
-> "[{Project} Vocabulary](tpl_vocabulary): Leverages vocabulary-based lookups for status codes and other
+> "[eSMIS Vocabulary](esmis_vocabulary): Leverages vocabulary-based lookups for status codes and other
 > coded values, ensuring consistency in terminology management."
 >
 > _(more paragraphs follow)_
 >
 > **After (flat list):**
 >
-> `tpl_vocabulary`, `tpl_security`, `base`, `mail`
+> `esmis_vocabulary`, `esmis_security`, `base`, `mail`
 
 ### Fabricated menu paths
 
@@ -203,7 +203,7 @@ A module description says:
 
 > Navigate to **Operations > Configuration > Order Types**
 
-But the actual XML menuitem has `parent="tpl_order.tpl_order_config_menu_root"`, which resolves to
+But the actual XML menuitem has `parent="esmis_order.esmis_order_config_menu_root"`, which resolves to
 **Orders > Configuration > Order Types**. The top-level menu name was guessed from context, not read from the
 XML. Always trace `parent=` attributes to the root `<menuitem>` to build the full path.
 
@@ -220,7 +220,7 @@ string="...">` for tab names and distinguish stat buttons from tabs.
 ### Overclaimed security permissions
 
 A module description says the manager group has "Full CRUD on records" but the CSV has
-`perm_unlink=0`. The `tpl_vocabulary` description says managers have "Full CRUD on definitions" but system-protected
+`perm_unlink=0`. The `esmis_vocabulary` description says managers have "Full CRUD on definitions" but system-protected
 codes block deletion. Always cross-reference CSV permissions with Python `unlink()` overrides.
 
 ### Phantom dependencies
@@ -237,7 +237,7 @@ description cannot write code against it without reading the source.
 
 ## Gold Standard Example
 
-A complete description for a hypothetical `tpl_order` module, demonstrating all sections:
+A complete description for a hypothetical `esmis_order` module, demonstrating all sections:
 
 ```markdown
 Manages orders from creation to fulfillment. Tracks order type, assigned user, line items, and
@@ -248,14 +248,14 @@ associated documents. Supports standard, urgent, and recurring workflows with vo
 - Create orders with submission/approval workflow
 - Track order lifecycle: draft → submitted → approved → fulfilled
 - Link line items, notes, and attachments to orders
-- Classify orders by type and category using `tpl.vocabulary`
+- Classify orders by type and category using `esmis.vocabulary`
 
 ### Key Models
 
 | Model                   | Description                                        |
 | ----------------------- | -------------------------------------------------- |
-| `tpl.order`         | An order with status tracking and user assignment |
-| `tpl.order.line`    | Individual line items belonging to an order        |
+| `esmis.order`         | An order with status tracking and user assignment |
+| `esmis.order.line`    | Individual line items belonging to an order        |
 
 ### Configuration
 
@@ -275,18 +275,18 @@ After installing:
 
 | Group                                | Access                             |
 | ------------------------------------ | ---------------------------------- |
-| `tpl_security.group_order_viewer` | Read orders                    |
-| `tpl_security.group_order_officer`| Read/write/create orders       |
-| `tpl_security.group_order_manager`| Full CRUD on orders and config |
+| `esmis_security.group_order_viewer` | Read orders                    |
+| `esmis_security.group_order_officer`| Read/write/create orders       |
+| `esmis_security.group_order_manager`| Full CRUD on orders and config |
 
 ### Extension Points
 
 - Override `_pre_submit_hook()` / `_post_approval_hook()` for custom workflow logic
-- Inherit `tpl.order` to add fields exposed through the API
+- Inherit `esmis.order` to add fields exposed through the API
 
 ### Dependencies
 
-`base`, `mail`, `tpl_security`, `tpl_vocabulary`
+`base`, `mail`, `esmis_security`, `esmis_vocabulary`
 ```
 
 This example is ~40 lines, names every model, includes menu paths, lists security groups by XML ID, and documents

@@ -431,9 +431,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s tpl_vocabulary/models/*.py
-  %(prog)s --check-only tpl_vocabulary/models/vocabulary.py
-  %(prog)s --format json tpl_vocabulary/models/*.py
+  %(prog)s esmis_vocabulary/models/*.py
+  %(prog)s --check-only esmis_vocabulary/models/vocabulary.py
+  %(prog)s --format json esmis_vocabulary/models/*.py
 
 Checks:
   - Offset pagination: .search(..., offset=...) should use cursor-based

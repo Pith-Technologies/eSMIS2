@@ -3,13 +3,13 @@ from odoo.tests.common import TransactionCase
 
 
 class TestVocabularyCode(TransactionCase):
-    """Tests for the tpl.vocabulary.code model."""
+    """Tests for the esmis.vocabulary.code model."""
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.Code = cls.env["tpl.vocabulary.code"]
-        cls.vocab = cls.env["tpl.vocabulary"].create(
+        cls.Code = cls.env["esmis.vocabulary.code"]
+        cls.vocab = cls.env["esmis.vocabulary"].create(
             {
                 "name": "Test Vocab",
                 "namespace_uri": "urn:test:vocab:codes",
@@ -80,7 +80,7 @@ class TestVocabularyCode(TransactionCase):
 
     def test_same_code_different_vocabulary(self):
         """Same code value in different vocabularies is allowed."""
-        other_vocab = self.env["tpl.vocabulary"].create(
+        other_vocab = self.env["esmis.vocabulary"].create(
             {
                 "name": "Other Vocab",
                 "namespace_uri": "urn:test:vocab:other",
@@ -151,17 +151,17 @@ class TestVocabularyCode(TransactionCase):
 
     def test_seed_gender_codes_count(self):
         """Gender vocabulary has exactly 4 codes."""
-        gender_vocab = self.env["tpl.vocabulary"].search([("namespace_uri", "=", "urn:iso:std:iso:5218")])
+        gender_vocab = self.env["esmis.vocabulary"].search([("namespace_uri", "=", "urn:iso:std:iso:5218")])
         self.assertEqual(len(gender_vocab.code_ids), 4)
 
     def test_seed_civil_status_codes_count(self):
         """Civil status vocabulary has exactly 6 codes."""
-        vocab = self.env["tpl.vocabulary"].search([("namespace_uri", "=", "urn:un:unsd:pop-census:marital-status")])
+        vocab = self.env["esmis.vocabulary"].search([("namespace_uri", "=", "urn:un:unsd:pop-census:marital-status")])
         self.assertEqual(len(vocab.code_ids), 6)
 
     def test_seed_blood_type_codes_count(self):
         """Blood type vocabulary has exactly 8 codes."""
-        vocab = self.env["tpl.vocabulary"].search([("namespace_uri", "=", "urn:tpl:vocab:blood-type")])
+        vocab = self.env["esmis.vocabulary"].search([("namespace_uri", "=", "urn:tpl:vocab:blood-type")])
         self.assertEqual(len(vocab.code_ids), 8)
 
     def test_namespace_uri_stored_from_vocabulary(self):

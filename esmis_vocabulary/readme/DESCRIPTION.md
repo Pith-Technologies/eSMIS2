@@ -1,12 +1,12 @@
-Configurable vocabulary (code list) infrastructure for tpl modules.
+Configurable vocabulary (code list) infrastructure for esmis modules.
 
 Provides two core models:
 
-- **tpl.vocabulary** — A named collection of codes with a globally unique namespace URI.
+- **esmis.vocabulary** — A named collection of codes with a globally unique namespace URI.
   Vocabularies can represent international standards (ISO 5218 for gender, UN marital status)
   or project-defined code lists (blood types, identifier types).
 
-- **tpl.vocabulary.code** — Individual codes within a vocabulary. Each code has a
+- **esmis.vocabulary.code** — Individual codes within a vocabulary. Each code has a
   machine-readable code, human-readable display name, and a globally unique URI
   computed as `{namespace_uri}#{code}`.
 
@@ -22,8 +22,8 @@ codes can only be managed through module data files.
 
 ### Key Models
 
-- `tpl.vocabulary` — vocabulary definition with namespace URI
-- `tpl.vocabulary.code` — individual code with computed URI
+- `esmis.vocabulary` — vocabulary definition with namespace URI
+- `esmis.vocabulary.code` — individual code with computed URI
 
 ### Configuration
 
@@ -42,7 +42,7 @@ Settings > Vocabularies > Codes (flat list of all codes)
 
 ### Extension Points
 
-- **Inheritable models**: `tpl.vocabulary` and `tpl.vocabulary.code` can be extended via `_inherit`
+- **Inheritable models**: `esmis.vocabulary` and `esmis.vocabulary.code` can be extended via `_inherit`
 - **System protection bypass**: `_is_protection_bypassed()` method controls when system vocabularies can be modified
 - **Cached lookups**: `get_code(namespace_uri, code)` and `resolve_by_uri(uri)` for efficient code resolution
 - **View extension groups**: Form views include invisible `<group>` elements (`additional_description`, `additional_definition`) for downstream modules to inject fields

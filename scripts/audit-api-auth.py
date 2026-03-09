@@ -48,7 +48,7 @@ ALLOWED_PUBLIC = {
     # Keep this list small and review changes carefully.
     #
     # Example:
-    # ("tpl_api", "oauth.py", "get_token"),  # OAuth token endpoint - public by design
+    # ("esmis_api", "oauth.py", "get_token"),  # OAuth token endpoint - public by design
     # ("fastapi", "demo_router.py", "*"),  # FastAPI demo router (development only)
 }
 

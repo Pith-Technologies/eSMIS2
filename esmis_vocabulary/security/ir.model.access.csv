@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_esmis_vocabulary_system,esmis.vocabulary / System,model_esmis_vocabulary,base.group_system,1,1,1,1
+access_esmis_vocabulary_user,esmis.vocabulary / User,model_esmis_vocabulary,base.group_user,1,0,0,0
+access_esmis_vocabulary_officer,esmis.vocabulary / Officer,model_esmis_vocabulary,group_vocabulary_officer,1,1,1,0
+access_esmis_vocabulary_manager,esmis.vocabulary / Manager,model_esmis_vocabulary,group_vocabulary_manager,1,1,1,1
+access_esmis_vocabulary_code_system,esmis.vocabulary.code / System,model_esmis_vocabulary_code,base.group_system,1,1,1,1
+access_esmis_vocabulary_code_user,esmis.vocabulary.code / User,model_esmis_vocabulary_code,base.group_user,1,0,0,0
+access_esmis_vocabulary_code_officer,esmis.vocabulary.code / Officer,model_esmis_vocabulary_code,group_vocabulary_officer,1,1,1,0
+access_esmis_vocabulary_code_manager,esmis.vocabulary.code / Manager,model_esmis_vocabulary_code,group_vocabulary_manager,1,1,1,1

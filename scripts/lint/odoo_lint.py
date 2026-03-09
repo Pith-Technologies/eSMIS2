@@ -192,7 +192,7 @@ def main():
 Examples:
   %(prog)s                           # Run all checks
   %(prog)s --check naming xml_ids    # Run specific checks
-  %(prog)s --module tpl_vocabulary # Check specific module
+  %(prog)s --module esmis_vocabulary # Check specific module
   %(prog)s --format json             # Output in JSON format
   %(prog)s --summary                 # Show summary statistics
 

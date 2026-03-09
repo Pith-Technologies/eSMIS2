@@ -8,11 +8,11 @@
 
 ### Implementation Summary
 
-All modules described in this ADR (`tpl_dms`, `tpl_attachment_av_scan`, `tpl_audit`, `tpl_storage_backend`) are **planned but not yet implemented**. The architecture remains valid for future development.
+All modules described in this ADR (`esmis_dms`, `esmis_attachment_av_scan`, `esmis_audit`, `esmis_storage_backend`) are **planned but not yet implemented**. The architecture remains valid for future development.
 
 ## Context
 
-The Document Management System (`tpl_dms`) provides centralized document storage with hierarchical organization. A security and architecture review has identified several areas for improvement:
+The Document Management System (`esmis_dms`) provides centralized document storage with hierarchical organization. A security and architecture review has identified several areas for improvement:
 
 ### Current State Analysis
 
@@ -29,9 +29,9 @@ The Document Management System (`tpl_dms`) provides centralized document storage
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        tpl_dms                              │
+│                        esmis_dms                              │
 ├─────────────────────────────────────────────────────────────┤
-│  tpl.dms.file          │ tpl.dms.directory │ tpl.dms.category│
+│  esmis.dms.file          │ esmis.dms.directory │ esmis.dms.category│
 │  ├── content (binary)  │ ├── name          │ ├── name        │
 │  ├── checksum (SHA512) │ ├── parent_id     │ └── file_ids    │
 │  ├── mimetype          │ └── file_ids      │                 │
@@ -47,13 +47,13 @@ The Document Management System (`tpl_dms`) provides centralized document storage
 
 ### Existing Security Patterns
 
-The `tpl_verifiable_credentials` module demonstrates good security patterns:
+The `esmis_verifiable_credentials` module demonstrates good security patterns:
 - Input validation with size limits (`MAX_CREDENTIAL_SIZE = 1MB`)
 - Rate limiting decorator
 - Constant-time comparison for timing attack prevention
 - Audit logging
 
-The `tpl_audit` module provides extensible audit trail:
+The `esmis_audit` module provides extensible audit trail:
 - Automatic CRUD auditing via decorator
 - `log_lifecycle_action()` for custom events
 - Configurable action flags per model
@@ -75,7 +75,7 @@ The `tpl_audit` module provides extensible audit trail:
 
 We will implement a modular enhancement strategy with the following components:
 
-### 1. System-Wide Antivirus Scanning (`tpl_attachment_av_scan`)
+### 1. System-Wide Antivirus Scanning (`esmis_attachment_av_scan`)
 
 Extend `ir.attachment` to provide Odoo-wide malware protection via async scanning.
 
@@ -124,7 +124,7 @@ Extend `ir.attachment` to provide Odoo-wide malware protection via async scannin
 
 ```python
 class AVScannerBackend(models.Model):
-    _name = "tpl.av.scanner.backend"
+    _name = "esmis.av.scanner.backend"
     _description = "Antivirus Scanner Backend"
 
     name = fields.Char(required=True)
@@ -231,7 +231,7 @@ class IrAttachment(models.Model):
 
     def _scan_for_malware(self):
         """Async job to scan attachments for malware."""
-        scanner = self.env["tpl.av.scanner.backend"].search([
+        scanner = self.env["esmis.av.scanner.backend"].search([
             ("is_active", "=", True)
         ], limit=1)
 
@@ -297,13 +297,13 @@ class IrAttachment(models.Model):
         self._notify_security_admins()
 ```
 
-### 2. File Type & Size Validation (Enhance `tpl_dms`)
+### 2. File Type & Size Validation (Enhance `esmis_dms`)
 
-Extend `tpl.dms.category` with validation rules:
+Extend `esmis.dms.category` with validation rules:
 
 ```python
 class SPPDMSCategory(models.Model):
-    _inherit = "tpl.dms.category"
+    _inherit = "esmis.dms.category"
 
     # File type restrictions
     allowed_extensions = fields.Char(
@@ -390,14 +390,14 @@ class SPPDMSCategory(models.Model):
         return False
 ```
 
-### 3. Download Audit (Extend `tpl_audit`)
+### 3. Download Audit (Extend `esmis_audit`)
 
-Add download/access logging using existing `tpl_audit` infrastructure:
+Add download/access logging using existing `esmis_audit` infrastructure:
 
 ```python
-# In tpl_audit module - extend rule model
+# In esmis_audit module - extend rule model
 class SppAuditRule(models.Model):
-    _inherit = "tpl.audit.rule"
+    _inherit = "esmis.audit.rule"
 
     # New action flags for file operations
     is_log_download = fields.Boolean(
@@ -411,9 +411,9 @@ class SppAuditRule(models.Model):
         help="Log when files are previewed"
     )
 
-# In tpl_dms module - extend file model
+# In esmis_dms module - extend file model
 class SPPDMSFile(models.Model):
-    _inherit = "tpl.dms.file"
+    _inherit = "esmis.dms.file"
 
     download_count = fields.Integer(default=0, readonly=True)
     last_download_date = fields.Datetime(readonly=True)
@@ -425,7 +425,7 @@ class SPPDMSFile(models.Model):
 
         # Atomic increment of download_count to prevent race conditions
         self.env.cr.execute("""
-            UPDATE tpl_dms_file
+            UPDATE esmis_dms_file
             SET download_count = download_count + 1,
                 last_download_date = %s,
                 last_download_user_id = %s
@@ -433,8 +433,8 @@ class SPPDMSFile(models.Model):
         """, (fields.Datetime.now(), self.env.uid, self.id))
         self.invalidate_recordset(["download_count", "last_download_date", "last_download_user_id"])
 
-        # Log via tpl_audit
-        self.env["tpl.audit.rule"].log_lifecycle_action(
+        # Log via esmis_audit
+        self.env["esmis.audit.rule"].log_lifecycle_action(
             model_name=self._name,
             record_id=self.id,
             action="download",
@@ -453,7 +453,7 @@ class SPPDMSFile(models.Model):
         }
 ```
 
-### 4. Pluggable Storage Backend (`tpl_storage_backend`)
+### 4. Pluggable Storage Backend (`esmis_storage_backend`)
 
 Create an LGPL-licensed storage abstraction layer:
 
@@ -463,7 +463,7 @@ Create an LGPL-licensed storage abstraction layer:
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │  ┌──────────────────────────────────────────────────────────────────┐   │
-│  │                     tpl.storage.backend                           │   │
+│  │                     esmis.storage.backend                           │   │
 │  │  ┌─────────────────────────────────────────────────────────────┐ │   │
 │  │  │ Interface Methods:                                          │ │   │
 │  │  │   store(binary, path) → reference                           │ │   │
@@ -488,7 +488,7 @@ Create an LGPL-licensed storage abstraction layer:
 
 ```python
 class StorageBackend(models.Model):
-    _name = "tpl.storage.backend"
+    _name = "esmis.storage.backend"
     _description = "Storage Backend Configuration"
 
     name = fields.Char(required=True)
@@ -520,7 +520,7 @@ class StorageBackend(models.Model):
     # Encryption
     encrypt_at_rest = fields.Boolean(
         default=False,
-        help="Encrypt files before storing (uses tpl_pii_encryption)"
+        help="Encrypt files before storing (uses esmis_pii_encryption)"
     )
 
     _sql_constraints = [
@@ -689,18 +689,18 @@ class StorageBackend(models.Model):
         return blob_client.download_blob().readall()
 ```
 
-### 5. Document Versioning (Native in `tpl_dms`)
+### 5. Document Versioning (Native in `esmis_dms`)
 
-Document versioning is implemented directly in `tpl_dms` as a native feature:
+Document versioning is implemented directly in `esmis_dms` as a native feature:
 
 ```python
 class SPPDMSFileVersion(models.Model):
-    _name = "tpl.dms.file.version"
+    _name = "esmis.dms.file.version"
     _description = "DMS File Version"
     _order = "version_number desc"
 
     file_id = fields.Many2one(
-        "tpl.dms.file",
+        "esmis.dms.file",
         required=True,
         ondelete="cascade",
         index=True,
@@ -723,9 +723,9 @@ class SPPDMSFileVersion(models.Model):
 
 
 class SPPDMSFile(models.Model):
-    _inherit = "tpl.dms.file"
+    _inherit = "esmis.dms.file"
 
-    version_ids = fields.One2many("tpl.dms.file.version", "file_id", "Versions")
+    version_ids = fields.One2many("esmis.dms.file.version", "file_id", "Versions")
     current_version = fields.Integer(compute="_compute_current_version", store=True)
     is_versioned = fields.Boolean(default=False)
 
@@ -754,7 +754,7 @@ class SPPDMSFile(models.Model):
         # Create new version
         new_version_num = max(self.version_ids.mapped("version_number") or [0]) + 1
 
-        self.env["tpl.dms.file.version"].create({
+        self.env["esmis.dms.file.version"].create({
             "file_id": self.id,
             "version_number": new_version_num,
             "content": self.content,
@@ -766,7 +766,7 @@ class SPPDMSFile(models.Model):
 
     def action_restore_version(self, version_id):
         """Restore a previous version."""
-        version = self.env["tpl.dms.file.version"].browse(version_id)
+        version = self.env["esmis.dms.file.version"].browse(version_id)
         if version.file_id != self:
             raise UserError(_("Version does not belong to this file"))
 
@@ -774,7 +774,7 @@ class SPPDMSFile(models.Model):
         self.content = version.content
 ```
 
-### 6. Enhanced Preview (`tpl_dms_preview`)
+### 6. Enhanced Preview (`esmis_dms_preview`)
 
 Separate module for enhanced document preview:
 
@@ -784,7 +784,7 @@ import { registry } from "@web/core/registry";
 import { Component, useState } from "@odoo/owl";
 
 export class DocumentPreviewWidget extends Component {
-    static template = "tpl_dms_preview.DocumentPreview";
+    static template = "esmis_dms_preview.DocumentPreview";
     static props = {
         record: Object,
         name: String,
@@ -817,7 +817,7 @@ export class DocumentPreviewWidget extends Component {
     async openPreview() {
         if (this.isPdf) {
             // Use PDF.js viewer
-            const url = `/tpl_dms_preview/pdf/${this.props.record.resId}`;
+            const url = `/esmis_dms_preview/pdf/${this.props.record.resId}`;
             window.open(url, "_blank", "width=900,height=700");
         } else if (this.isImage) {
             // Use image lightbox
@@ -834,7 +834,7 @@ registry.category("view_widgets").add("document_preview", DocumentPreviewWidget)
 
 ```
 New Modules:
-├── tpl_attachment_av_scan/        # System-wide AV scanning
+├── esmis_attachment_av_scan/        # System-wide AV scanning
 │   ├── models/
 │   │   ├── av_scanner_backend.py
 │   │   └── ir_attachment.py
@@ -847,7 +847,7 @@ New Modules:
 │       ├── av_scanner_backend_views.xml
 │       └── ir_attachment_views.xml
 │
-├── tpl_storage_backend/           # Pluggable storage (LGPL)
+├── esmis_storage_backend/           # Pluggable storage (LGPL)
 │   ├── models/
 │   │   └── storage_backend.py     # S3, Azure, filesystem implementations
 │   ├── data/
@@ -859,7 +859,7 @@ New Modules:
 │   └── views/
 │       └── storage_backend_views.xml
 │
-└── tpl_dms_preview/               # Enhanced preview (future)
+└── esmis_dms_preview/               # Enhanced preview (future)
     ├── controllers/
     │   └── preview.py
     └── static/src/
@@ -867,7 +867,7 @@ New Modules:
         └── xml/
 
 Enhanced Existing Modules:
-├── tpl_dms/                       # File validation + versioning
+├── esmis_dms/                       # File validation + versioning
 │   ├── models/
 │   │   ├── dms_category.py        # File type/size validation rules
 │   │   ├── dms_file.py            # Versioning fields & methods
@@ -878,8 +878,8 @@ Enhanced Existing Modules:
 │   └── wizard/
 │       └── restore_version_wizard.py
 │
-└── tpl_audit/
-    └── models/tpl_audit_rule.py   # is_log_download/preview/export flags
+└── esmis_audit/
+    └── models/esmis_audit_rule.py   # is_log_download/preview/export flags
 ```
 
 ## Dependency Graph
@@ -894,18 +894,18 @@ Enhanced Existing Modules:
               │                               │
               ▼                               ▼
 ┌─────────────────────────┐     ┌─────────────────────────┐
-│ tpl_attachment_av_scan  │     │   tpl_storage_backend   │
+│ esmis_attachment_av_scan  │     │   esmis_storage_backend   │
 └─────────────────────────┘     └─────────────────────────┘
                                               │
                                               ▼
                               ┌─────────────────────────────┐
-                              │         tpl_dms             │
+                              │         esmis_dms             │
                               │  (validation + versioning)  │
                               └─────────────────────────────┘
                                               │
                                               ▼
                               ┌─────────────────────────────┐
-                              │      tpl_dms_preview        │
+                              │      esmis_dms_preview        │
                               │         (future)            │
                               └─────────────────────────────┘
 ```
@@ -914,12 +914,12 @@ Enhanced Existing Modules:
 
 | Phase | Module | Status | Priority | Notes |
 |-------|--------|--------|----------|-------|
-| 1a | `tpl_dms` file validation | ✅ Done | P0 | Category-level validation |
-| 1b | `tpl_dms` versioning | ✅ Done | P0 | Native feature |
-| 1c | `tpl_attachment_av_scan` | ✅ Done | P0 | System-wide AV |
-| 2a | `tpl_audit` download flags | ✅ Done | P1 | New action flags |
-| 2b | `tpl_storage_backend` | ✅ Done | P1 | S3/Azure/FS backends |
-| 3 | `tpl_dms_preview` | ❌ Pending | P2 | Future enhancement |
+| 1a | `esmis_dms` file validation | ✅ Done | P0 | Category-level validation |
+| 1b | `esmis_dms` versioning | ✅ Done | P0 | Native feature |
+| 1c | `esmis_attachment_av_scan` | ✅ Done | P0 | System-wide AV |
+| 2a | `esmis_audit` download flags | ✅ Done | P1 | New action flags |
+| 2b | `esmis_storage_backend` | ✅ Done | P1 | S3/Azure/FS backends |
+| 3 | `esmis_dms_preview` | ❌ Pending | P2 | Future enhancement |
 | 4 | Drag-and-drop upload | ❌ Pending | P3 | Future enhancement |
 
 ## Configuration Examples

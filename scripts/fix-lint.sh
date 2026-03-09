@@ -3,10 +3,10 @@
 # If linters report remaining issues, call an AI agent to help fix them.
 #
 # Usage:
-#   ./scripts/fix-lint.sh tpl_vocabulary
-#   ./scripts/fix-lint.sh tpl_vocabulary tpl_inventory
-#   ./scripts/fix-lint.sh --model composer-1 --details tpl_vocabulary
-#   ./scripts/fix-lint.sh --lint-only tpl_vocabulary  # Skip AI fixing
+#   ./scripts/fix-lint.sh esmis_vocabulary
+#   ./scripts/fix-lint.sh esmis_vocabulary esmis_inventory
+#   ./scripts/fix-lint.sh --model composer-1 --details esmis_vocabulary
+#   ./scripts/fix-lint.sh --lint-only esmis_vocabulary  # Skip AI fixing
 #
 # Environment variables:
 #   AI_AGENT_CMD - Command to run AI agent (default: cursor-agent or claude if found)

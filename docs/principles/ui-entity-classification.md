@@ -51,8 +51,8 @@ Does the entity have a state-based workflow?
 **Usage**: Classify your entity first → patterns are automatically prescribed
 
 **Relationship (Simple) vs (Rich)**:
-- **Simple**: Pure join table, no additional attributes beyond foreign keys (e.g., `tpl.area.assignment`)
-- **Rich**: Has own attributes, state, dates; needs reconciliation and auditing (e.g., `tpl.order.line` with scheduled_date, state, product_id)
+- **Simple**: Pure join table, no additional attributes beyond foreign keys (e.g., `esmis.area.assignment`)
+- **Rich**: Has own attributes, state, dates; needs reconciliation and auditing (e.g., `esmis.order.line` with scheduled_date, state, product_id)
 
 ---
 
@@ -60,18 +60,18 @@ Does the entity have a state-based workflow?
 
 | Class | Module | Key Views |
 |-------|--------|-----------|
-| Master Data | `tpl_area` | `views/area.xml` |
-| Workflow Entity | `tpl_order` (planned) | `views/order_view.xml` |
-| Registry Entity | `tpl_vocabulary` | `views/vocabulary_views.xml` |
-| Transactional | `tpl_log` (planned) | `views/log_view.xml` |
+| Master Data | `esmis_area` | `views/area.xml` |
+| Workflow Entity | `esmis_order` (planned) | `views/order_view.xml` |
+| Registry Entity | `esmis_vocabulary` | `views/vocabulary_views.xml` |
+| Transactional | `esmis_log` (planned) | `views/log_view.xml` |
 
 ---
 
 ## Examples by Class
 
 ### Master Data
-- `tpl.area` - Geographic areas
-- `tpl.vocabulary` - Vocabulary definitions (status codes, categories, types)
+- `esmis.area` - Geographic areas
+- `esmis.vocabulary` - Vocabulary definitions (status codes, categories, types)
 - `res.country` - Countries
 
 **Characteristics**: Few records, rarely change, simple structure
@@ -79,9 +79,9 @@ Does the entity have a state-based workflow?
 ---
 
 ### Workflow Entities
-- `tpl.order` (planned) - Business orders
-- `tpl.request` (planned) - Service requests
-- `tpl.transfer` (planned) - Stock transfers
+- `esmis.order` (planned) - Business orders
+- `esmis.request` (planned) - Service requests
+- `esmis.transfer` (planned) - Stock transfers
 
 **Characteristics**: State machine, approval workflows, moderate record count
 
@@ -96,15 +96,15 @@ Does the entity have a state-based workflow?
 ---
 
 ### Transactional
-- `tpl.log.entry` (planned) - Activity log entries
-- `tpl.audit.log` - Audit trail entries
+- `esmis.log.entry` (planned) - Activity log entries
+- `esmis.audit.log` - Audit trail entries
 
 **Characteristics**: Millions of records, created in bulk, import/export heavy
 
 ---
 
 ### Relationship (Simple)
-- `tpl.area.assignment` - Area assignments (just partner_id + area_id)
+- `esmis.area.assignment` - Area assignments (just partner_id + area_id)
 - Many2many through tables with no extra fields
 
 **Characteristics**: Pure join table, no additional attributes, embedded only
@@ -112,8 +112,8 @@ Does the entity have a state-based workflow?
 ---
 
 ### Relationship (Rich)
-- `tpl.order.line` (planned) - Order line items (has scheduled_date, state, product_id)
-- `tpl.identifier` - Entity identifiers (has type, value, system_uri)
+- `esmis.order.line` (planned) - Order line items (has scheduled_date, state, product_id)
+- `esmis.identifier` - Entity identifiers (has type, value, system_uri)
 
 **Characteristics**: Join table with attributes, state, dates; needs searchable list for reconciliation and auditing
 

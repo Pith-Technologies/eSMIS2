@@ -14,7 +14,7 @@ hook. The hook runs `scripts/setup_test_env.sh` which:
 **No manual setup needed!** Just run tests:
 
 ```bash
-./odoo-project test tpl_vocabulary
+./odoo-project test esmis_vocabulary
 ```
 
 ### Setup Performance
@@ -93,7 +93,7 @@ odoo shell -d mydb
 
 # Print permission matrix
 >>> report.print_matrix()
->>> report.print_matrix(filter_groups=['vocabulary'], filter_models=['tpl.vocabulary'])
+>>> report.print_matrix(filter_groups=['vocabulary'], filter_models=['esmis.vocabulary'])
 
 # Check user permissions
 >>> report.print_user_permissions('admin')
@@ -109,7 +109,7 @@ odoo shell -d mydb
 >>> report.generate_mermaid(filter_prefix='tpl', filename='security_diagram.md')
 
 # Print record rules
->>> report.print_record_rules(filter_models=['tpl.vocabulary'])
+>>> report.print_record_rules(filter_models=['esmis.vocabulary'])
 ```
 
 **Output formats:**
@@ -147,7 +147,7 @@ Static analysis script that audits Odoo modules for compliance with ADR-004 secu
 
 ```bash
 # Audit single module
-python scripts/security_audit.py tpl_vocabulary
+python scripts/security_audit.py esmis_vocabulary
 
 # Audit all modules
 python scripts/security_audit.py --all
@@ -273,7 +273,7 @@ Install all modules:
 Install specific module:
 
 ```bash
-./test_odoo19_modules.sh install tpl_vocabulary
+./test_odoo19_modules.sh install esmis_vocabulary
 ```
 
 Run full test workflow:
@@ -405,7 +405,7 @@ All logs are saved to `/tmp/odoo19-test-logs/`:
 **Solution:** Check for any remaining instances with:
 
 ```bash
-grep -r "type=['\"]json['\"]" /tmp/odoo19-addons/tpl_*
+grep -r "type=['\"]json['\"]" /tmp/odoo19-addons/esmis_*
 ```
 
 ### Issue 2: PostgreSQL Connection Failed
@@ -435,7 +435,7 @@ sudo apt-get install python3.10 python3.10-venv python3.10-dev
 
 Test installation of foundation modules:
 
-- tpl_vocabulary
+- esmis_vocabulary
 
 ### Phase 2: Domain Modules
 

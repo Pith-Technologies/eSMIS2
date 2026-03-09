@@ -1,6 +1,6 @@
 # Error Handling & Logging Principles
 
-Standards for exceptions, user messages, and logging in {Project}.
+Standards for exceptions, user messages, and logging in eSMIS.
 
 ## Core Principles
 
@@ -43,7 +43,7 @@ from odoo.exceptions import UserError
 def action_approve(self):
     if self.state != 'pending':
         raise UserError(_("Only pending requests can be approved."))
-    if not self.env.user.has_group('tpl_security.group_validator'):
+    if not self.env.user.has_group('esmis_security.group_validator'):
         raise UserError(_("You don't have permission to approve requests."))
 ```
 
@@ -90,10 +90,10 @@ raise ValidationError(_(
 
 | Tool | Purpose | Storage | Use For |
 |------|---------|---------|---------|
-| **tpl_audit** | Compliance audit trail | Database (permanent) | Business events, state changes, approvals |
+| **esmis_audit** | Compliance audit trail | Database (permanent) | Business events, state changes, approvals |
 | **_logger** | Operational debugging | Log files (ephemeral) | Errors, exceptions, performance issues |
 
-**Rule of thumb:** If auditors or supervisors need to see it, use `tpl_audit`. If only developers need it for troubleshooting, use `_logger`.
+**Rule of thumb:** If auditors or supervisors need to see it, use `esmis_audit`. If only developers need it for troubleshooting, use `_logger`.
 
 ## Logging Standards
 
