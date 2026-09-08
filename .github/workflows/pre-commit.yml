@@ -2,10 +2,13 @@ name: pre-commit
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: ["19.0"]
   push:
-    branches: ["main"]
+    branches: ["19.0"]
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   pre-commit:
