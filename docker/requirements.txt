@@ -11,10 +11,9 @@
 # -----------------------------------------------------------------------------
 # Core System Dependencies (required for production)
 # -----------------------------------------------------------------------------
-websocket-client~=0.56
+websocket-client~=1.9
 pyOpenSSL
 geoip2
-git-aggregator==4.0
 
 # PDF processing (reportlab uses these)
 pdfminer.six
@@ -23,8 +22,8 @@ pdfminer.six
 # Project Specific (not in module manifests but required)
 # -----------------------------------------------------------------------------
 # Pin specific versions for Docker builds
-Pillow==11.1.0
-fastapi==0.112.2
+Pillow==12.3.0
+fastapi==0.136.1
 # Note: requests/urllib3 versions constrained by Odoo's requirements.txt
 
 # Excel support
