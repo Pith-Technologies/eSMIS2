@@ -2,14 +2,14 @@ name: CI
 
 on:
   push:
-    branches: ['main']
+    branches: ['19.0']
     paths-ignore:
       - 'docs/**'
       - '*.md'
       - '.claude/**'
       - 'readme/**'
   pull_request:
-    branches: ['main']
+    branches: ['19.0']
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -28,6 +28,9 @@ concurrency:
 
 env:
   ODOO_ADDONS_PATH: /opt/odoo/odoo/addons,/opt/odoo/odoo/odoo/addons,/mnt/extra-addons/custom,/mnt/extra-addons/server-ux,/mnt/extra-addons/server-tools,/mnt/extra-addons/queue,/mnt/extra-addons/server-backend,/mnt/extra-addons/rest-framework,/mnt/extra-addons/muk-it
+
+permissions:
+  contents: read
 
 jobs:
   # ============================================================================
