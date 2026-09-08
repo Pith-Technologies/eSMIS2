@@ -66,7 +66,7 @@ the `models` package, which in turn imports individual model files.
     "version": "19.0.1.0.0",
     "category": "eSMIS/Core",
     "summary": "Academic year and term/semester definitions for scheduling and enrollment",
-    "author": "Your Organization",
+    "author": "Pith Technologies",
     "website": "",
     "license": "LGPL-3",
     "development_status": "Alpha",

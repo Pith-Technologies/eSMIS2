@@ -196,7 +196,7 @@ def _generate_readme(target_dir: Path, config: dict) -> None:
 
         ```bash
         # Clone this repository
-        git clone https://github.com/your-org/odoo-project.git
+        git clone https://github.com/pithtech/odoo-project.git
         cd odoo-project
 
         # Start with Docker Compose

@@ -3,7 +3,7 @@
     "version": "19.0.1.0.0",
     "category": "eSMIS/Core",
     "summary": "Standardized approval state machine and workflow definitions",
-    "author": "Your Organization",
+    "author": "Pith Technologies",
     "website": "",
     "license": "LGPL-3",
     "development_status": "Alpha",

@@ -3,7 +3,7 @@
     "version": "19.0.1.0.0",
     "category": "eSMIS/Core",
     "summary": "Configurable code lists for operational and administrative data",
-    "author": "Your Organization",
+    "author": "Pith Technologies",
     "website": "",
     "license": "LGPL-3",
     "development_status": "Alpha",

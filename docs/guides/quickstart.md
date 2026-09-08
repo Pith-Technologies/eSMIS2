@@ -36,7 +36,7 @@ This checks Docker, Docker Compose, Git, pre-commit, and port availability.
 ## Clone and Build
 
 ```bash
-git clone https://github.com/your-org/eSMIS.git
+git clone https://github.com/pithtech/eSMIS2.git
 cd eSMIS
 ./odoo-project build
 ```

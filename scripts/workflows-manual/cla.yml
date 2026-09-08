@@ -13,6 +13,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path-to-signatures: "signatures/version1/cla.json"
-          path-to-document: "https://github.com/your-org/odoo-project/blob/main/CLA.md"
+          path-to-document: "https://github.com/pithtech/odoo-project/blob/main/CLA.md"
           branch: "main"
           allowlist: dependabot[bot],github-actions[bot],odoo-bot
