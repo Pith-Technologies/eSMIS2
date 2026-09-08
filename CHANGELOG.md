@@ -143,7 +143,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Bumped `codecov/codecov-action` from 4 to 5
 - Bumped `docker/setup-buildx-action` from 3 to 4
 - Bumped `github/codeql-action` from 3 to 4
-- Bumped `fastapi` from 0.112.2 to 0.135.1
-- Bumped `git-aggregator` from 4.0 to 4.1
-- Bumped `pillow` from 11.1.0 to 12.1.1
+- Bumped `fastapi` from 0.112.2 to 0.136.1
+- Removed unused `git-aggregator` from Docker requirements
+- Bumped `pillow` from 11.1.0 to 12.3.0 (clears all open advisories against 11.1.0)
 - Updated `websocket-client` from ~=0.56 to ~=1.9

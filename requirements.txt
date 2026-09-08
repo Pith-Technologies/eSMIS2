@@ -8,7 +8,7 @@ cryptography
 extendable-pydantic>=1.2.0
 extendable>=0.0.4
 faker
-fastapi>=0.110.0
+fastapi>=0.136.1
 freezegun>=1.2.0
 geojson
 httpx
