@@ -3,7 +3,7 @@
     "version": "19.0.1.0.0",
     "category": "eSMIS",
     "summary": "Student Management Information System for Philippine HEIs",
-    "author": "Your Organization",
+    "author": "Pith Technologies",
     "website": "",
     "license": "LGPL-3",
     "development_status": "Alpha",

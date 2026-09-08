@@ -110,7 +110,7 @@ services:
   # Odoo - Main web application
   # ==========================================================================
   odoo:
-    image: ${PROJECT_IMAGE:-ghcr.io/your-org/odoo-project:latest}
+    image: ${PROJECT_IMAGE:-ghcr.io/pithtech/odoo-project:latest}
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -244,7 +244,7 @@ services:
   # Queue Worker - Background job processing (OCA/queue_job)
   # ==========================================================================
   queue-worker:
-    image: ${PROJECT_IMAGE:-ghcr.io/your-org/odoo-project:latest}
+    image: ${PROJECT_IMAGE:-ghcr.io/pithtech/odoo-project:latest}
     build:
       context: ..
       dockerfile: docker/Dockerfile

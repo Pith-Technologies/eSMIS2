@@ -68,7 +68,7 @@ A minimum viable SIS (Phases 1-3 plus `esmis_documents`) covers the full student
 ### Getting Started
 
 ```bash
-git clone https://github.com/your-org/eSMIS.git
+git clone https://github.com/pithtech/eSMIS2.git
 cd eSMIS
 ./odoo-project build
 ./odoo-project start       # http://localhost:8069 (admin/admin)
