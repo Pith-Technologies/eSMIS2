@@ -1,5 +1,9 @@
 # Phase 1 Build Plan: Foundation Layer
 
+Status: COMPLETE. Phase 1A shipped; see the module roadmap in the project
+README for what exists today. The unticked boxes below are the original plan,
+kept as a record of intent. They are not a backlog.
+
 Detailed implementation blueprint for Phase 1 of eSMIS. A developer reading this plan
 should not need to reference any other document to implement these modules.
 

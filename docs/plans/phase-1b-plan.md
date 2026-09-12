@@ -1,5 +1,9 @@
 # Phase 1B Build Plan: Student Profile & Address Modules
 
+Status: COMPLETE. `esmis_address`, `esmis_student`, `esmis_ph` and
+`esmis_starter_ph` all shipped. The unticked boxes below are the original
+plan, kept as a record of intent. They are not a backlog.
+
 Detailed implementation blueprint for the second batch of Phase 1 modules. This plan
 covers `esmis_address`, `esmis_student`, `esmis_ph`, and the `esmis_starter` →
 `esmis_starter_ph` rename.

@@ -11,6 +11,7 @@ and RA 10931 (Free Tuition Law).
 docs/
 ├── architecture/        # Architecture decisions and project vision
 │   └── decisions/       # ADRs (Architecture Decision Records)
+├── plans/               # Build plans: time-bound, owned, finished when the work ships
 ├── principles/          # Development standards and guidelines
 ├── guides/              # Developer guides
 ├── research/            # Regulatory and domain research behind the principles
@@ -25,6 +26,7 @@ docs/
 | Understand module integration patterns | [architecture/integration-patterns.md](architecture/integration-patterns.md) |
 | Read coding principles | [principles/](principles/) |
 | Check an ADR | [architecture/decisions/](architecture/decisions/) |
+| Read a build plan, current or past | [plans/](plans/) |
 | Use the developer CLI | [guides/esmis-cli.md](guides/esmis-cli.md) |
 | Create a new module | [guides/module-development.md](guides/module-development.md) |
 | Write and run tests | [guides/testing-guide.md](guides/testing-guide.md) |
