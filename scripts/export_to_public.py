@@ -14,7 +14,17 @@ import re
 import shutil
 import sys
 import textwrap
-import tomllib
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - depends on interpreter
+    try:
+        import tomli as tomllib
+    except ModuleNotFoundError:
+        sys.exit(
+            "export_to_public needs TOML support to read export_config.toml.\n"
+            "Run it with Python 3.11 or newer, or install the backport: pip install tomli"
+        )
 from pathlib import Path
 
 logger = logging.getLogger("export_to_public")
@@ -186,18 +196,31 @@ def _clean_target(target_dir: Path, expected_entries: set[str]) -> None:
 
 def _generate_readme(target_dir: Path, config: dict) -> None:
     """Generate a README.md for the public repo."""
-    modules = config["export"]["modules"]
+    export = config["export"]
+    modules = export["modules"]
+    # Identity comes from config. Hardcoding it produced a README naming the
+    # upstream template repository, which no longer exists, so every generated
+    # README told its readers to clone a 404.
+    repo_name = export.get("repo_name", target_dir.name)
+    repo_url = export.get("repo_url", "")
+    description = export.get(
+        "repo_description",
+        "Open-source modules built on [Odoo 19](https://www.odoo.com/).",
+    )
+    # Two placeholders, not one string with a newline in it: textwrap.dedent
+    # runs before .format(), so an embedded newline keeps its indentation.
+    clone = f"git clone {repo_url}" if repo_url else "# set repo_url in export_config.toml"
     readme = textwrap.dedent("""\
-        # Odoo Project
+        # {repo_name}
 
-        Open-source modules built on [Odoo 19](https://www.odoo.com/).
+        {description}
 
         ## Quick Start
 
         ```bash
         # Clone this repository
-        git clone https://github.com/pithtech/odoo-project.git
-        cd odoo-project
+        {clone}
+        cd {repo_dir}
 
         # Start with Docker Compose
         docker compose --profile ui up -d
@@ -221,6 +244,10 @@ def _generate_readme(target_dir: Path, config: dict) -> None:
 
         LGPL-3. See [LICENSE](LICENSE) for details.
     """).format(
+        repo_name=repo_name,
+        description=description,
+        clone=clone,
+        repo_dir=target_dir.name,
         module_count=len(modules),
         module_list="\n".join(f"- `{m}`" for m in sorted(modules)),
     )

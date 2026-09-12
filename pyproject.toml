@@ -1,3 +1,15 @@
+# Host tooling (./esmis, scripts/) supports Python 3.9 and newer, because the
+# macOS system interpreter is 3.9 and that is what a new contributor has. Odoo
+# itself runs in Docker and has its own, newer interpreter; this bound is about
+# what runs on a developer's machine.
+#
+# 3.11 adds tomllib. Below that, reading ~/.esmis.toml or export_config.toml
+# needs the tomli backport, and each tool says so rather than failing on an
+# import.
+[project]
+name = "esmis"
+requires-python = ">=3.9"
+
 [tool.pytest.ini_options]
 markers = [
     "slow: marks tests that run external tools (deselect with '-m \"not slow\"')",
