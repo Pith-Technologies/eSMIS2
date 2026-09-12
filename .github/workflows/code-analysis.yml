@@ -6,14 +6,12 @@ on:
     paths-ignore:
       - "docs/**"
       - "*.md"
-      - ".claude/**"
       - "readme/**"
   push:
     branches: ["19.0"]
     paths-ignore:
       - "docs/**"
       - "*.md"
-      - ".claude/**"
       - "readme/**"
   schedule:
     # Weekly: Monday at 3am UTC

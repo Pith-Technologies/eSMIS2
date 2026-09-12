@@ -6,14 +6,12 @@ on:
     paths-ignore:
       - 'docs/**'
       - '*.md'
-      - '.claude/**'
       - 'readme/**'
   pull_request:
     branches: ['19.0']
     paths-ignore:
       - 'docs/**'
       - '*.md'
-      - '.claude/**'
       - 'readme/**'
   workflow_dispatch:
     inputs:
