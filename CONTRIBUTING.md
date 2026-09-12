@@ -8,7 +8,8 @@ institutions!
 1. Read the [Development Principles](docs/principles/README.md)
 2. Review the [Architecture](docs/architecture/) and [ADRs](docs/architecture/decisions/)
 3. Check open issues in this repository
-4. Set up your local environment (see [CLAUDE.md](CLAUDE.md) for commands)
+4. Set up your local environment (see the [Quickstart](docs/guides/quickstart.md) and
+   [CLI Guide](docs/guides/esmis-cli.md) for commands)
 
 ## Module Proposals
 
@@ -206,7 +207,7 @@ Examples:
 
 1. Create a feature branch from `main`
 2. Make your changes following the principles and TDD workflow
-3. Write/update tests -- verify they pass with `./odoo-project test <module>`
+3. Write/update tests -- verify they pass with `./esmis test <module>`
 4. Run linters: `pre-commit run --files <changed_files>`
 5. Submit a PR using the template
 6. Address reviewer feedback, especially regulatory compliance checks
@@ -214,12 +215,12 @@ Examples:
 ### Running Tests and Linters
 
 ```bash
-./odoo-project test <module_name>                    # Run module tests
-./odoo-project test <module> --tags=post_install     # Filter by tag
+./esmis test <module_name>                    # Run module tests
+./esmis test <module> --tags=post_install     # Filter by tag
 pre-commit run ruff --files <changed_files>          # Lint Python
 pre-commit run ruff-format --files <changed_files>   # Format Python
 pre-commit run prettier --files <changed_files>      # Format XML/MD/JSON
-./odoo-project audit-security                        # Security/ACL audit
+./esmis audit-security                        # Security/ACL audit
 ```
 
 ## Community

@@ -105,5 +105,10 @@ docker/.env.production
 scripts/run_ci_local.sh
 .github/workflows/ci-local.yml
 
-# Claude Code personal settings (not team-shared)
-.claude/settings.local.json
+# Claude Code configuration. This repository deliberately tracks none of it:
+# the team's lives in the PithTech-Workspace profile and is symlinked in, and
+# an outside contributor's is their own. Without this, a contributor who uses
+# Claude Code and does not have the workspace would have nothing stopping them
+# committing their local config - they have no .git/info/exclude from `ws link`.
+.claude/
+CLAUDE.local.md

@@ -9,12 +9,11 @@ This directory contains practical how-to guides for working with eSMIS. While [p
 | [Module Development](module-development.md)                 | Create, structure, and ship a new module from scratch using TDD and Claude Code |
 | [Testing Guide](testing-guide.md)                           | Write, run, and maintain tests for project modules                             |
 | [Security Audit Guide](security-audit-guide.md)             | Audit, understand, and fix access rights issues in modules                     |
-| [odoo-project CLI](odoo-project-cli.md)                     | Developer CLI for running, testing, and managing the project locally            |
+| [esmis CLI](esmis-cli.md)                     | Developer CLI for running, testing, and managing the project locally            |
 | [Government Export Guide](government-export-guide.md)       | Generate and submit government-mandated reports (CHED HEMIS, eCAV, UniFAST)    |
 | [Multi-Campus Setup](multi-campus-setup-guide.md)           | Configure eSMIS for institutions with multiple campuses                        |
 | [PhilSys Integration](philsys-integration-guide.md)         | Configure and use Philippine National ID (PhilSys) verification                |
 | [Data Breach Response](breach-response-guide.md)            | Step-by-step procedure for responding to a personal data breach                |
-| [Claude Code for Developers](claude-code-for-developers.md) | How Claude Code is configured for this project and how to use it               |
 | [Claude Code Sandbox](claude-code-sandbox.md)               | Run Claude Code safely using DevContainers                                     |
 
 ## How to Use These Guides

@@ -898,4 +898,3 @@ In addition to the [Verification Checklist](#verification-checklist) above, conf
 - `docs/principles/naming-conventions.md` — all naming rules including field types and XML IDs
 - `docs/principles/access-rights.md` — three-tier security, ACL format, record rules
 - `docs/principles/module-descriptions.md` — DESCRIPTION.md anti-patterns and examples
-- `.claude/rules/module-setup.md` — auto-loaded rule summary (loaded when editing `__manifest__.py`)

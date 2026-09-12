@@ -1,10 +1,10 @@
-# odoo-project CLI
+# esmis CLI
 
 Developer CLI for running, testing, and managing your Odoo project locally with Docker.
 
 ## Prerequisites
 
-Run `./odoo-project doctor` to verify your environment:
+Run `./esmis doctor` to verify your environment:
 
 - **Docker** and **Docker Compose v2** (required)
 - **Git** (optional, used by `lint`)
@@ -15,21 +15,21 @@ Run `./odoo-project doctor` to verify your environment:
 
 ```bash
 # 1. Check prerequisites
-./odoo-project doctor
+./esmis doctor
 
 # 2. Build the Docker image
-./odoo-project build
+./esmis build
 
 # 3. Start Odoo
-./odoo-project start
+./esmis start
 
 # 4. Open http://localhost:8069 (admin / admin)
 
 # 5. Run tests
-./odoo-project test esmis_vocabulary
+./esmis test esmis_vocabulary
 
 # 6. Stop everything
-./odoo-project stop
+./esmis stop
 ```
 
 ### init — Initialize from template
@@ -37,9 +37,9 @@ Run `./odoo-project doctor` to verify your environment:
 Replaces the `tpl` placeholder prefix and `eSMIS` name throughout the codebase, then renames `esmis_*` directories to match your project.
 
 ```bash
-./odoo-project init eh EHealth             # replace esmis -> eh, eSMIS -> EHealth
-./odoo-project init --dry-run eh EHealth   # preview changes without modifying files
-./odoo-project init myapp "My App"         # any lowercase prefix works
+./esmis init eh EHealth             # replace esmis -> eh, eSMIS -> EHealth
+./esmis init --dry-run eh EHealth   # preview changes without modifying files
+./esmis init myapp "My App"         # any lowercase prefix works
 ```
 
 | Option          | Description                                      |
@@ -69,11 +69,11 @@ Every command has a short alias shown in parentheses.
 Runs tests in an isolated container that does not affect your running dev instance.
 
 ```bash
-./odoo-project test esmis_vocabulary
-./odoo-project t esmis_vocabulary                     # alias
-./odoo-project test esmis_vocabulary --tags=post_install
-./odoo-project test esmis_vocabulary --local           # force local mode (no Docker)
-./odoo-project test esmis_vocabulary --docker           # force Docker mode
+./esmis test esmis_vocabulary
+./esmis t esmis_vocabulary                     # alias
+./esmis test esmis_vocabulary --tags=post_install
+./esmis test esmis_vocabulary --local           # force local mode (no Docker)
+./esmis test esmis_vocabulary --docker           # force Docker mode
 ```
 
 | Option     | Description                        |
@@ -87,14 +87,14 @@ Runs tests in an isolated container that does not affect your running dev instan
 Starts the Odoo development server. Defaults to the **ui** profile on port 8069.
 
 ```bash
-./odoo-project start                     # default: ui profile, port 8069
-./odoo-project s                         # alias
-./odoo-project start --profile dev       # dynamic port, auto-reload enabled
-./odoo-project start --demo=base         # install base demo data on start
-./odoo-project start --wipe              # wipe all data first (fresh DB)
-./odoo-project start --wipe --demo=base  # fresh start with demo data
-./odoo-project start --no-build          # skip Docker image freshness check
-./odoo-project start -y                  # auto-confirm prompts (rebuild, etc.)
+./esmis start                     # default: ui profile, port 8069
+./esmis s                         # alias
+./esmis start --profile dev       # dynamic port, auto-reload enabled
+./esmis start --demo=base         # install base demo data on start
+./esmis start --wipe              # wipe all data first (fresh DB)
+./esmis start --wipe --demo=base  # fresh start with demo data
+./esmis start --no-build          # skip Docker image freshness check
+./esmis start -y                  # auto-confirm prompts (rebuild, etc.)
 ```
 
 | Option        | Description                                              |
@@ -111,10 +111,10 @@ Starts the Odoo development server. Defaults to the **ui** profile on port 8069.
 Stops all Docker containers across all profiles.
 
 ```bash
-./odoo-project stop
-./odoo-project stop -v           # also remove volumes (deletes DB data)
-./odoo-project stop -y           # skip confirmation prompt
-./odoo-project stop -v -y        # remove volumes without confirmation
+./esmis stop
+./esmis stop -v           # also remove volumes (deletes DB data)
+./esmis stop -y           # skip confirmation prompt
+./esmis stop -v -y        # remove volumes without confirmation
 ```
 
 | Option        | Description                       |
@@ -127,8 +127,8 @@ Stops all Docker containers across all profiles.
 Auto-detects which profile is running and restarts the Odoo container.
 
 ```bash
-./odoo-project restart
-./odoo-project r                 # alias
+./esmis restart
+./esmis r                 # alias
 ```
 
 ### resetdb — Reset database
@@ -136,10 +136,10 @@ Auto-detects which profile is running and restarts the Odoo container.
 Drops and recreates the database. Use with `start` to initialize with modules.
 
 ```bash
-./odoo-project resetdb -y                          # reset with defaults
-./odoo-project resetdb --demo=base -y              # reset with demo profile
-./odoo-project resetdb --db=mydb -y                # reset a named database
-./odoo-project resetdb --demo=base start           # reset then start (chained)
+./esmis resetdb -y                          # reset with defaults
+./esmis resetdb --demo=base -y              # reset with demo profile
+./esmis resetdb --db=mydb -y                # reset a named database
+./esmis resetdb --demo=base start           # reset then start (chained)
 ```
 
 | Option     | Description                                            |
@@ -153,9 +153,9 @@ Drops and recreates the database. Use with `start` to initialize with modules.
 Uses `click-odoo-update` to auto-detect changed modules based on file checksums.
 
 ```bash
-./odoo-project update
-./odoo-project u                      # alias
-./odoo-project update --db=mydb       # target a specific database
+./esmis update
+./esmis u                      # alias
+./esmis update --db=mydb       # target a specific database
 ```
 
 | Option | Description                     |
@@ -167,10 +167,10 @@ Uses `click-odoo-update` to auto-detect changed modules based on file checksums.
 Builds the Docker image for the specified profile.
 
 ```bash
-./odoo-project build
-./odoo-project b                      # alias
-./odoo-project build --no-cache       # full rebuild without cache
-./odoo-project build --profile dev    # build dev profile image
+./esmis build
+./esmis b                      # alias
+./esmis build --no-cache       # full rebuild without cache
+./esmis build --profile dev    # build dev profile image
 ```
 
 | Option       | Description                       |
@@ -183,11 +183,11 @@ Builds the Docker image for the specified profile.
 Shows container logs. Auto-detects the running Odoo service.
 
 ```bash
-./odoo-project logs
-./odoo-project l                      # alias
-./odoo-project logs -f                # follow (stream) logs
-./odoo-project logs --tail 50         # last 50 lines
-./odoo-project logs db                # show database logs
+./esmis logs
+./esmis l                      # alias
+./esmis logs -f                # follow (stream) logs
+./esmis logs --tail 50         # last 50 lines
+./esmis logs db                # show database logs
 ```
 
 | Option        | Description                        |
@@ -201,10 +201,10 @@ Shows container logs. Auto-detects the running Odoo service.
 Opens an interactive Odoo Python shell connected to the running instance.
 
 ```bash
-./odoo-project shell
-./odoo-project sh                     # alias
-./odoo-project shell --db             # open PostgreSQL shell instead
-./odoo-project shell -d mydb          # connect to a specific database
+./esmis shell
+./esmis sh                     # alias
+./esmis shell --db             # open PostgreSQL shell instead
+./esmis shell -d mydb          # connect to a specific database
 ```
 
 | Option          | Description                              |
@@ -217,10 +217,10 @@ Opens an interactive Odoo Python shell connected to the running instance.
 Opens an interactive PostgreSQL shell or executes a query directly.
 
 ```bash
-./odoo-project sql                                           # interactive psql
-./odoo-project sql "SELECT name FROM esmis_vocabulary"         # run a query
-./odoo-project sql -f scripts/report.sql                     # run SQL from file
-./odoo-project sql -d mydb "SELECT 1"                        # target specific DB
+./esmis sql                                           # interactive psql
+./esmis sql "SELECT name FROM esmis_vocabulary"         # run a query
+./esmis sql -f scripts/report.sql                     # run SQL from file
+./esmis sql -d mydb "SELECT 1"                        # target specific DB
 ```
 
 | Option          | Description                     |
@@ -234,8 +234,8 @@ Opens an interactive PostgreSQL shell or executes a query directly.
 Displays the URL of the running Odoo instance.
 
 ```bash
-./odoo-project url
-./odoo-project url --open             # open in default browser
+./esmis url
+./esmis url --open             # open in default browser
 ```
 
 | Option      | Description             |
@@ -247,8 +247,8 @@ Displays the URL of the running Odoo instance.
 Runs `ruff`, `ruff-format`, and `prettier` via pre-commit on specified files.
 
 ```bash
-./odoo-project lint                                   # lint changed files (git diff)
-./odoo-project lint esmis_vocabulary/models/*.py        # lint specific files
+./esmis lint                                   # lint changed files (git diff)
+./esmis lint esmis_vocabulary/models/*.py        # lint specific files
 ```
 
 | Option  | Description                                      |
@@ -260,8 +260,8 @@ Runs `ruff`, `ruff-format`, and `prettier` via pre-commit on specified files.
 Shows running Docker containers.
 
 ```bash
-./odoo-project status
-./odoo-project st                     # alias
+./esmis status
+./esmis st                     # alias
 ```
 
 ### doctor — Check prerequisites
@@ -269,7 +269,7 @@ Shows running Docker containers.
 Verifies that all required and optional tools are installed.
 
 ```bash
-./odoo-project doctor
+./esmis doctor
 ```
 
 Checks: Docker, Docker Compose, Docker daemon, Git, pre-commit, argcomplete, config file, port 8069.
@@ -280,7 +280,7 @@ Outputs a shell script that enables tab completion for commands and module names
 
 ```bash
 # Add to your shell profile (~/.zshrc or ~/.bashrc)
-eval "$(./odoo-project activate)"
+eval "$(./esmis activate)"
 ```
 
 Requires `argcomplete` (`pip install argcomplete`).
@@ -290,9 +290,9 @@ Requires `argcomplete` (`pip install argcomplete`).
 Applies automatic fixes for Odoo 19 Command API tuples in Python files.
 
 ```bash
-./odoo-project fix-odoo19                        # fix all modules
-./odoo-project fix-odoo19 esmis_vocabulary          # fix specific module
-./odoo-project fix-odoo19 --dry-run               # preview changes
+./esmis fix-odoo19                        # fix all modules
+./esmis fix-odoo19 esmis_vocabulary          # fix specific module
+./esmis fix-odoo19 --dry-run               # preview changes
 ```
 
 | Option          | Description                                    |
@@ -305,9 +305,9 @@ Applies automatic fixes for Odoo 19 Command API tuples in Python files.
 Runs ruff, pylint, and prettier across module files and optionally invokes an AI agent for remaining issues.
 
 ```bash
-./odoo-project fix-lint esmis_vocabulary            # fix specific module
-./odoo-project fix-lint                           # fix all modules
-./odoo-project fix-lint esmis_vocabulary --lint-only # linters only, no AI
+./esmis fix-lint esmis_vocabulary            # fix specific module
+./esmis fix-lint                           # fix all modules
+./esmis fix-lint esmis_vocabulary --lint-only # linters only, no AI
 ```
 
 | Option        | Description                                      |
@@ -320,10 +320,10 @@ Runs ruff, pylint, and prettier across module files and optionally invokes an AI
 Applies mechanical fixes for Odoo 19 security issues (tuple syntax, field renames) and optionally invokes an AI agent for complex issues.
 
 ```bash
-./odoo-project fix-security esmis_vocabulary        # fix specific module
-./odoo-project fix-security --all                 # fix all modules with issues
-./odoo-project fix-security --dry-run esmis_api     # preview changes
-./odoo-project fix-security --mechanical-only esmis_api  # no AI
+./esmis fix-security esmis_vocabulary        # fix specific module
+./esmis fix-security --all                 # fix all modules with issues
+./esmis fix-security --dry-run esmis_api     # preview changes
+./esmis fix-security --mechanical-only esmis_api  # no AI
 ```
 
 | Option              | Description                                      |
@@ -338,10 +338,10 @@ Applies mechanical fixes for Odoo 19 security issues (tuple syntax, field rename
 Audits modules for access rights compliance using the Python security audit script.
 
 ```bash
-./odoo-project audit-security                     # audit all modules
-./odoo-project audit-security esmis_vocabulary      # audit specific module
-./odoo-project audit-security --report            # generate markdown report
-./odoo-project audit-security --json              # output as JSON
+./esmis audit-security                     # audit all modules
+./esmis audit-security esmis_vocabulary      # audit specific module
+./esmis audit-security --report            # generate markdown report
+./esmis audit-security --json              # output as JSON
 ```
 
 | Option     | Description                          |
@@ -355,10 +355,10 @@ Audits modules for access rights compliance using the Python security audit scri
 Audits modules against project principles using an AI agent (requires `cursor-agent` or `claude`).
 
 ```bash
-./odoo-project audit-modules                      # audit all modules
-./odoo-project audit-modules esmis_vocabulary       # audit specific module
-./odoo-project audit-modules --fix                # auto-fix simple issues
-./odoo-project audit-modules --fix --commit       # fix and commit
+./esmis audit-modules                      # audit all modules
+./esmis audit-modules esmis_vocabulary       # audit specific module
+./esmis audit-modules --fix                # auto-fix simple issues
+./esmis audit-modules --fix --commit       # fix and commit
 ```
 
 | Option    | Description                                    |
@@ -379,8 +379,8 @@ Demo profiles are predefined sets of modules to install:
 Use with `start` or `resetdb`:
 
 ```bash
-./odoo-project start --demo=base
-./odoo-project resetdb --demo=base -y
+./esmis start --demo=base
+./esmis resetdb --demo=base -y
 ```
 
 ## Command Chaining
@@ -388,9 +388,9 @@ Use with `start` or `resetdb`:
 Commands can be chained in a single invocation. Options apply to the preceding command.
 
 ```bash
-./odoo-project resetdb --demo=base start         # reset DB, then start
-./odoo-project stop start --wipe                  # stop, then wipe and start
-./odoo-project resetdb --demo=base start --wipe   # reset, then wipe and start
+./esmis resetdb --demo=base start         # reset DB, then start
+./esmis stop start --wipe                  # stop, then wipe and start
+./esmis resetdb --demo=base start --wipe   # reset, then wipe and start
 ```
 
 ## Dry Run Mode
@@ -398,13 +398,13 @@ Commands can be chained in a single invocation. Options apply to the preceding c
 Add `--dry-run` (or `-n`) to see what commands would be executed without running them.
 
 ```bash
-./odoo-project --dry-run start
-./odoo-project -n stop -v
+./esmis --dry-run start
+./esmis -n stop -v
 ```
 
 ## Configuration
 
-Defaults can be customized via `~/.odoo-project.toml`:
+Defaults can be customized via `~/.esmis.toml`:
 
 ```toml
 default_demo = "base"       # auto-install demo on start
@@ -415,7 +415,7 @@ default_db = "odoo"          # database name
 Create the file:
 
 ```bash
-echo 'default_profile = "ui"' > ~/.odoo-project.toml
+echo 'default_profile = "ui"' > ~/.esmis.toml
 ```
 
 ## Common Workflows
@@ -423,43 +423,43 @@ echo 'default_profile = "ui"' > ~/.odoo-project.toml
 ### Fresh start with demo data
 
 ```bash
-./odoo-project start --wipe --demo=base -y
+./esmis start --wipe --demo=base -y
 ```
 
 ### Daily development
 
 ```bash
-./odoo-project start                # start Odoo
+./esmis start                # start Odoo
 # ... make code changes ...
-./odoo-project update               # auto-detect and upgrade changed modules
-./odoo-project test esmis_vocabulary   # run tests
-./odoo-project lint                  # lint changed files
+./esmis update               # auto-detect and upgrade changed modules
+./esmis test esmis_vocabulary   # run tests
+./esmis lint                  # lint changed files
 ```
 
 ### Debugging a module
 
 ```bash
-./odoo-project start
-./odoo-project shell                 # open Odoo shell
+./esmis start
+./esmis shell                 # open Odoo shell
 >>> env['esmis.vocabulary'].search([])
 
-./odoo-project sql "SELECT * FROM esmis_vocabulary"
-./odoo-project logs -f               # watch logs in real time
+./esmis sql "SELECT * FROM esmis_vocabulary"
+./esmis logs -f               # watch logs in real time
 ```
 
 ### Quick test cycle
 
 ```bash
-./odoo-project test esmis_vocabulary
-./odoo-project test esmis_vocabulary --tags=post_install
+./esmis test esmis_vocabulary
+./esmis test esmis_vocabulary --tags=post_install
 ```
 
 ### Complete reset
 
 ```bash
-./odoo-project stop -v -y            # stop and delete all data
-./odoo-project build --no-cache      # full rebuild
-./odoo-project start --demo=base     # fresh start with demo
+./esmis stop -v -y            # stop and delete all data
+./esmis build --no-cache      # full rebuild
+./esmis start --demo=base     # fresh start with demo
 ```
 
 ## Troubleshooting
@@ -467,8 +467,8 @@ echo 'default_profile = "ui"' > ~/.odoo-project.toml
 ### Port 8069 already in use
 
 ```bash
-./odoo-project doctor                # will show port status
-./odoo-project stop                  # stop any running containers
+./esmis doctor                # will show port status
+./esmis stop                  # stop any running containers
 ```
 
 ### Docker image seems stale
@@ -476,7 +476,7 @@ echo 'default_profile = "ui"' > ~/.odoo-project.toml
 The CLI auto-detects when `Dockerfile` or `requirements.txt` change and prompts to rebuild. To force:
 
 ```bash
-./odoo-project build --no-cache
+./esmis build --no-cache
 ```
 
 ### Tests fail but dev instance works
@@ -484,21 +484,21 @@ The CLI auto-detects when `Dockerfile` or `requirements.txt` change and prompts 
 Tests run in an isolated container with a temporary database. Check:
 
 ```bash
-./odoo-project test esmis_vocabulary   # re-run tests
-./odoo-project logs                  # check logs for errors
+./esmis test esmis_vocabulary   # re-run tests
+./esmis logs                  # check logs for errors
 ```
 
 ### Module not updating after code changes
 
 ```bash
-./odoo-project update                # auto-detect and upgrade changed modules
-./odoo-project restart               # restart if update doesn't pick up changes
+./esmis update                # auto-detect and upgrade changed modules
+./esmis restart               # restart if update doesn't pick up changes
 ```
 
 ### Database connection issues
 
 ```bash
-./odoo-project doctor                # check Docker daemon is running
-./odoo-project status                # check container states
-./odoo-project logs db               # check database logs
+./esmis doctor                # check Docker daemon is running
+./esmis status                # check container states
+./esmis logs db               # check database logs
 ```

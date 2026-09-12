@@ -3,7 +3,7 @@
 # Tests custom Odoo modules upgraded to Odoo 19.0
 #
 # Platform: Linux only (Claude Code remote / CI containers)
-# For local development, use: ./odoo-project test <module>
+# For local development, use: ./esmis test <module>
 
 set -e  # Exit on error
 

@@ -57,7 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Module development guide (TDD workflow with Claude Code)
 - Testing guide (writing, running, maintaining tests)
 - Security audit guide (audit commands, fixing access rights)
-- `odoo-project` CLI reference
+- `esmis` CLI reference
 - Claude Code for developers
 - Claude Code sandbox (DevContainers)
 - Government export guide (CHED HEMIS, eCAV, UniFAST)
@@ -99,7 +99,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 #### Infrastructure — Developer Tooling
 
-- `odoo-project` CLI (build, start, stop, test, audit, lint, fix)
+- `esmis` CLI (build, start, stop, test, audit, lint, fix)
 - Pre-commit hooks (ruff, prettier, eslint, pylint, mypy, semgrep)
 - Claude Code agents (odoo-developer, code-reviewer, ux-expert, code-simplifier, verify-module)
 - Claude Code commands (implement, verify-tests, analyze, expert-review, commit, pr)

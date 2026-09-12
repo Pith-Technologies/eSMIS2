@@ -2,8 +2,8 @@
 # Odoo Project Docker - Optimized Multi-Stage Build
 # Based on Odoo 19.0 (OCB) with custom modules
 #
-# Build: docker build -f docker/Dockerfile -t odoo-project .
-# Build dev target: docker build --target dev -f docker/Dockerfile -t odoo-project:dev .
+# Build: docker build -f docker/Dockerfile -t esmis .
+# Build dev target: docker build --target dev -f docker/Dockerfile -t esmis:dev .
 
 ARG PYTHON_VERSION=3.13
 
