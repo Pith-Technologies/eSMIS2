@@ -153,6 +153,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Updated project documentation for Philippine SIS domain
 - CI workflows skip on docs-only changes via `paths-ignore`
 
+### Removed
+
+- The public-export subsystem: `scripts/export_to_public.py`, `scripts/export_config.toml` and
+  `scripts/tests/test_export_to_public.py`. It came from the project template this repository was generated from, where
+  a private development repo published a curated slice of itself to a separate public one — stripping self-hosted
+  runners and an internal Docker registry mirror on the way out. eSMIS2 is itself the public repository and has neither
+  of those, so the transformations had nothing to act on. Its output manifest also excluded `docs/` entirely, generated
+  a stub README over the real one, and deleted anything in the target it did not recognise, so running it could only
+  produce something worse than the repository it ran in.
+
 ### Security
 
 - Semgrep rules for Odoo-specific security patterns
