@@ -120,9 +120,7 @@ class ApprovalMixin(models.AbstractModel):
         """
         for record in self:
             if record.approval_state != "pending":
-                raise UserError(
-                    _("Only records in Pending state can be approved. (ID: %(id)s)") % {"id": record.id}
-                )
+                raise UserError(_("Only records in Pending state can be approved. (ID: %(id)s)") % {"id": record.id})
             if record.submitted_by_id and record.submitted_by_id.id == self.env.uid:
                 raise UserError(
                     _(
@@ -161,9 +159,7 @@ class ApprovalMixin(models.AbstractModel):
             raise UserError(_("A rejection reason is required."))
         for record in self:
             if record.approval_state != "pending":
-                raise UserError(
-                    _("Only records in Pending state can be rejected. (ID: %(id)s)") % {"id": record.id}
-                )
+                raise UserError(_("Only records in Pending state can be rejected. (ID: %(id)s)") % {"id": record.id})
             record.write(
                 {
                     "approval_state": "rejected",
@@ -190,9 +186,7 @@ class ApprovalMixin(models.AbstractModel):
         """
         for record in self:
             if record.approval_state != "rejected":
-                raise UserError(
-                    _("Only rejected records can be reset to draft. (ID: %(id)s)") % {"id": record.id}
-                )
+                raise UserError(_("Only rejected records can be reset to draft. (ID: %(id)s)") % {"id": record.id})
             record.write(
                 {
                     "approval_state": "draft",
@@ -224,8 +218,7 @@ class ApprovalMixin(models.AbstractModel):
         for record in self:
             if record.approval_state != "pending":
                 raise UserError(
-                    _("Only records in Pending state can have a revision requested. (ID: %(id)s)")
-                    % {"id": record.id}
+                    _("Only records in Pending state can have a revision requested. (ID: %(id)s)") % {"id": record.id}
                 )
             record.write({"approval_state": "revision"})
             _logger.info(
@@ -257,6 +250,4 @@ class ApprovalMixin(models.AbstractModel):
         valid = {"draft", "pending", "approved", "rejected", "revision"}
         for record in self:
             if record.approval_state not in valid:
-                raise ValidationError(
-                    _("Unknown approval state '%(state)s'.") % {"state": record.approval_state}
-                )
+                raise ValidationError(_("Unknown approval state '%(state)s'.") % {"state": record.approval_state})

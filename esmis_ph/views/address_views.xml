@@ -5,8 +5,8 @@
          the user is entering a Philippine address using the PSGC hierarchy.
          The generic city and state_province fields are hidden when a PSGC
          region is selected, since the PSGC hierarchy replaces them. -->
-    <record id="view_esmis_address_ph_fields" model="ir.ui.view">
-        <field name="name">esmis.address.ph.fields</field>
+    <record id="view_esmis_address_form_ph" model="ir.ui.view">
+        <field name="name">esmis.address.form.ph</field>
         <field name="model">esmis.address</field>
         <field name="inherit_id" ref="esmis_address.view_esmis_address_form_inline"/>
         <field name="arch" type="xml">

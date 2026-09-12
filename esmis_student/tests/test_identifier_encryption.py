@@ -1,6 +1,8 @@
 import base64
 import os
 
+from psycopg2 import IntegrityError
+
 from odoo.tests.common import TransactionCase
 
 
@@ -161,7 +163,7 @@ class TestIdentifierEncryption(TransactionCase):
         transaction for subsequent tests.
         """
         self._make_identifier("FIRST-ID-001")
-        with self.assertRaises(Exception), self.cr.savepoint():
+        with self.assertRaises(IntegrityError), self.cr.savepoint():
             self._make_identifier("SECOND-ID-001")
 
     def test_cascade_delete_with_partner(self):

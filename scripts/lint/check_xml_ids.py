@@ -96,6 +96,14 @@ NAMING_RULES = {
             r"^group_[a-z0-9_]+_restrict_[a-z0-9_]+$",  # Technical restriction groups
             # Module-specific roles
             r"^group_[a-z0-9_]+_(agent|validator|applicator|administrator|external_api|local_validator|hq_validator)$",
+            # eSMIS institutional roles. These name offices defined by Philippine
+            # higher-education regulation or by an institution's own structure,
+            # not generic privilege levels, so {domain}_{level} does not apply.
+            # 'dpo' in particular is the statutory term in RA 10173; renaming it
+            # to fit a pattern would obscure the role it implements.
+            r"^group_esmis_(dpo|president|vp_academic|ched_reporter)$",
+            # Self-service scope: a data subject acting on their own record.
+            r"^group_esmis_[a-z0-9_]+_self$",
             r"^category_[a-z0-9_]+$",
         ],
         "description": "Group IDs should follow 'group_{domain}_{level}' or 'category_{domain}' pattern",

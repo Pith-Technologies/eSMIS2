@@ -1,6 +1,7 @@
 # Contributing to eSMIS
 
-Thank you for your interest in contributing to the Student Management Information System for Philippine higher education institutions!
+Thank you for your interest in contributing to the Student Management Information System for Philippine higher education
+institutions!
 
 ## Getting Started
 
@@ -15,16 +16,20 @@ All new `esmis_*` modules go through a proposal process before implementation.
 
 ### Steps
 
-1. **File a Module Request issue** describing the module's purpose, which layer it belongs to (see the [module dependency graph](docs/architecture/implementation-roadmap.md)), and what problems it solves.
-2. **Create an ADR** if the module involves architectural decisions (new integrations, data model changes, cross-module dependencies). Place it in `docs/architecture/decisions/` following the existing numbering convention.
-3. **Get team review** before writing code. The issue should be approved and the ADR accepted. This prevents wasted effort on modules that overlap with existing plans or violate architectural constraints.
+1. **File a Module Request issue** describing the module's purpose, which layer it belongs to (see the
+   [module dependency graph](docs/architecture/implementation-roadmap.md)), and what problems it solves.
+2. **Create an ADR** if the module involves architectural decisions (new integrations, data model changes, cross-module
+   dependencies). Place it in `docs/architecture/decisions/` following the existing numbering convention.
+3. **Get team review** before writing code. The issue should be approved and the ADR accepted. This prevents wasted
+   effort on modules that overlap with existing plans or violate architectural constraints.
 4. **Reference the dependency graph** in your implementation. Modules must respect the layer hierarchy:
    - Layer 1 (Foundation) modules depend only on Layer 0 (Odoo Core)
    - Layer 2 (Domain Core) modules depend on Layer 1
    - Layer 3 (Domain Extensions) depend on Layer 2
    - Layer 4 (Portals & Integrations) depend on Layer 3
 
-See [Module Architecture](docs/principles/module-architecture.md) and [Module Visibility](docs/principles/module-visibility.md) for naming and manifest rules.
+See [Module Architecture](docs/principles/module-architecture.md) and
+[Module Visibility](docs/principles/module-visibility.md) for naming and manifest rules.
 
 ## Adding Vocabularies
 
@@ -59,7 +64,9 @@ Vocabularies live in `esmis_vocabulary/data/` as XML data files. Follow the esta
 
 - Use `noupdate="1"` so user customizations are preserved on upgrade.
 - Set `is_system` to `True` for system-managed vocabularies that users should not delete.
-- Provide a real `namespace_uri` using the `urn:tpl:vocab:` prefix (see [ADR-002](docs/architecture/decisions/ADR-002-namespace-uris-for-identifiers.md) and [ADR-003](docs/architecture/decisions/ADR-003-terminology-system.md)).
+- Provide a real `namespace_uri` using the `urn:tpl:vocab:` prefix (see
+  [ADR-002](docs/architecture/decisions/ADR-002-namespace-uris-for-identifiers.md) and
+  [ADR-003](docs/architecture/decisions/ADR-003-terminology-system.md)).
 - Include human-readable `display` text and a `description` on the vocabulary itself.
 - Use `sequence` values in increments of 10 to allow future insertions.
 - Add the new XML file to the `data` list in `esmis_vocabulary/__manifest__.py`.
@@ -78,9 +85,12 @@ Use `esmis_{feature}_{country_code}` for country-specific modules:
 
 ### Guidelines
 
-- **Use `_inherit` to extend base models** with country-specific fields and methods. The base module (e.g., `esmis_grading`) defines the shared interface; the country module adds localized behavior.
-- **Never add country-specific logic to base modules.** If you find yourself writing `if country == 'PH':` in a base module, that logic belongs in a country module instead.
-- **Use `excludes` in the manifest** for mutually exclusive country modules. This prevents installing two conflicting country variants simultaneously:
+- **Use `_inherit` to extend base models** with country-specific fields and methods. The base module (e.g.,
+  `esmis_grading`) defines the shared interface; the country module adds localized behavior.
+- **Never add country-specific logic to base modules.** If you find yourself writing `if country == 'PH':` in a base
+  module, that logic belongs in a country module instead.
+- **Use `excludes` in the manifest** for mutually exclusive country modules. This prevents installing two conflicting
+  country variants simultaneously:
 
 ```python
 {
@@ -89,7 +99,8 @@ Use `esmis_{feature}_{country_code}` for country-specific modules:
 }
 ```
 
-- **Keep vocabularies country-aware.** Country-specific code lists (e.g., Philippine civil status values from PSA) belong in the country module, not the base vocabulary data.
+- **Keep vocabularies country-aware.** Country-specific code lists (e.g., Philippine civil status values from PSA)
+  belong in the country module, not the base vocabulary data.
 
 ## Regulatory Compliance in PRs
 
@@ -97,13 +108,14 @@ Reviewers check every PR against RA 10173 (Data Privacy Act) and related regulat
 
 ### PII Classification
 
-Every new field that stores personal data must be classified using the [4-tier model](docs/architecture/decisions/ADR-005-data-classification-system.md):
+Every new field that stores personal data must be classified using the
+[4-tier model](docs/architecture/decisions/ADR-005-data-classification-system.md):
 
-| Tier | Category        | Examples                              | Requirements                      |
-| ---- | --------------- | ------------------------------------- | --------------------------------- |
-| 0    | Public          | Institution name, program title       | Standard access control           |
-| 1    | Internal        | Enrollment status, section assignment | Role-based access                 |
-| 2    | Confidential    | Home address, contact number          | Consent + role-based access       |
+| Tier | Category        | Examples                              | Requirements                       |
+| ---- | --------------- | ------------------------------------- | ---------------------------------- |
+| 0    | Public          | Institution name, program title       | Standard access control            |
+| 1    | Internal        | Enrollment status, section assignment | Role-based access                  |
+| 2    | Confidential    | Home address, contact number          | Consent + role-based access        |
 | 3    | Sensitive (SPI) | Grades, national ID, medical records  | Consent + encryption + audit + MFA |
 
 ### Checklist for PR Authors
@@ -117,7 +129,9 @@ Every new field that stores personal data must be classified using the [4-tier m
 - [ ] Tests verify access control and consent enforcement for new PII fields
 - [ ] MFA consideration documented for views accessing Tier 3 data
 
-See [Data Privacy and PII](docs/principles/data-privacy-and-pii.md), [Consent Management](docs/principles/consent-management.md), and [ADR-012](docs/architecture/decisions/ADR-012-student-data-privacy-ra10173.md) for details.
+See [Data Privacy and PII](docs/principles/data-privacy-and-pii.md),
+[Consent Management](docs/principles/consent-management.md), and
+[ADR-012](docs/architecture/decisions/ADR-012-student-data-privacy-ra10173.md) for details.
 
 ## Code Standards
 
@@ -125,11 +139,13 @@ Detailed standards are in `docs/principles/`. Here is a summary of what every co
 
 ### Naming Conventions
 
-All modules use `esmis_*` technical names and `esmis.*` model names. See [Naming Conventions](docs/principles/naming-conventions.md).
+All modules use `esmis_*` technical names and `esmis.*` model names. See
+[Naming Conventions](docs/principles/naming-conventions.md).
 
 ### Odoo 19 Compatibility
 
-Use the Odoo 19 API (Command tuples, `@api.depends`, etc.). See [Odoo 19 Compatibility](docs/principles/odoo19-compatibility.md).
+Use the Odoo 19 API (Command tuples, `@api.depends`, etc.). See
+[Odoo 19 Compatibility](docs/principles/odoo19-compatibility.md).
 
 ### Error Handling and PII Protection
 
@@ -181,6 +197,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) in imperative m
 Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
 
 Examples:
+
 - `feat(enrollment): add pre-enrollment validation for free tuition eligibility`
 - `fix(grading): prevent grade posting without consent verification`
 - `docs(privacy): add RA 10173 consent flow diagrams`
@@ -213,11 +230,11 @@ pre-commit run prettier --files <changed_files>      # Format XML/MD/JSON
 
 ## Documentation
 
-| Document                                                       | Purpose                           |
-| -------------------------------------------------------------- | --------------------------------- |
-| [docs/principles/](docs/principles/)                           | Development standards             |
-| [docs/architecture/](docs/architecture/)                       | Architecture decisions            |
-| [docs/architecture/decisions/](docs/architecture/decisions/)   | ADRs for significant decisions    |
+| Document                                                                                   | Purpose                           |
+| ------------------------------------------------------------------------------------------ | --------------------------------- |
+| [docs/principles/](docs/principles/)                                                       | Development standards             |
+| [docs/architecture/](docs/architecture/)                                                   | Architecture decisions            |
+| [docs/architecture/decisions/](docs/architecture/decisions/)                               | ADRs for significant decisions    |
 | [docs/architecture/implementation-roadmap.md](docs/architecture/implementation-roadmap.md) | Module dependency graph & roadmap |
 
 ## Questions?

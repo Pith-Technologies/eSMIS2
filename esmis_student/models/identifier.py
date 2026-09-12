@@ -39,8 +39,7 @@ def _get_encryption_key():
         )
     except (ValueError, base64.binascii.Error):
         _logger.warning(
-            "ESMIS_ENCRYPTION_KEY env var is set but cannot be base64-decoded; "
-            "falling back to ir.config_parameter"
+            "ESMIS_ENCRYPTION_KEY env var is set but cannot be base64-decoded; " "falling back to ir.config_parameter"
         )
     return None
 
@@ -146,6 +145,7 @@ class EsmisIdentifier(models.Model):
         if key_bytes is None:
             # Attempt to read from ir.config_parameter (sudo because the
             # parameter is system-level and should not be ACL-gated per user).
+            # nosemgrep: odoo-sudo-without-context
             ICP = self.env["ir.config_parameter"].sudo()
             stored = ICP.get_param(_ENCRYPTION_KEY_PARAM)
             if stored:
@@ -278,6 +278,10 @@ class EsmisIdentifier(models.Model):
         """Compute HMAC-SHA256 blind index without requiring a record instance."""
         key_bytes = _get_encryption_key()
         if key_bytes is None:
+            # sudo: same system-level parameter as _get_encryption_key above.
+            # Scoped to a single get_param; the key itself is never returned to
+            # the caller, only the derived blind index.
+            # nosemgrep: odoo-sudo-without-context
             stored = self.env["ir.config_parameter"].sudo().get_param(_ENCRYPTION_KEY_PARAM)
             if stored:
                 key_bytes = _decode_stored_key(stored)
