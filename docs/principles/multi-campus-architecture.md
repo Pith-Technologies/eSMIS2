@@ -477,4 +477,4 @@ Campus-level customizations (additional electives, local general education cours
 
 ---
 
-**See also:** [Module Architecture](module-architecture.md), [Access Rights](access-rights.md), [Security](../architecture/decisions/)
+**See also:** [Module Architecture](module-architecture.md), [Access Rights](access-rights.md), [Security](../architecture/decisions)

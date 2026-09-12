@@ -18,6 +18,6 @@ See our [Vulnerability Disclosure Policy](vulnerability_disclosure_policy.md) fo
 
 ## Security Documentation
 
-- [Security Audit Guide](docs/guides/security-audit-guide.md)
+- [Security Audit Guide](docs/runbooks/security-audit.md)
 - [Access Rights Principles](docs/principles/access-rights.md)
-- [Security Scanning](docs/security/SECURITY_SCANNING.md)
+- [Security Scanning](docs/guides/security-scanning.md)

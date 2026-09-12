@@ -118,4 +118,4 @@ Run these checks against real test data, not just empty campuses.
 
 - `docs/principles/access-rights.md` — record rules, campus scoping via `company_id`, system-wide groups
 - `docs/principles/module-architecture.md` — which models carry `company_id` (campus-scoped) and which are shared
-- `docs/guides/government-export-guide.md` — how HEMIS export aggregates multi-campus data
+- `docs/runbooks/government-export.md` — how HEMIS export aggregates multi-campus data

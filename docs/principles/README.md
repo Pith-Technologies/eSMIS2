@@ -45,7 +45,7 @@ This directory contains the core principles and standards that guide eSMIS devel
 
 These principles are extracted from and complement:
 
-- [Architecture Decisions](../architecture/decisions/) - Architectural Decision Records (ADRs)
+- [Architecture Decisions](../architecture/decisions) - Architectural Decision Records (ADRs)
 
 ## Contributing
 

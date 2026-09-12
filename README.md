@@ -121,16 +121,16 @@ modules across the foundation, and made `esmis_starter_ph` the only entry in
 the Apps menu. See [Phase 1B Plan](docs/plans/phase-1b-plan.md) and
 [ADR-018](docs/architecture/decisions/ADR-018-menu-architecture.md).
 
-For details, see [Architecture Vision](docs/architecture/vision.md), [Integration Patterns](docs/architecture/integration-patterns.md), and [Architecture Decisions](docs/architecture/decisions/).
+For details, see [Architecture Vision](docs/architecture/vision.md), [Integration Patterns](docs/architecture/integration-patterns.md), and [Architecture Decisions](docs/architecture/decisions).
 
 ## Documentation
 
 | Area | Location | Description |
 |------|----------|-------------|
-| Architecture & ADRs | [docs/architecture/](docs/architecture/) | System architecture, module map, and decision records |
-| Development Principles | [docs/principles/](docs/principles/) | Naming, security, UI, regulatory compliance, data privacy |
-| Developer Guides | [docs/guides/](docs/guides/) | CLI usage, module development, testing, Claude Code workflow |
-| Research | [docs/research/](docs/research/) | Philippine SIS landscape, regulatory analysis, integration specs |
+| Architecture & ADRs | [docs/architecture/](docs/architecture) | System architecture, module map, and decision records |
+| Development Principles | [docs/principles/](docs/principles) | Naming, security, UI, regulatory compliance, data privacy |
+| Developer Guides | [docs/guides/](docs/guides) | CLI usage, module development, testing, Claude Code workflow |
+| Research | [docs/research/](docs/research) | Philippine SIS landscape, regulatory analysis, integration specs |
 
 ## Regulatory Compliance
 

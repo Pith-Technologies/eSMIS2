@@ -1016,7 +1016,7 @@ have their own database tables.
 
 **Purpose:** Reporting dashboards, HEMIS export wizards, accreditation evidence packages.
 **Status:** Planned
-**Governed by:** [Government Integrations](../principles/government-integrations.md), [ADR-011](decisions/ADR-011-government-integration-architecture.md), [Government Export Guide](../guides/government-export-guide.md)
+**Governed by:** [Government Integrations](../principles/government-integrations.md), [ADR-011](decisions/ADR-011-government-integration-architecture.md), [Government Export Guide](../runbooks/government-export.md)
 
 #### `esmis.hemis.export.wizard` (TransientModel)
 
@@ -1318,7 +1318,7 @@ at Layer 1.
 | Module | `esmis_security` |
 | Layer | 1 (Foundation) |
 | Status | Planned |
-| Governed by | [ADR-012](decisions/ADR-012-student-data-privacy-ra10173.md), [Breach Response Guide](../guides/breach-response-guide.md) |
+| Governed by | [ADR-012](decisions/ADR-012-student-data-privacy-ra10173.md), [Breach Response Guide](../runbooks/breach-response.md) |
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -1481,4 +1481,4 @@ Quick reference for which document governs which model groups.
 | [ADR-013](decisions/ADR-013-financial-aid-modeling.md) | `esmis.financial.aid.program`, `esmis.financial.aid.award` |
 | [ADR-014](decisions/ADR-014-lms-integration-standards.md) | `esmis.lms.platform`, `esmis.section.learning_modality` |
 | [ADR-015](decisions/ADR-015-grading-system-flexibility.md) | `esmis.grading.system`, `esmis.grading.scale`, `esmis.grade.change`, `esmis.latin.honors.config` |
-| [Breach Response Guide](../guides/breach-response-guide.md) | `esmis.data.breach` (referred to as `esmis.breach.record` in guide) |
+| [Breach Response Guide](../runbooks/breach-response.md) | `esmis.data.breach` (referred to as `esmis.breach.record` in guide) |

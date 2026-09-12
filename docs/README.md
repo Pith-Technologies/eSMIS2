@@ -9,13 +9,13 @@ and RA 10931 (Free Tuition Law).
 
 ```
 docs/
-├── architecture/        # Architecture decisions and project vision
-│   └── decisions/       # ADRs (Architecture Decision Records)
-├── plans/               # Build plans: time-bound, owned, finished when the work ships
-├── principles/          # Development standards and guidelines
-├── guides/              # Developer guides
-├── research/            # Regulatory and domain research behind the principles
-└── security/            # Security scanning docs
+├── architecture/        # How the system is designed. Must stay true
+│   └── decisions/       # ADRs: the hard calls and why
+├── principles/          # Standards the code is held to
+├── guides/              # Read to learn how to build something
+├── runbooks/            # Followed under pressure, often to a deadline
+├── plans/               # Time-bound and owned; history once the work ships
+└── research/            # Regulatory and domain research behind the principles
 ```
 
 ## Quick Links
@@ -24,13 +24,13 @@ docs/
 |------------|----------|
 | See the project architecture vision | [architecture/vision.md](architecture/vision.md) |
 | Understand module integration patterns | [architecture/integration-patterns.md](architecture/integration-patterns.md) |
-| Read coding principles | [principles/](principles/) |
-| Check an ADR | [architecture/decisions/](architecture/decisions/) |
-| Read a build plan, current or past | [plans/](plans/) |
+| Read coding principles | [principles/](principles) |
+| Check an ADR | [architecture/decisions/](architecture/decisions) |
+| Read a build plan, current or past | [plans/](plans) |
 | Use the developer CLI | [guides/esmis-cli.md](guides/esmis-cli.md) |
 | Create a new module | [guides/module-development.md](guides/module-development.md) |
 | Write and run tests | [guides/testing-guide.md](guides/testing-guide.md) |
-| Run security audits | [guides/security-audit-guide.md](guides/security-audit-guide.md) |
+| Run a security audit | [runbooks/security-audit.md](runbooks/security-audit.md) |
 | Run Claude Code in sandbox | [guides/claude-code-sandbox.md](guides/claude-code-sandbox.md) |
 
 ## Getting Started
