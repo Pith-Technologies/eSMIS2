@@ -3,6 +3,19 @@
 Thank you for your interest in contributing to the Student Management Information System for Philippine higher education
 institutions!
 
+## Prerequisites
+
+|        |                                                                                                                        |
+| ------ | ---------------------------------------------------------------------------------------------------------------------- |
+| Docker | Compose v2. Odoo and PostgreSQL both run in containers                                                                 |
+| Python | 3.9 or newer, for the `./esmis` CLI and the scripts. Odoo's own interpreter lives in the container and is not this one |
+| Git    | any recent version                                                                                                     |
+
+Python 3.11 adds `tomllib`. On an older interpreter the optional `~/.esmis.toml` config is skipped with a notice, and
+`pip install tomli` restores it. Nothing else needs it.
+
+`./esmis doctor` checks all of the above and names anything missing.
+
 ## Getting Started
 
 1. Read the [Development Principles](docs/principles/README.md)

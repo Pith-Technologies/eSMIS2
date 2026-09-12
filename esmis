@@ -1254,6 +1254,24 @@ def cmd_doctor(_args):
     print("Checking prerequisites...\n")
     all_ok = True
 
+    # Python first: two of this project's tools used to fail on an import here
+    # with a traceback that named a module rather than the interpreter.
+    version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    # noqa justification: ruff targets py312 because the Odoo modules run in a
+    # 3.13 container, so it reads this branch as dead. It is not - this file
+    # runs on the developer's host, where 3.9 is the macOS default and older
+    # is possible. The check exists for interpreters below our declared floor.
+    if sys.version_info < (3, 9):  # noqa: UP036
+        error(f"Python {version}: too old. This project's tooling needs 3.9 or newer")
+        all_ok = False
+    else:
+        success(f"Python {version}")
+        # Driven by the capability, not the version number: tomli on an older
+        # interpreter is just as good as tomllib on a newer one.
+        if tomllib is None:
+            info("  TOML config needs Python 3.11+, or: pip install tomli")
+            info("  Everything else works; only ~/.esmis.toml would be skipped")
+
     # Check Docker
     docker_path = shutil.which("docker")
     if docker_path:

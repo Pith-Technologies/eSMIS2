@@ -3,6 +3,14 @@
 # Add modules here to include them in the public release.
 
 [export]
+# Identity of the repository being produced, used to generate its README.
+# Without these the generator hardcoded a title and a clone URL for the
+# upstream template repository, which no longer exists, so every generated
+# README told its readers to clone a 404.
+repo_name = "eSMIS"
+repo_url = "https://github.com/Pith-Technologies/eSMIS2.git"
+repo_description = "Student Management Information System modules for Philippine higher education institutions, built on Odoo 19."
+
 # Odoo module directories to export (each must contain __manifest__.py)
 modules = [
     # Foundation
