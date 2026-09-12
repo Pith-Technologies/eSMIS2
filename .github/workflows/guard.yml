@@ -1,0 +1,21 @@
+name: guard
+
+# Calls the organisation's reusable private-file-guard, which fails when this
+# repository tracks a path the workspace treats as private (CLAUDE.md,
+# .claude/, .workspace, docs/internal/ and friends).
+#
+# The local pre-commit and pre-push hooks check the same patterns, but both
+# can be skipped from a laptop. This check runs on GitHub and, once it is
+# required by the organisation ruleset, is the ring that actually holds.
+#
+# Deliberately no paths-ignore: the guard must run on every change, since the
+# whole point is to catch a file that should not be here at all.
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    uses: Pith-Technologies/.github/.github/workflows/private-file-guard.yml@main
