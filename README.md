@@ -118,7 +118,7 @@ depends on `base` alone — the wider Odoo dependencies (`hr`, `account`,
 `esmis_address`, `esmis_ph` and `esmis_starter_ph` came out of Phase 1B, which
 kept the Philippine extensions in one module rather than scattering `_ph`
 modules across the foundation, and made `esmis_starter_ph` the only entry in
-the Apps menu. See [Phase 1B Plan](docs/architecture/phase-1b-plan.md) and
+the Apps menu. See [Phase 1B Plan](docs/plans/phase-1b-plan.md) and
 [ADR-018](docs/architecture/decisions/ADR-018-menu-architecture.md).
 
 For details, see [Architecture Vision](docs/architecture/vision.md), [Integration Patterns](docs/architecture/integration-patterns.md), and [Architecture Decisions](docs/architecture/decisions/).
