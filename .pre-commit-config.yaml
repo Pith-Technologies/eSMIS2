@@ -268,7 +268,7 @@ repos:
       - id: bandit
         args: ["-c", "pyproject.toml", "-r", "-ll"]
         additional_dependencies: [setuptools]
-        exclude: ^(tests/|scripts/tests/|.*_test\.py$|test_.*\.py$)
+        exclude: ^(tests/|.*_test\.py$|test_.*\.py$)
   - repo: https://github.com/semgrep/semgrep
     rev: v1.153.0
     hooks:

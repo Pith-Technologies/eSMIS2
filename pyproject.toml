@@ -3,9 +3,8 @@
 # itself runs in Docker and has its own, newer interpreter; this bound is about
 # what runs on a developer's machine.
 #
-# 3.11 adds tomllib. Below that, reading ~/.esmis.toml or export_config.toml
-# needs the tomli backport, and each tool says so rather than failing on an
-# import.
+# 3.11 adds tomllib. Below that, reading ~/.esmis.toml needs the tomli
+# backport, and the tool says so rather than failing on an import.
 [project]
 name = "esmis"
 requires-python = ">=3.9"
@@ -16,7 +15,7 @@ markers = [
 ]
 
 [tool.bandit]
-exclude_dirs = ["tests", "scripts/tests", ".git", "__pycache__", "node_modules"]
+exclude_dirs = ["tests", ".git", "__pycache__", "node_modules"]
 # NOTE: Don't skip B101 globally - assert statements are removed with -O flag
 # and should never be used for security checks. Skip only in test files via
 # the assert_used section below.
