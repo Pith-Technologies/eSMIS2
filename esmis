@@ -1257,11 +1257,10 @@ def cmd_doctor(_args):
     # Python first: two of this project's tools used to fail on an import here
     # with a traceback that named a module rather than the interpreter.
     version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-    # noqa justification: ruff targets py312 because the Odoo modules run in a
-    # 3.13 container, so it reads this branch as dead. It is not - this file
-    # runs on the developer's host, where 3.9 is the macOS default and older
-    # is possible. The check exists for interpreters below our declared floor.
-    if sys.version_info < (3, 9):  # noqa: UP036
+    # This file runs on the developer's host, not in the container, so an
+    # interpreter below the declared floor is reachable. .ruff.toml exempts
+    # this file from the version rules rather than repeating a noqa here.
+    if sys.version_info < (3, 9):
         error(f"Python {version}: too old. This project's tooling needs 3.9 or newer")
         all_ok = False
     else:

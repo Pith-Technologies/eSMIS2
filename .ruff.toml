@@ -1,4 +1,10 @@
 
+# The Odoo modules run in the container, which is on Python 3.13, so pyupgrade
+# should push them forward. The host tooling does not: ./esmis and scripts/ run
+# on a developer's machine, where the macOS default is 3.9 and pyproject.toml
+# declares `requires-python = ">=3.9"`. Ruff has one target for the whole tree,
+# so the host files opt out of the version-dependent rules below rather than
+# holding the module code back to 3.9.
 target-version = "py312"
 fix = true
 line-length = 120
@@ -20,6 +26,12 @@ exclude = ["setup/*"]
 [lint.per-file-ignores]
 "__init__.py" = ["F401", "I001"]  # ignore unused and unsorted imports in __init__.py
 "__manifest__.py" = ["B018", "E501"]  # allow long lines and useless expression in manifests
+# Host tooling must keep running on Python 3.9 (see requires-python). UP rules
+# would rewrite it into 3.10+ syntax, and UP036 reads a version check for an
+# older interpreter as dead code when it is the whole point.
+"esmis" = ["UP"]
+"scripts/*.py" = ["UP"]
+"scripts/**/*.py" = ["UP"]
 
 [lint.isort]
 section-order = ["future", "standard-library", "third-party", "odoo", "odoo-addons", "first-party", "local-folder"]
