@@ -1,6 +1,9 @@
 # Project Documentation
 
-Odoo 19 project template with modular architecture and comprehensive development standards.
+Documentation for eSMIS, a Student Management Information System for Philippine
+higher education institutions, built on Odoo 19. Modules use `esmis_*` naming and
+the system is built to comply with RA 10173 (Data Privacy Act), CHED regulations
+and RA 10931 (Free Tuition Law).
 
 ## Directory Structure
 
@@ -10,6 +13,7 @@ docs/
 │   └── decisions/       # ADRs (Architecture Decision Records)
 ├── principles/          # Development standards and guidelines
 ├── guides/              # Developer guides
+├── research/            # Regulatory and domain research behind the principles
 └── security/            # Security scanning docs
 ```
 
