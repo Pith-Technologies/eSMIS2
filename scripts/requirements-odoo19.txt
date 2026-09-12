@@ -40,7 +40,7 @@ python-ldap>=3.4.0
 python-magic>=0.4.24
 python-stdnum>=1.17
 pytz
-pyusb>=1.2.1
+pyusb>=1.3.1
 qrcode>=7.3.1
 reportlab>=3.6.8
 requests>=2.25.1
