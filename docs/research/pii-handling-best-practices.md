@@ -148,7 +148,7 @@ The following fields must never appear in log messages, error traces, or debug o
 - Parent/guardian names and contact information
 - Any field value from a model that inherits `esmis.pii.aware`
 
-**Implementation pattern**: The `_logger` usage rule (already in CLAUDE.md: "No `print()` — use
+**Implementation pattern**: The `_logger` usage rule (already in `docs/principles/error-handling.md`: "No `print()` — use
 `_logger`") must be extended with a linting rule that flags any log statement containing a field
 name from the PII registry.
 

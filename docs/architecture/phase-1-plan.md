@@ -1434,7 +1434,7 @@ Every `esmis.*` model must have:
 ### 7.7 Verification
 
 Before marking any module complete:
-1. `./odoo-project test <module>` passes
+1. `./esmis test <module>` passes
 2. `pre-commit run --files <changed_files>` passes
 3. Demo data installs without errors
 4. ACLs verified by running operations as non-admin users in tests

@@ -14,7 +14,7 @@ hook. The hook runs `scripts/setup_test_env.sh` which:
 **No manual setup needed!** Just run tests:
 
 ```bash
-./odoo-project test esmis_vocabulary
+./esmis test esmis_vocabulary
 ```
 
 ### Setup Performance

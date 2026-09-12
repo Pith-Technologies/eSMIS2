@@ -113,7 +113,7 @@ When a student from one campus takes a course at another campus (cross-enrollmen
 2. System-level reporting users (CHED coordinator, system admin) are added to the `esmis_security.group_system_admin` group, which carries `res.groups` `share` = False and explicit cross-campus access.
 3. Shared master data models (curriculum, course catalog, grading templates) explicitly omit `company_id` and omit campus isolation record rules. This is a deliberate design choice, not an oversight.
 4. The `esmis_cross_enrollment` module, when implemented, must use `with_company()` context manager to create enrollment records in the hosting campus.
-5. Module audit tooling (`./odoo-project audit-modules`) will be extended to flag transactional models missing `company_id`.
+5. Module audit tooling (`./esmis audit-modules`) will be extended to flag transactional models missing `company_id`.
 
 ## References
 

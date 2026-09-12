@@ -314,7 +314,7 @@ class TestAcademicTerm(TransactionCase):
 ### 2b. Run the Tests — Confirm They Fail
 
 ```bash
-./odoo-project test esmis_academic_term
+./esmis test esmis_academic_term
 ```
 
 The tests must fail at this point because the models do not exist yet. If they somehow pass,
@@ -1063,7 +1063,7 @@ class TestAcademicTermSecurity(TransactionCase):
 ### Run the tests
 
 ```bash
-./odoo-project test esmis_academic_term
+./esmis test esmis_academic_term
 ```
 
 All tests should pass. If any fail, read the error carefully — the most common issues are:
@@ -1130,7 +1130,7 @@ Before considering the module complete, verify every item:
 - [ ] Tests run with appropriate user context, not just admin
 - [ ] Date validation tests cover edge cases
 - [ ] Security tests cover all three tiers (basic, officer, manager)
-- [ ] All tests pass: `./odoo-project test esmis_academic_term`
+- [ ] All tests pass: `./esmis test esmis_academic_term`
 - [ ] Linters pass: `pre-commit run --files <changed_files>`
 
 ---

@@ -39,7 +39,7 @@ can work efficiently and the project presents well as an open-source contributio
 
 ### Phase D: Developer Experience
 
-- [x] D1. Add `quickstart` command to `odoo-project` or document a one-liner
+- [x] D1. Add `quickstart` command to `esmis` or document a one-liner
 - [x] D2. Create example module tutorial (`docs/guides/tutorial-first-module.md`) using
       `esmis_academic_term` as the example
 

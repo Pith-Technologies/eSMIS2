@@ -12,7 +12,7 @@ assignees: ""
 
 ## Architecture Layer
 
-<!-- Select one. See CLAUDE.md for layer definitions. -->
+<!-- Select one. See docs/architecture/implementation-roadmap.md for layer definitions. -->
 
 - [ ] Layer 1: Foundation (core data, shared services)
 - [ ] Layer 2: Domain Core (enrollment, curriculum, grading, scheduling, billing, financial aid, faculty)

@@ -25,10 +25,9 @@ docs/
 | Understand module integration patterns | [architecture/integration-patterns.md](architecture/integration-patterns.md) |
 | Read coding principles | [principles/](principles/) |
 | Check an ADR | [architecture/decisions/](architecture/decisions/) |
-| Use the developer CLI | [guides/odoo-project-cli.md](guides/odoo-project-cli.md) |
+| Use the developer CLI | [guides/esmis-cli.md](guides/esmis-cli.md) |
 | Create a new module | [guides/module-development.md](guides/module-development.md) |
 | Write and run tests | [guides/testing-guide.md](guides/testing-guide.md) |
-| Use Claude Code effectively | [guides/claude-code-for-developers.md](guides/claude-code-for-developers.md) |
 | Run security audits | [guides/security-audit-guide.md](guides/security-audit-guide.md) |
 | Run Claude Code in sandbox | [guides/claude-code-sandbox.md](guides/claude-code-sandbox.md) |
 

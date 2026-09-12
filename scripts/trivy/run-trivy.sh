@@ -56,7 +56,7 @@ if [[ -z "$IMAGE_NAME" ]]; then
 
     if [[ -z "$IMAGE_NAME" ]]; then
         # Fall back to image name from Dockerfile
-        IMAGE_NAME="odoo-project-dev"
+        IMAGE_NAME="esmis-dev"
     fi
 fi
 

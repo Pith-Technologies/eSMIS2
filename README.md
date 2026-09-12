@@ -70,11 +70,11 @@ A minimum viable SIS (Phases 1-3 plus `esmis_documents`) covers the full student
 ```bash
 git clone https://github.com/Pith-Technologies/eSMIS2.git
 cd eSMIS2
-./odoo-project build
-./odoo-project start       # http://localhost:8069 (admin/admin)
+./esmis build
+./esmis start       # http://localhost:8069 (admin/admin)
 ```
 
-Run `./odoo-project doctor` to verify your environment. See the [CLI Guide](docs/guides/odoo-project-cli.md) for all available commands.
+Run `./esmis doctor` to verify your environment. See the [CLI Guide](docs/guides/esmis-cli.md) for all available commands.
 
 ## Architecture
 

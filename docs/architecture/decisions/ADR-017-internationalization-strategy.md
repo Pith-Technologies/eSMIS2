@@ -229,7 +229,7 @@ Each country maintains an independent fork of the entire eSMIS codebase.
 - [ADR-011: Government Integration Architecture](ADR-011-government-integration-architecture.md) — country-specific integration patterns
 - [ADR-012: Student Data Privacy — RA 10173](ADR-012-student-data-privacy-ra10173.md) — Philippine privacy compliance
 - [ADR-015: Grading System Flexibility](ADR-015-grading-system-flexibility.md) — configurable grading scales
-- [Odoo Python Rules](../../../.claude/rules/odoo-python.md) — country-specific code guidelines
+- [Naming Conventions](../../principles/naming-conventions.md) — country-specific code guidelines
 - [Module Architecture Principles](../../principles/module-architecture.md)
 
 ---

@@ -141,7 +141,8 @@ module. Keep `esmis_vocabulary` separate (no student domain knowledge) and
 4. **Upgrade safety.** A bugfix to consent management (`esmis_security`) can be deployed
    without touching `esmis_student` or `esmis_academic_term`.
 5. **Documentation clarity.** The four-module foundation maps directly to the architecture
-   diagram in `CLAUDE.md`, making it easy for contributors to orient themselves.
+   diagram in `docs/architecture/implementation-roadmap.md`, making it easy for
+   contributors to orient themselves.
 
 ### Negative
 

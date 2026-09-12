@@ -1097,8 +1097,8 @@ Every module must include:
 
 Test commands:
 ```bash
-./odoo-project test <module_name>
-./odoo-project test <module_name> --tags=post_install
+./esmis test <module_name>
+./esmis test <module_name> --tags=post_install
 ```
 
 ### 7. Demo Data

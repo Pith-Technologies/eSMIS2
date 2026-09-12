@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 # Default configuration
 DEFAULT_OPENPROJECT_URL = "https://projects.acn.fr"
 DEFAULT_EPIC_ID = 484
-DEFAULT_PROJECT_SLUG = "odoo-project"
+DEFAULT_PROJECT_SLUG = "esmis"
 
 # Priority mapping for OpenProject
 # OpenProject priorities: typically 1=Low, 2=Normal, 3=High, 4=Urgent, 5=Immediate

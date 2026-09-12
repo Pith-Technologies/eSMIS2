@@ -246,13 +246,13 @@ jobs:
           docker build \
             -f docker/Dockerfile \
             --target runtime \
-            -t odoo-project:scan \
+            -t esmis:scan \
             .
 
       - name: Run Trivy image scan
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: odoo-project:scan
+          image-ref: esmis:scan
           severity: CRITICAL,HIGH
           trivyignores: .trivyignore.yaml
           format: sarif

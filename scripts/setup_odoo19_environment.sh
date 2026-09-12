@@ -13,10 +13,10 @@
 #   - Uses consolidated requirements file (faster pip resolution)
 #
 # For Claude Code on the web, use the SessionStart hook instead:
-#   See .claude/settings.json and scripts/setup_test_env.sh
+#   See scripts/setup_test_env.sh
 #
 # Platform: Linux only (Claude Code remote / CI containers)
-# For local development on macOS/Windows, use Docker: ./odoo-project start
+# For local development on macOS/Windows, use Docker: ./esmis start
 
 set -e  # Exit on error
 

@@ -26,9 +26,9 @@ import tempfile
 import time
 
 # tomllib is 3.11+; tomli is its backport. Both are optional: they are only
-# needed to read ~/.odoo-project.toml, which most machines do not have. A hard
+# needed to read ~/.esmis.toml, which most machines do not have. A hard
 # import here made the whole CLI unusable on the macOS system python (3.9),
-# which is every documented command in CLAUDE.md - build, start, test.
+# which is every command the project documents - build, start, test.
 try:
     import tomllib
 except ModuleNotFoundError:  # pragma: no cover - depends on interpreter
@@ -112,7 +112,10 @@ def info(msg: str):
 # Config File Support
 # =============================================================================
 
-CONFIG_PATH = Path.home() / ".odoo-project.toml"
+CONFIG_PATH = Path.home() / ".esmis.toml"
+# The CLI was called odoo-project until 2026-09-12. Keep reading the old config
+# path so a rename does not silently ignore settings someone already had.
+LEGACY_CONFIG_PATH = Path.home() / ".odoo-project.toml"
 DEFAULT_CONFIG = {
     "default_demo": None,
     "default_profile": "ui",
@@ -121,23 +124,27 @@ DEFAULT_CONFIG = {
 
 
 def load_config() -> dict:
-    """Load config from ~/.odoo-project.toml, returning defaults if not found."""
+    """Load config from ~/.esmis.toml, returning defaults if not found."""
     config = DEFAULT_CONFIG.copy()
-    if not CONFIG_PATH.exists():
-        return config
+    path = CONFIG_PATH
+    if not path.exists():
+        if not LEGACY_CONFIG_PATH.exists():
+            return config
+        path = LEGACY_CONFIG_PATH
+        info(f"Reading {path}. Rename it to {CONFIG_PATH} - the CLI is now 'esmis'.")
     if tomllib is None:
         warn(
-            f"{CONFIG_PATH} is present but cannot be read: this Python "
+            f"{path} is present but cannot be read: this Python "
             f"({sys.version_info.major}.{sys.version_info.minor}) has no tomllib "
             "and tomli is not installed. Using defaults. "
             "Install tomli, or run with Python 3.11 or newer."
         )
         return config
     try:
-        with open(CONFIG_PATH, "rb") as f:
+        with open(path, "rb") as f:
             config.update(tomllib.load(f))
     except (tomllib.TOMLDecodeError, OSError) as e:
-        warn(f"Could not load config from {CONFIG_PATH}: {e}")
+        warn(f"Could not load config from {path}: {e}")
     return config
 
 
@@ -232,7 +239,7 @@ def _check_image_freshness(profile: str = "dev", auto_rebuild: bool = False) -> 
 
     # Check if build inputs changed
     current_hash = _get_build_inputs_hash()
-    marker_file = Path(tempfile.gettempdir()) / f".odoo-project-build-{profile}-{current_hash}"
+    marker_file = Path(tempfile.gettempdir()) / f".esmis-build-{profile}-{current_hash}"
 
     if marker_file.exists():
         return True  # Image is fresh
@@ -309,10 +316,10 @@ def _find_running_odoo() -> tuple:
 def cmd_test(args):
     """Run tests for a module (isolated from dev instance)."""
     if not args.module:
-        print("Usage: ./odoo-project test <module> [--tags=...] [--local|--docker]")
+        print("Usage: ./esmis test <module> [--tags=...] [--local|--docker]")
         print("\nExamples:")
-        print("  ./odoo-project test esmis_vocabulary")
-        print("  ./odoo-project test esmis_vocabulary --tags=post_install")
+        print("  ./esmis test esmis_vocabulary")
+        print("  ./esmis test esmis_vocabulary --tags=post_install")
         sys.exit(1)
 
     module = args.module
@@ -573,7 +580,7 @@ def _wait_for_odoo_ready(profile: str, timeout: int = 300):
                 for line in logs.split("\n"):
                     if "CRITICAL" in line or "ParseError" in line or "ValueError" in line:
                         print(f"  {line.strip()}")
-                print("\nCheck full logs with: ./odoo-project logs")
+                print("\nCheck full logs with: ./esmis logs")
                 sys.exit(1)
 
         # Check health endpoint
@@ -714,7 +721,7 @@ def cmd_start(args):
     """Start Odoo development server."""
     if IS_REMOTE:
         print("Error: 'start' not supported in Claude Code web environment")
-        print("Use './odoo-project test <module>' to run tests instead")
+        print("Use './esmis test <module>' to run tests instead")
         sys.exit(1)
 
     env = os.environ.copy()
@@ -840,7 +847,7 @@ def cmd_restart(args):
     # Auto-detect running profile if not specified
     service, profile = _find_running_odoo()
     if not service:
-        print("Error: No Odoo container running. Start with './odoo-project start' first.")
+        print("Error: No Odoo container running. Start with './esmis start' first.")
         sys.exit(1)
 
     print(f"Restarting {service}...")
@@ -909,7 +916,7 @@ def cmd_resetdb(args):
     os.environ["ODOO_INIT_MODULES"] = modules
     os.environ["ODOO_DB_NAME"] = db_name
 
-    print(f"Database '{db_name}' reset. Run './odoo-project start' to initialize with {modules}")
+    print(f"Database '{db_name}' reset. Run './esmis start' to initialize with {modules}")
 
 
 def cmd_update(args):
@@ -927,7 +934,7 @@ def cmd_update(args):
     # Find running Odoo service
     service, profile = _find_running_odoo()
     if not service:
-        print("Error: No Odoo container running. Start with './odoo-project start' first.")
+        print("Error: No Odoo container running. Start with './esmis start' first.")
         sys.exit(1)
 
     # Warn if modules specified (click-odoo-update auto-detects)
@@ -1000,7 +1007,7 @@ def cmd_shell(args):
         # Find running Odoo service
         service, profile = _find_running_odoo()
         if not service:
-            print("Error: No Odoo container running. Start with './odoo-project start' first.")
+            print("Error: No Odoo container running. Start with './esmis start' first.")
             sys.exit(1)
 
         # Odoo shell
@@ -1092,7 +1099,7 @@ def cmd_url(args):
     url = _show_url(open_browser=args.open)
     if not url:
         print("Dev server is not running.")
-        print("Start it with: ./odoo-project start")
+        print("Start it with: ./esmis start")
         sys.exit(1)
 
 
@@ -1137,7 +1144,7 @@ def cmd_build(args):
 
     # Update marker file
     current_hash = _get_build_inputs_hash()
-    marker_file = Path(tempfile.gettempdir()) / f".odoo-project-build-{profile}-{current_hash}"
+    marker_file = Path(tempfile.gettempdir()) / f".esmis-build-{profile}-{current_hash}"
     marker_file.touch()
 
     success("Build complete")
@@ -1150,7 +1157,7 @@ def cmd_status(args):
         marker = Path(tempfile.gettempdir()) / ".odoo_project_env_ready"
         if marker.exists():
             print("Environment: Claude Code web (ready)")
-            print("Test with: ./odoo-project test <module>")
+            print("Test with: ./esmis test <module>")
         else:
             print("Environment: Claude Code web (not set up)")
             print("Run: ./scripts/setup_test_env.sh")
@@ -1193,19 +1200,19 @@ def cmd_help(_args):
         print(f"  {key:12} -> {modules}")
     print("")
     print("Examples:")
-    print("  ./odoo-project t esmis_vocabulary          # Run tests (using alias)")
-    print("  ./odoo-project s                         # Start with auto-reload")
-    print("  ./odoo-project start --demo=base         # Start with base demo")
-    print("  ./odoo-project start --wipe              # Wipe all data and start fresh")
-    print("  ./odoo-project resetdb --demo=base start # Reset DB and start with base demo")
-    print("  ./odoo-project r                         # Restart Odoo container")
-    print("  ./odoo-project u esmis_vocabulary          # Update a module")
-    print("  ./odoo-project l -f                      # Follow Odoo logs")
-    print("  ./odoo-project url --open                # Open in browser")
+    print("  ./esmis t esmis_vocabulary          # Run tests (using alias)")
+    print("  ./esmis s                         # Start with auto-reload")
+    print("  ./esmis start --demo=base         # Start with base demo")
+    print("  ./esmis start --wipe              # Wipe all data and start fresh")
+    print("  ./esmis resetdb --demo=base start # Reset DB and start with base demo")
+    print("  ./esmis r                         # Restart Odoo container")
+    print("  ./esmis u esmis_vocabulary          # Update a module")
+    print("  ./esmis l -f                      # Follow Odoo logs")
+    print("  ./esmis url --open                # Open in browser")
     print("")
     print("Chaining: Commands can be chained (options apply to preceding command):")
-    print("  ./odoo-project resetdb --demo=base start       # Reset then start")
-    print("  ./odoo-project stop start --wipe               # Stop then wipe and start")
+    print("  ./esmis resetdb --demo=base start       # Reset then start")
+    print("  ./esmis stop start --wipe               # Stop then wipe and start")
     print("")
     print(f"Config file: {CONFIG_PATH}")
     if CONFIG_PATH.exists():
@@ -1306,7 +1313,7 @@ def cmd_doctor(_args):
     else:
         info(f"Config file: {CONFIG_PATH} (not found, using defaults)")
         info("  Create one with your preferences:")
-        info("    echo 'default_demo = \"base\"' > ~/.odoo-project.toml")
+        info("    echo 'default_demo = \"base\"' > ~/.esmis.toml")
 
     # Check port availability (8069)
     print("")
@@ -1434,7 +1441,7 @@ def cmd_fix_security(args):
     elif args.modules:
         modules = _discover_modules(args.modules)
     else:
-        error("No modules specified. Usage: ./odoo-project fix-security [--all] <module> [...]")
+        error("No modules specified. Usage: ./esmis fix-security [--all] <module> [...]")
         sys.exit(1)
 
     print("========================================")
@@ -1488,7 +1495,7 @@ def cmd_fix_security(args):
             )
 
     print("\n========================================")
-    print("Done. Run './odoo-project audit-security' to verify.")
+    print("Done. Run './esmis audit-security' to verify.")
 
 
 def _apply_security_fixes(mod_dir: Path, dry_run: bool = False) -> int:
@@ -1722,7 +1729,7 @@ def _is_text_file(path: Path) -> bool:
     """Check if a file is a text file we should perform replacements in."""
     if path.suffix in _TEXT_EXTENSIONS:
         return True
-    # Extensionless files that look like scripts (e.g., odoo-project itself)
+    # Extensionless files that look like scripts (e.g., esmis itself)
     if path.suffix == "":
         try:
             with open(path, "rb") as f:
@@ -1846,9 +1853,9 @@ def cmd_init(args):
     if not dry_run:
         print("")
         info("Next steps:")
-        info("  ./odoo-project doctor     # verify environment")
-        info("  ./odoo-project build      # build Docker image")
-        info("  ./odoo-project start      # start Odoo")
+        info("  ./esmis doctor     # verify environment")
+        info("  ./esmis build      # build Docker image")
+        info("  ./esmis start      # start Odoo")
 
 
 # ============================================================================

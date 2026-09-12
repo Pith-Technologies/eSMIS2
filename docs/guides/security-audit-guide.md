@@ -6,8 +6,8 @@ How to audit, understand, and fix access rights issues in project modules.
 
 | Command | What it does |
 |---------|-------------|
-| `./odoo-project audit-security` | Mechanical checks: ACL naming, record rule patterns, Odoo 19 API compliance |
-| `./odoo-project audit-modules` | AI-assisted deep audit: naming, logging, tests, PII, error handling |
+| `./esmis audit-security` | Mechanical checks: ACL naming, record rule patterns, Odoo 19 API compliance |
+| `./esmis audit-modules` | AI-assisted deep audit: naming, logging, tests, PII, error handling |
 
 Run `audit-security` regularly (it's fast). Run `audit-modules` before a PR on modules you have substantially changed (it requires `cursor-agent` or `claude`).
 
@@ -15,16 +15,16 @@ Run `audit-security` regularly (it's fast). Run `audit-modules` before a PR on m
 
 ```bash
 # Audit all modules
-./odoo-project audit-security
+./esmis audit-security
 
 # Audit a single module
-./odoo-project audit-security esmis_inventory
+./esmis audit-security esmis_inventory
 
 # Generate markdown report
-./odoo-project audit-security --report
+./esmis audit-security --report
 
 # Output as JSON (for scripting)
-./odoo-project audit-security --json
+./esmis audit-security --json
 ```
 
 ### Understanding the output
@@ -73,16 +73,16 @@ Errors block the CI pipeline. Warnings should be fixed but do not block. The ful
 
 ```bash
 # Audit all modules (AI-assisted, requires cursor-agent or claude)
-./odoo-project audit-modules
+./esmis audit-modules
 
 # Audit a single module
-./odoo-project audit-modules esmis_inventory
+./esmis audit-modules esmis_inventory
 
 # Auto-fix simple issues
-./odoo-project audit-modules --fix esmis_inventory
+./esmis audit-modules --fix esmis_inventory
 
 # Auto-fix and commit each module
-./odoo-project audit-modules --fix --commit esmis_inventory
+./esmis audit-modules --fix --commit esmis_inventory
 ```
 
 Results are saved as JSON files in `reports/compliance/`. A summary is written to `reports/compliance/summary.json`.
@@ -93,16 +93,16 @@ The AI audit checks: naming conventions, ACL completeness, `print()` usage, bare
 
 ```bash
 # Fix a single module (mechanical fixes + AI if cursor-agent/claude available)
-./odoo-project fix-security esmis_inventory
+./esmis fix-security esmis_inventory
 
 # Preview what would change without writing files
-./odoo-project fix-security --dry-run esmis_inventory
+./esmis fix-security --dry-run esmis_inventory
 
 # Only apply mechanical fixes (no AI)
-./odoo-project fix-security --mechanical-only esmis_inventory
+./esmis fix-security --mechanical-only esmis_inventory
 
 # Fix all modules that have issues
-./odoo-project fix-security --all
+./esmis fix-security --all
 ```
 
 Mechanical fixes applied automatically:
@@ -351,13 +351,13 @@ After running `fix-security` or making manual security changes:
 1. Re-run the audit to confirm the error count dropped to zero:
 
 ```bash
-./odoo-project audit-security esmis_inventory
+./esmis audit-security esmis_inventory
 ```
 
 2. Run module tests — security changes can break existing tests:
 
 ```bash
-./odoo-project test esmis_inventory
+./esmis test esmis_inventory
 ```
 
 3. Search for broken cross-module references if you renamed any group IDs or ACL entry IDs:
@@ -370,4 +370,3 @@ grep -r "OLD_ID" --include="*.xml" --include="*.csv" --include="*.py" .
 
 - `docs/principles/access-rights.md` — full three-tier architecture, group hierarchy patterns, record rule requirements, demo environment checklist
 - `docs/principles/naming-conventions.md` — Security Groups section (category, privilege, group, technical group naming)
-- `.claude/rules/security.md` — auto-loaded rule summary (loaded when editing `security/*`)

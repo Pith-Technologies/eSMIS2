@@ -40,6 +40,13 @@ See [Production Deployment](#production-deployment) below.
 
 ## Production Deployment
 
+This is the single-VPS path, for an institution self-hosting eSMIS at 10k-100k records. It is not how any particular
+deployment has to work: a larger installation on managed infrastructure is configured elsewhere and does not use this
+compose file.
+
+Nothing publishes an eSMIS image. Leave `PROJECT_IMAGE` unset and compose builds from `docker/Dockerfile`, tagging
+`esmis:latest`. Set it only if your institution publishes its own build.
+
 ### Architecture
 
 ```
@@ -219,10 +226,10 @@ docker compose -f docker/docker-compose.production.yml exec clamav clamscan --ve
 
 ```bash
 # Standard build
-docker build -f docker/Dockerfile -t odoo-project .
+docker build -f docker/Dockerfile -t esmis .
 
 # With dev target (for local development)
-docker build --target dev -f docker/Dockerfile -t odoo-project:dev .
+docker build --target dev -f docker/Dockerfile -t esmis:dev .
 ```
 
 ## Health Check

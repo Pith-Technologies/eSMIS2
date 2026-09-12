@@ -28,7 +28,7 @@ Once installed, linters run automatically on every `git commit`. You can also ru
 After cloning (see next section), you can check that everything is set up correctly:
 
 ```bash
-./odoo-project doctor
+./esmis doctor
 ```
 
 This checks Docker, Docker Compose, Git, pre-commit, and port availability.
@@ -38,7 +38,7 @@ This checks Docker, Docker Compose, Git, pre-commit, and port availability.
 ```bash
 git clone https://github.com/Pith-Technologies/eSMIS2.git
 cd eSMIS2
-./odoo-project build
+./esmis build
 ```
 
 The `build` command creates the Docker image with Odoo 19 and all project dependencies. This takes a few minutes the first time. Subsequent builds are cached and much faster.
@@ -46,7 +46,7 @@ The `build` command creates the Docker image with Odoo 19 and all project depend
 ## Start the System
 
 ```bash
-./odoo-project start
+./esmis start
 ```
 
 Once the logs show Odoo is ready, open your browser:
@@ -64,7 +64,7 @@ The `esmis_vocabulary` module is the first foundation module and ships with the 
 1. Start with demo data if you have not already:
 
    ```bash
-   ./odoo-project start --wipe --demo=base -y
+   ./esmis start --wipe --demo=base -y
    ```
 
 2. Log in at <http://localhost:8069> with `admin` / `admin`.
@@ -96,13 +96,13 @@ The `esmis_vocabulary` module is the first foundation module and ships with the 
 Every module includes tests. Run them with:
 
 ```bash
-./odoo-project test esmis_vocabulary
+./esmis test esmis_vocabulary
 ```
 
 Tests run in an isolated Docker container with a temporary database, so they never affect your running dev instance. You can filter by tag:
 
 ```bash
-./odoo-project test esmis_vocabulary --tags=post_install
+./esmis test esmis_vocabulary --tags=post_install
 ```
 
 ## Development Workflow
@@ -126,13 +126,13 @@ Edit models, views, security rules, or whatever your feature requires.
 pre-commit run --files esmis_vocabulary/models/vocabulary.py
 
 # Or let the CLI auto-detect changed files
-./odoo-project lint
+./esmis lint
 ```
 
 ### 4. Run tests
 
 ```bash
-./odoo-project test esmis_vocabulary
+./esmis test esmis_vocabulary
 ```
 
 ### 5. Commit with conventional format
@@ -150,26 +150,26 @@ Push your branch and open a PR. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for
 
 ## Common Commands
 
-Quick reference for the most useful `odoo-project` commands:
+Quick reference for the most useful `esmis` commands:
 
 | Command                                | Alias          | Description                                    |
 | -------------------------------------- | -------------- | ---------------------------------------------- |
-| `./odoo-project build`                 | `b`            | Build the Docker image                         |
-| `./odoo-project start`                 | `s`            | Start Odoo (port 8069)                         |
-| `./odoo-project stop`                  | —              | Stop all containers                            |
-| `./odoo-project restart`               | `r`            | Restart the Odoo container                     |
-| `./odoo-project test <module>`         | `t <module>`   | Run module tests in isolation                  |
-| `./odoo-project update`               | `u`            | Auto-detect and upgrade changed modules        |
-| `./odoo-project logs -f`              | `l -f`         | Stream logs in real time                       |
-| `./odoo-project shell`                | `sh`           | Open an interactive Odoo Python shell          |
-| `./odoo-project sql`                  | —              | Open an interactive PostgreSQL shell           |
-| `./odoo-project status`               | `st`           | Show running container status                  |
-| `./odoo-project lint`                 | —              | Lint changed files                             |
-| `./odoo-project doctor`               | —              | Verify prerequisites and environment           |
-| `./odoo-project stop -v -y`           | —              | Stop and delete all data (clean reset)         |
-| `./odoo-project start --wipe --demo=base` | —          | Fresh start with demo data                     |
+| `./esmis build`                 | `b`            | Build the Docker image                         |
+| `./esmis start`                 | `s`            | Start Odoo (port 8069)                         |
+| `./esmis stop`                  | —              | Stop all containers                            |
+| `./esmis restart`               | `r`            | Restart the Odoo container                     |
+| `./esmis test <module>`         | `t <module>`   | Run module tests in isolation                  |
+| `./esmis update`               | `u`            | Auto-detect and upgrade changed modules        |
+| `./esmis logs -f`              | `l -f`         | Stream logs in real time                       |
+| `./esmis shell`                | `sh`           | Open an interactive Odoo Python shell          |
+| `./esmis sql`                  | —              | Open an interactive PostgreSQL shell           |
+| `./esmis status`               | `st`           | Show running container status                  |
+| `./esmis lint`                 | —              | Lint changed files                             |
+| `./esmis doctor`               | —              | Verify prerequisites and environment           |
+| `./esmis stop -v -y`           | —              | Stop and delete all data (clean reset)         |
+| `./esmis start --wipe --demo=base` | —          | Fresh start with demo data                     |
 
-For the full command reference, see the [CLI Guide](odoo-project-cli.md).
+For the full command reference, see the [CLI Guide](esmis-cli.md).
 
 ## Troubleshooting
 
@@ -177,23 +177,23 @@ For the full command reference, see the [CLI Guide](odoo-project-cli.md).
 
 **Symptom:** Commands fail with "Cannot connect to the Docker daemon" or similar.
 
-**Fix:** Start Docker Desktop (or the Docker daemon if using Docker Engine). Then run `./odoo-project doctor` to verify.
+**Fix:** Start Docker Desktop (or the Docker daemon if using Docker Engine). Then run `./esmis doctor` to verify.
 
 ### Port 8069 is already in use
 
-**Symptom:** `./odoo-project start` fails because something else is using port 8069.
+**Symptom:** `./esmis start` fails because something else is using port 8069.
 
 **Fix:**
 
 ```bash
 # Check what is using the port
-./odoo-project doctor
+./esmis doctor
 
 # Stop any existing eSMIS containers
-./odoo-project stop
+./esmis stop
 
 # If another application is using 8069, stop it or use the dev profile (dynamic port)
-./odoo-project start --profile dev
+./esmis start --profile dev
 ```
 
 ### Module not found during tests or install
@@ -203,8 +203,8 @@ For the full command reference, see the [CLI Guide](odoo-project-cli.md).
 **Fix:** Make sure your module directory is inside the project root, has a valid `__manifest__.py`, and has an `__init__.py`. If the module was just added, you may need to rebuild:
 
 ```bash
-./odoo-project build
-./odoo-project start --wipe --demo=base -y
+./esmis build
+./esmis start --wipe --demo=base -y
 ```
 
 ### Module not updating after code changes
@@ -215,10 +215,10 @@ For the full command reference, see the [CLI Guide](odoo-project-cli.md).
 
 ```bash
 # Auto-detect and upgrade changed modules
-./odoo-project update
+./esmis update
 
 # If that does not help, restart the container
-./odoo-project restart
+./esmis restart
 ```
 
 ### Database errors or corrupted state
@@ -228,8 +228,8 @@ For the full command reference, see the [CLI Guide](odoo-project-cli.md).
 **Fix:** Reset everything and start fresh:
 
 ```bash
-./odoo-project stop -v -y       # Stop containers and delete all volumes (database + filestore)
-./odoo-project start --demo=base  # Start with a clean database and demo data
+./esmis stop -v -y       # Stop containers and delete all volumes (database + filestore)
+./esmis start --demo=base  # Start with a clean database and demo data
 ```
 
 ### Tests fail but the dev instance works fine
@@ -251,7 +251,7 @@ Check the test output carefully and see the [Testing Guide](testing-guide.md) fo
 **Fix:** The CLI auto-detects when `Dockerfile` or `requirements.txt` change and prompts to rebuild. To force a full rebuild:
 
 ```bash
-./odoo-project build --no-cache
+./esmis build --no-cache
 ```
 
 ## Next Steps
@@ -260,7 +260,7 @@ Once you have the system running, explore these resources:
 
 - **[Module Development Guide](module-development.md)** — how to create and structure eSMIS modules
 - **[Testing Guide](testing-guide.md)** — test patterns, coverage targets, and TDD workflow
-- **[CLI Guide](odoo-project-cli.md)** — full reference for all `odoo-project` commands
+- **[CLI Guide](esmis-cli.md)** — full reference for all `esmis` commands
 - **[Architecture Vision](../architecture/vision.md)** — system architecture and module layers
 - **[Implementation Roadmap](../architecture/implementation-roadmap.md)** — what is being built and in what order
 - **[CONTRIBUTING.md](../../CONTRIBUTING.md)** — commit conventions, PR process, and review guidelines

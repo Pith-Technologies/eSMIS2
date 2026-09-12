@@ -6,14 +6,14 @@ How to write, run, and maintain tests for project modules.
 
 ```bash
 # Run all tests for a single module (recommended — Docker-isolated, cross-platform)
-./odoo-project test esmis_inventory
+./esmis test esmis_inventory
 
 # Run multiple modules
-./odoo-project test esmis_vocabulary
-./odoo-project test esmis_project
+./esmis test esmis_vocabulary
+./esmis test esmis_project
 
 # Filter by test tags
-./odoo-project test esmis_inventory --tags=post_install
+./esmis test esmis_inventory --tags=post_install
 ```
 
 The CLI creates a temporary database (`test_<module>_<random>`), installs the module and all dependencies, runs the test suite, then tears it down. It uses `--no-http` so no port binding is needed.
@@ -266,4 +266,3 @@ These pitfalls have caused real failures on this project.
 - `docs/principles/testing.md` — coverage targets, E2E patterns, Playwright setup
 - `docs/principles/odoo19-compatibility.md` — `assertRaises`, Command API, other Odoo 19 quirks
 - `docs/principles/approval-workflows.md` — approval chain test data patterns
-- `.claude/rules/testing.md` — auto-loaded rule summary (loaded when editing `tests/*.py`)
