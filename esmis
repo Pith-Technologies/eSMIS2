@@ -495,10 +495,10 @@ def _test_docker(module: str, tags: str | None = None):
         )
 
     # Parse and display results
-    _display_test_results(log_file)
+    _display_test_results(log_file, module)
 
 
-def _display_test_results(log_file: Path):
+def _display_test_results(log_file: Path, module: str | None = None):
     """Parse Odoo test log and display a summary."""
     log_content = log_file.read_text() if log_file.exists() else ""
 
@@ -541,11 +541,23 @@ def _display_test_results(log_file: Path):
             if re.match(r"^(FAIL:|ERROR:|.*AssertionError)", line):
                 print(f"  {line.strip()}")
 
-    if passed == 0 and failed == 0 and errors == 0 and not critical_error:
-        print("\nNOTE: No tests were executed. Check if:")
-        print("      - Tests are tagged correctly" " (@tagged('post_install', '-at_install'))")
-        print("      - Test files are in tests/ directory")
-        print("      - Test classes inherit from TransactionCase/HttpCase")
+    # Nothing ran. Whether that is a pass or a failure depends on whether the
+    # module has any tests to run: an aggregate module legitimately has none,
+    # but a module that ships test files and runs zero of them has a discovery
+    # problem, and exiting 0 there would report a green build for a suite that
+    # never executed.
+    nothing_ran = passed == 0 and failed == 0 and errors == 0 and not critical_error
+    has_test_files = bool(module) and any((PROJECT_ROOT / module / "tests").glob("test_*.py"))
+
+    if nothing_ran:
+        if has_test_files:
+            print(f"\nFAIL: {module} ships test files but ran no tests. Check if:")
+            print("      - Tests are tagged correctly" " (@tagged('post_install', '-at_install'))")
+            print("      - Test files are imported from tests/__init__.py")
+            print("      - Test classes inherit from TransactionCase/HttpCase")
+        else:
+            print(f"\nNOTE: {module or 'this module'} has no tests of its own.")
+            print("      Nothing to run; test its dependencies individually.")
 
     print(f"\nFull log: {log_file}")
     print("==================================")
@@ -554,6 +566,8 @@ def _display_test_results(log_file: Path):
         sys.exit(1)
     elif critical_error:
         sys.exit(2)
+    elif nothing_ran and has_test_files:
+        sys.exit(1)
 
 
 def _wait_for_odoo_ready(profile: str, timeout: int = 300):

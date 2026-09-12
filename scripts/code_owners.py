@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""Authorship statistics from git blame, by author and by file extension.
+
+Unconfigured by default: set INTERNAL_DOMAINS below before the internal /
+external split means anything. Nothing else in the project calls this; it is
+a reporting tool you run by hand.
+"""
+
 import os
 import subprocess
 from collections import Counter, defaultdict
