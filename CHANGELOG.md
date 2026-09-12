@@ -76,6 +76,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - Data model registry and implementation plan
 - Implementation roadmap and ERD diagrams
 
+#### Documentation — Plans
+
+- Build plan for `esmis_academic_term` (`docs/plans/academic-term-plan.md`), the last foundation module. Reconciles the
+  three specifications that disagreed on the module's fields, state machine, security layout and dependencies, records
+  the five decisions that reconciliation forced, and sets the test-first build order
+
 #### Documentation — Guides
 
 - Module development guide (TDD workflow with Claude Code)
