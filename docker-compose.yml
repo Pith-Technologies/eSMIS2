@@ -1,5 +1,11 @@
 # Odoo Project Docker Compose
 #
+# LOCAL DEVELOPMENT ONLY. The database password and the Odoo admin password
+# below are throwaway defaults so a fresh clone starts with no setup. Never
+# reuse them anywhere reachable from a network, and never copy this file as a
+# starting point for a deployment - use docker/docker-compose.production.yml,
+# which reads every credential from docker/.env.production (gitignored).
+#
 # Unified compose file for development, E2E testing, and unit testing.
 #
 # Services:
@@ -167,6 +173,8 @@ services:
   # Note: Uses same image as odoo/odoo-dev - build any of them to update
   test:
     image: odoo-dev
+    profiles:
+      - test
     depends_on:
       db:
         condition: service_healthy

@@ -17,7 +17,7 @@ Before you begin, make sure you have the following installed:
 
 ```bash
 pip install pre-commit
-cd eSMIS
+cd eSMIS2
 pre-commit install
 ```
 
@@ -36,8 +36,8 @@ This checks Docker, Docker Compose, Git, pre-commit, and port availability.
 ## Clone and Build
 
 ```bash
-git clone https://github.com/pithtech/eSMIS2.git
-cd eSMIS
+git clone https://github.com/Pith-Technologies/eSMIS2.git
+cd eSMIS2
 ./odoo-project build
 ```
 

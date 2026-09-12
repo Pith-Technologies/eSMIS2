@@ -13,6 +13,15 @@ docker compose --profile ui up -d
 # Access at http://localhost:8069 (admin/admin)
 ```
 
+The credentials above, and the database password in `docker-compose.yml`, are throwaway local defaults. They are not
+used by the production stack, which reads every credential from `docker/.env.production`.
+
+#### Apple Silicon
+
+The `db` service pins `platform: linux/amd64`. On an Apple Silicon Mac that means the database runs emulated. Enable
+Rosetta for x86/amd64 emulation in Docker Desktop (Settings -> General) or use OrbStack, which enables it by default;
+without it the container falls back to QEMU and is noticeably slower to start.
+
 ### Production
 
 See [Production Deployment](#production-deployment) below.
