@@ -246,9 +246,9 @@ pre-commit run prettier --files <changed_files>      # Format XML/MD/JSON
 
 | Document                                                                                   | Purpose                           |
 | ------------------------------------------------------------------------------------------ | --------------------------------- |
-| [docs/principles/](docs/principles)                                                       | Development standards             |
-| [docs/architecture/](docs/architecture)                                                   | Architecture decisions            |
-| [docs/architecture/decisions/](docs/architecture/decisions)                               | ADRs for significant decisions    |
+| [docs/principles/](docs/principles)                                                        | Development standards             |
+| [docs/architecture/](docs/architecture)                                                    | Architecture decisions            |
+| [docs/architecture/decisions/](docs/architecture/decisions)                                | ADRs for significant decisions    |
 | [docs/architecture/implementation-roadmap.md](docs/architecture/implementation-roadmap.md) | Module dependency graph & roadmap |
 
 ## Questions?
