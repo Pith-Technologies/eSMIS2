@@ -329,8 +329,11 @@ def main():
     output = formatter.format(all_violations, show_summary=args.summary)
     print(output)
 
-    # Exit with error if violations found
-    return 1 if all_violations else 0
+    # Exit with error only on ERROR severity, matching every other checker in
+    # this directory. INFO findings are printed as suggestions and must not
+    # fail the hook.
+    has_errors = any(v.severity == Severity.ERROR for v in all_violations)
+    return 1 if has_errors else 0
 
 
 if __name__ == "__main__":

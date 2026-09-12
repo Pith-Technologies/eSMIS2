@@ -77,6 +77,11 @@ class PiiAware(models.AbstractModel):
 
         for record in self:
             try:
+                # sudo: the PII access trail must be written whatever rights the
+                # acting user holds on the log model. A user who could suppress
+                # their own access record would defeat the audit requirement in
+                # RA 10173; the create below writes only this access event.
+                # nosemgrep: odoo-sudo-without-context
                 self.env["esmis.pii.access.log"].sudo().create(
                     {
                         "model_name": record._name,

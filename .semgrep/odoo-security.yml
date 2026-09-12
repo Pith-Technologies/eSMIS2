@@ -737,6 +737,13 @@ rules:
           - pattern: "return {..., 'id': $RECORD.id, ...}"
           - pattern: "return {..., 'record_id': $RECORD.id, ...}"
           - pattern: "{'id': $RECORD.id}"
+      # The bare dict pattern also matches translation interpolation in
+      # user-facing exceptions - `_("... (ID: %(id)s)") % {"id": record.id}`.
+      # Those are not API responses: the user raising them already has the
+      # record open, and the alternative, record.display_name, would put a
+      # student's name into an error message, which data-privacy-and-pii.md
+      # forbids. This rule is about what leaves the system in a response.
+      - pattern-not-inside: raise $EXC(...)
     message: |
       Exposing database ID in API response.
       Use external identifiers (external_id or UUID) instead.

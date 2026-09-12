@@ -64,7 +64,9 @@ fi
 # Configuration - shared
 LOG_DIR="/tmp/odoo-test-logs"
 mkdir -p "$LOG_DIR"
-DB_NAME="test_${MODULE_NAME}_$(shuf -i 1000000-9999999 -n 1)"
+# awk rather than shuf: shuf is GNU coreutils and absent on macOS, where this
+# script is the documented way to run a module's tests locally.
+DB_NAME="test_${MODULE_NAME}_$(awk 'BEGIN{srand();printf "%d", 1000000+int(rand()*9000000)}')"
 LOG_FILE="$LOG_DIR/${MODULE_NAME}_unittest_$(date +%Y%m%d_%H%M%S).log"
 BUILD_LOG_FILE="$LOG_DIR/${MODULE_NAME}_build_$(date +%Y%m%d_%H%M%S).log"
 

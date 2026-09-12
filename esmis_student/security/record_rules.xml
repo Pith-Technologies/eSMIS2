@@ -1,99 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
-        <!-- ============================================================
-             res.partner — Student Campus Isolation
-             Restricts base.group_user members to student partners at
-             their own campus. Non-student partners are always visible
-             to avoid breaking standard Odoo contact/vendor workflows.
-             ============================================================ -->
-        <record id="rule_student_partner_campus" model="ir.rule">
-            <field name="name">Student Partner: Campus Isolation</field>
-            <field name="model_id" ref="base.model_res_partner"/>
-            <field name="domain_force">
-                ['|', ('is_student', '=', False), '&amp;', ('is_student', '=', True), '|', ('company_id', '=', False), ('company_id', 'in', company_ids)]
-            </field>
-            <field name="groups" eval="[Command.link(ref('base.group_user'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
+<odoo noupdate="1">
+    <!-- ============================================================
+         res.partner — Student Campus Isolation
+         Restricts base.group_user members to student partners at
+         their own campus. Non-student partners are always visible
+         to avoid breaking standard Odoo contact/vendor workflows.
+         ============================================================ -->
+    <record id="rule_student_partner_campus" model="ir.rule">
+        <field name="name">Student Partner: Campus Isolation</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="domain_force">
+            ['|', ('is_student', '=', False), '&amp;', ('is_student', '=', True), '|', ('company_id', '=', False), ('company_id', 'in', company_ids)]
+        </field>
+        <field name="groups" eval="[Command.link(ref('base.group_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
 
-        <!-- Student sees only their own partner record -->
-        <record id="rule_student_self" model="ir.rule">
-            <field name="name">Student Partner: Self Only</field>
-            <field name="model_id" ref="base.model_res_partner"/>
-            <field name="domain_force">[('id', '=', user.partner_id.id)]</field>
-            <field name="groups" eval="[Command.link(ref('group_esmis_student_self'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
+    <!-- Student sees only their own partner record -->
+    <record id="rule_student_self" model="ir.rule">
+        <field name="name">Student Partner: Self Only</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="domain_force">[('id', '=', user.partner_id.id)]</field>
+        <field name="groups" eval="[Command.link(ref('group_esmis_student_self'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
 
-        <!-- Registrar manager sees all student partners across all campuses -->
-        <record id="rule_student_registrar_all" model="ir.rule">
-            <field name="name">Student Partner: Registrar Manager All Campuses</field>
-            <field name="model_id" ref="base.model_res_partner"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[Command.link(ref('group_esmis_registrar_manager'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
+    <!-- Registrar manager sees all student partners across all campuses -->
+    <record id="rule_student_registrar_all" model="ir.rule">
+        <field name="name">Student Partner: Registrar Manager All Campuses</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[Command.link(ref('group_esmis_registrar_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
 
-        <!-- ============================================================
-             esmis.identifier — Campus Isolation via partner→company_id
-             ============================================================ -->
-        <record id="rule_identifier_partner" model="ir.rule">
-            <field name="name">Identifier: Campus Isolation</field>
-            <field name="model_id" ref="model_esmis_identifier"/>
-            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
-            <field name="groups" eval="[Command.link(ref('base.group_user'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
+    <!-- ============================================================
+         esmis.identifier — Campus Isolation via partner→company_id
+         ============================================================ -->
+    <record id="rule_identifier_partner" model="ir.rule">
+        <field name="name">Identifier: Campus Isolation</field>
+        <field name="model_id" ref="model_esmis_identifier"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[Command.link(ref('base.group_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
 
-        <!-- Student sees only their own identifiers -->
-        <record id="rule_identifier_self" model="ir.rule">
-            <field name="name">Identifier: Self Only</field>
-            <field name="model_id" ref="model_esmis_identifier"/>
-            <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
-            <field name="groups" eval="[Command.link(ref('group_esmis_student_self'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
+    <!-- Student sees only their own identifiers -->
+    <record id="rule_identifier_self" model="ir.rule">
+        <field name="name">Identifier: Self Only</field>
+        <field name="model_id" ref="model_esmis_identifier"/>
+        <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
+        <field name="groups" eval="[Command.link(ref('group_esmis_student_self'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
 
-        <!-- ============================================================
-             esmis.education.history — Campus Isolation
-             ============================================================ -->
-        <record id="rule_education_history_partner" model="ir.rule">
-            <field name="name">Education History: Campus Isolation</field>
-            <field name="model_id" ref="model_esmis_education_history"/>
-            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
-            <field name="groups" eval="[Command.link(ref('base.group_user'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
+    <!-- ============================================================
+         esmis.education.history — Campus Isolation
+         ============================================================ -->
+    <record id="rule_education_history_partner" model="ir.rule">
+        <field name="name">Education History: Campus Isolation</field>
+        <field name="model_id" ref="model_esmis_education_history"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        <field name="groups" eval="[Command.link(ref('base.group_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
 
-        <!-- Student sees only their own education history -->
-        <record id="rule_education_history_self" model="ir.rule">
-            <field name="name">Education History: Self Only</field>
-            <field name="model_id" ref="model_esmis_education_history"/>
-            <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
-            <field name="groups" eval="[Command.link(ref('group_esmis_student_self'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
-    </data>
+    <!-- Student sees only their own education history -->
+    <record id="rule_education_history_self" model="ir.rule">
+        <field name="name">Education History: Self Only</field>
+        <field name="model_id" ref="model_esmis_education_history"/>
+        <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
+        <field name="groups" eval="[Command.link(ref('group_esmis_student_self'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
 </odoo>

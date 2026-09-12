@@ -2,14 +2,11 @@
 
 Quality requirements for Odoo 19 module development.
 
-## Coverage Targets
+## Coverage Target
 
-| Module Type | Target |
-|-------------|--------|
-| Core domain modules | 85%+ |
-| API modules | 90%+ |
-| Utility/helper | 80%+ |
-| UI-only | 60%+ |
+**85% for every module.** One number rather than a tier table: the tiers were
+never implemented in the gate, and classifying a module into a tier is an
+argument that adds nothing a single floor does not already give.
 
 ### Current Coverage Gaps
 
@@ -18,9 +15,9 @@ Quality requirements for Odoo 19 module development.
 
 ### Enforcing Coverage
 
-Coverage is enforced via `pyproject.toml` (`[tool.coverage.*]` sections) with tiered
-targets per module type (see table above). CI fails the build if any module falls below
-its threshold. Locally, use `--coverage` with the test script:
+Coverage is enforced by `fail_under = 85` in `pyproject.toml` (`[tool.coverage.report]`).
+`.github/workflows/ci.yml` runs `coverage report` per module against that setting and fails
+the build for any module below it. Locally:
 
 ```bash
 ./scripts/test_single_module.sh esmis_vocabulary --coverage

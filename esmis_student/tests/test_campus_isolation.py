@@ -77,33 +77,21 @@ class TestCampusIsolation(TransactionCase):
                 "school_name": "Campus A School",
             }
         )
-        results = (
-            self.EducationHistory.with_user(self.user_campus_b)
-            .search([("id", "=", history_a.id)])
-        )
+        results = self.EducationHistory.with_user(self.user_campus_b).search([("id", "=", history_a.id)])
         self.assertFalse(results, "Campus A education history should not be visible to campus B user")
 
     def test_student_non_student_partner_always_visible(self):
         """Non-student partners are always visible regardless of campus context."""
         non_student = self.Partner.create({"name": "Vendor Contact", "is_student": False})
-        results = (
-            self.Partner.with_user(self.user_campus_b)
-            .search([("id", "=", non_student.id)])
-        )
+        results = self.Partner.with_user(self.user_campus_b).search([("id", "=", non_student.id)])
         self.assertTrue(results, "Non-student partners must be visible across campuses")
 
     def test_student_at_own_campus_visible(self):
         """A student at campus A is visible to a user at campus A."""
-        results = (
-            self.Partner.with_user(self.user_campus_a)
-            .search([("id", "=", self.student_a.id)])
-        )
+        results = self.Partner.with_user(self.user_campus_a).search([("id", "=", self.student_a.id)])
         self.assertTrue(results, "Student should be visible at their own campus")
 
     def test_student_at_other_campus_not_visible(self):
         """A student at campus A is not visible to a user at campus B."""
-        results = (
-            self.Partner.with_user(self.user_campus_b)
-            .search([("id", "=", self.student_a.id)])
-        )
+        results = self.Partner.with_user(self.user_campus_b).search([("id", "=", self.student_a.id)])
         self.assertFalse(results, "Campus A student should not be visible to campus B user")

@@ -242,7 +242,7 @@ jobs:
           rm -f .coverage-exit-${{ matrix.module }}
           if [ "$COV_EXIT_CODE" != "0" ]; then
             echo "coverage_passed=false" >> $GITHUB_OUTPUT
-            echo "::error::Coverage below 90%% threshold for ${{ matrix.module }}"
+            echo "::error::Coverage below 85%% threshold for ${{ matrix.module }}"
           else
             echo "coverage_passed=true" >> $GITHUB_OUTPUT
           fi

@@ -3,7 +3,7 @@
     <!-- Demo users for testing esmis_security groups.
          All names are fictional. No real PII. -->
 
-    <record id="demo_user_security_officer" model="res.users">
+    <record id="demo_user_security_officer" model="res.users" context="{'no_reset_password': True}">
         <field name="name">Maria Santos (Security Officer)</field>
         <field name="login">demo_security_officer</field>
         <field name="password">demo_security_officer</field>
@@ -12,7 +12,7 @@
         ]"/>
     </record>
 
-    <record id="demo_user_security_manager" model="res.users">
+    <record id="demo_user_security_manager" model="res.users" context="{'no_reset_password': True}">
         <field name="name">Jose Reyes (Security Manager)</field>
         <field name="login">demo_security_manager</field>
         <field name="password">demo_security_manager</field>
@@ -21,7 +21,7 @@
         ]"/>
     </record>
 
-    <record id="demo_user_dpo" model="res.users">
+    <record id="demo_user_dpo" model="res.users" context="{'no_reset_password': True}">
         <field name="name">Ana Cruz (DPO)</field>
         <field name="login">demo_dpo</field>
         <field name="password">demo_dpo</field>
@@ -30,7 +30,7 @@
         ]"/>
     </record>
 
-    <record id="demo_user_audit_viewer" model="res.users">
+    <record id="demo_user_audit_viewer" model="res.users" context="{'no_reset_password': True}">
         <field name="name">Carlos Mendoza (Audit Viewer)</field>
         <field name="login">demo_audit_viewer</field>
         <field name="password">demo_audit_viewer</field>
@@ -39,7 +39,7 @@
         ]"/>
     </record>
 
-    <record id="demo_user_system_admin" model="res.users">
+    <record id="demo_user_system_admin" model="res.users" context="{'no_reset_password': True}">
         <field name="name">Pedro Ramos (System Admin)</field>
         <field name="login">demo_system_admin</field>
         <field name="password">demo_system_admin</field>

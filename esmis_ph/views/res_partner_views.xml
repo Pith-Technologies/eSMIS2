@@ -2,8 +2,8 @@
 <odoo>
     <!-- Extend the student demographics page with Philippine-specific fields.
          Inserts PH fields after existing fields in the student demographics page. -->
-    <record id="view_res_partner_ph_fields" model="ir.ui.view">
-        <field name="name">res.partner.ph.fields</field>
+    <record id="view_res_partner_form_ph" model="ir.ui.view">
+        <field name="name">res.partner.form.ph</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="esmis_student.view_res_partner_student_form"/>
         <field name="arch" type="xml">
