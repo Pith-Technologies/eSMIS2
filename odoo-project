@@ -14,6 +14,8 @@ A unified interface for common development tasks:
 Works in both Docker mode (local dev) and local mode (Claude Code web).
 """
 
+from __future__ import annotations  # `str | list` hints on Python 3.9/3.10
+
 import json
 import os
 import re
@@ -22,7 +24,18 @@ import subprocess
 import sys
 import tempfile
 import time
-import tomllib
+
+# tomllib is 3.11+; tomli is its backport. Both are optional: they are only
+# needed to read ~/.odoo-project.toml, which most machines do not have. A hard
+# import here made the whole CLI unusable on the macOS system python (3.9),
+# which is every documented command in CLAUDE.md - build, start, test.
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - depends on interpreter
+    try:
+        import tomli as tomllib
+    except ModuleNotFoundError:
+        tomllib = None
 from pathlib import Path
 
 try:
@@ -110,13 +123,21 @@ DEFAULT_CONFIG = {
 def load_config() -> dict:
     """Load config from ~/.odoo-project.toml, returning defaults if not found."""
     config = DEFAULT_CONFIG.copy()
-    if CONFIG_PATH.exists():
-        try:
-            with open(CONFIG_PATH, "rb") as f:
-                user_config = tomllib.load(f)
-                config.update(user_config)
-        except (tomllib.TOMLDecodeError, OSError) as e:
-            warn(f"Could not load config from {CONFIG_PATH}: {e}")
+    if not CONFIG_PATH.exists():
+        return config
+    if tomllib is None:
+        warn(
+            f"{CONFIG_PATH} is present but cannot be read: this Python "
+            f"({sys.version_info.major}.{sys.version_info.minor}) has no tomllib "
+            "and tomli is not installed. Using defaults. "
+            "Install tomli, or run with Python 3.11 or newer."
+        )
+        return config
+    try:
+        with open(CONFIG_PATH, "rb") as f:
+            config.update(tomllib.load(f))
+    except (tomllib.TOMLDecodeError, OSError) as e:
+        warn(f"Could not load config from {CONFIG_PATH}: {e}")
     return config
 
 
