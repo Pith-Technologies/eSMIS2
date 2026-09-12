@@ -19,7 +19,7 @@ Python 3.11 adds `tomllib`. On an older interpreter the optional `~/.esmis.toml`
 ## Getting Started
 
 1. Read the [Development Principles](docs/principles/README.md)
-2. Review the [Architecture](docs/architecture/) and [ADRs](docs/architecture/decisions/)
+2. Review the [Architecture](docs/architecture) and [ADRs](docs/architecture/decisions)
 3. Check open issues in this repository
 4. Set up your local environment (see the [Quickstart](docs/guides/quickstart.md) and
    [CLI Guide](docs/guides/esmis-cli.md) for commands)
@@ -246,9 +246,9 @@ pre-commit run prettier --files <changed_files>      # Format XML/MD/JSON
 
 | Document                                                                                   | Purpose                           |
 | ------------------------------------------------------------------------------------------ | --------------------------------- |
-| [docs/principles/](docs/principles/)                                                       | Development standards             |
-| [docs/architecture/](docs/architecture/)                                                   | Architecture decisions            |
-| [docs/architecture/decisions/](docs/architecture/decisions/)                               | ADRs for significant decisions    |
+| [docs/principles/](docs/principles)                                                       | Development standards             |
+| [docs/architecture/](docs/architecture)                                                   | Architecture decisions            |
+| [docs/architecture/decisions/](docs/architecture/decisions)                               | ADRs for significant decisions    |
 | [docs/architecture/implementation-roadmap.md](docs/architecture/implementation-roadmap.md) | Module dependency graph & roadmap |
 
 ## Questions?

@@ -543,7 +543,7 @@ requirements apply.
 ## 13. Breach Response
 
 For the full operational procedure, see
-[`docs/guides/breach-response-guide.md`](../guides/breach-response-guide.md).
+[`docs/runbooks/breach-response.md`](../runbooks/breach-response.md).
 
 **Key statutory obligations (NPC Circular 16-03):**
 
@@ -596,6 +596,6 @@ Run this checklist for every feature that touches personal data:
 | [`access-rights.md`](access-rights.md) | Group hierarchy and three-tier access architecture |
 | [`audit-compliance.md`](audit-compliance.md) | Full audit logging specification |
 | [`error-handling.md`](error-handling.md) | Error handling and log sanitization patterns |
-| [`guides/breach-response-guide.md`](../guides/breach-response-guide.md) | Operational breach response procedures |
+| [`runbooks/breach-response.md`](../runbooks/breach-response.md) | Operational breach response procedures |
 | [`research/data-privacy-act-deep-dive.md`](../research/data-privacy-act-deep-dive.md) | Full RA 10173 legislative analysis |
 | [`research/pii-handling-best-practices.md`](../research/pii-handling-best-practices.md) | Technical implementation patterns |

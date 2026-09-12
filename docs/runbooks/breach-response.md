@@ -280,4 +280,4 @@ post-incident review.
 - [Data Retention and Disposal](../principles/data-retention-and-disposal.md) — legal hold procedures
 - [Consent Management](../principles/consent-management.md) — consent records and withdrawal
 - [Error Handling and Logging](../principles/error-handling.md) — no PII in logs
-- [Security Audit Guide](security-audit-guide.md) — proactive security review procedures
+- [Security Audit Guide](security-audit.md) — proactive security review procedures

@@ -264,4 +264,4 @@ Once you have the system running, explore these resources:
 - **[Architecture Vision](../architecture/vision.md)** — system architecture and module layers
 - **[Implementation Roadmap](../architecture/implementation-roadmap.md)** — what is being built and in what order
 - **[CONTRIBUTING.md](../../CONTRIBUTING.md)** — commit conventions, PR process, and review guidelines
-- **[Security Audit Guide](security-audit-guide.md)** — auditing modules for access rights compliance
+- **[Security Audit Guide](../runbooks/security-audit.md)** — auditing modules for access rights compliance

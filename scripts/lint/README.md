@@ -4,7 +4,7 @@ Custom linting checks for Odoo modules to enforce development principles and cod
 
 ## Overview
 
-These scripts automate enforcement of [Development Principles](../../docs/principles/):
+These scripts automate enforcement of [Development Principles](../../docs/principles):
 
 | Check              | Principle                                                                                                         | Severity | Auto-Fix |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------- | -------- | -------- |
