@@ -13,8 +13,18 @@ repo_description = "Student Management Information System modules for Philippine
 
 # Odoo module directories to export (each must contain __manifest__.py)
 modules = [
-    # Foundation
+    # Phase 1A foundation
+    "esmis_base",
     "esmis_vocabulary",
+    "esmis_security",
+    "esmis_consent",
+    "esmis_approval",
+    # Phase 1B student profile
+    "esmis_address",
+    "esmis_student",
+    "esmis_ph",
+    # The single application module; depends on all of the above
+    "esmis_starter_ph",
 ]
 
 # Non-module directories to export

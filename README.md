@@ -4,7 +4,7 @@
 <!-- ![eSMIS Logo](docs/assets/logo.png) -->
 
 [![License: LGPL-3](https://img.shields.io/badge/License-LGPL--3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
-[![Python: 3.12+](https://img.shields.io/badge/Python-3.12+-yellow.svg)](https://www.python.org/)
+[![Python: 3.9+](https://img.shields.io/badge/Python-3.9+-yellow.svg)](https://www.python.org/)
 [![Odoo: 19.0](https://img.shields.io/badge/Odoo-19.0-purple.svg)](https://www.odoo.com/)
 [![Status: Pre-release](https://img.shields.io/badge/Status-Pre--release-orange.svg)]()
 
@@ -23,17 +23,27 @@
 
 ## Current Status
 
-eSMIS is in **pre-release / active development**. The foundation module (`esmis_vocabulary`) is implemented with full test coverage, and 55+ documentation files establish the architecture, development principles, and regulatory requirements. The project infrastructure (Docker dev environment, CLI tooling, CI/CD, linting) is production-ready.
+eSMIS is in **pre-release / active development**. Phase 1 of the foundation layer is built: nine modules with 323 tests between them, covering vocabulary, security, consent, approvals, addresses, the student profile and the Philippine extensions. 77 documentation files establish the architecture, development principles and regulatory requirements. The project infrastructure (Docker dev environment, CLI tooling, CI/CD, linting) is production-ready.
+
+No domain module — enrollment, curriculum, grading, scheduling, billing, financial aid — is written yet. The roadmap below marks what exists.
 
 ### Module Roadmap
 
 | Phase | Modules | Status |
 |-------|---------|--------|
-| **Phase 1: Foundation** | | |
+| **Phase 1A: Foundation** | | |
+| | `esmis_base` | ✅ Complete |
 | | `esmis_vocabulary` | ✅ Complete |
-| | `esmis_security` | 🔜 Next |
+| | `esmis_security` | ✅ Complete |
+| | `esmis_consent` | ✅ Complete |
+| | `esmis_approval` | ✅ Complete |
+| **Phase 1B: Student Profile** | | |
+| | `esmis_address` | ✅ Complete |
+| | `esmis_student` | ✅ Complete |
+| | `esmis_ph` | ✅ Complete |
+| | `esmis_starter_ph` | ✅ Complete |
+| **Phase 1C: Remaining Foundation** | | |
 | | `esmis_academic_term` | 🔜 Next |
-| | `esmis_student` | 🔜 Next |
 | **Phase 2: Core Academic** | | |
 | | `esmis_curriculum` | 📋 Planned |
 | | `esmis_scheduling` | 📋 Planned |
@@ -63,7 +73,8 @@ A minimum viable SIS (Phases 1-3 plus `esmis_documents`) covers the full student
 
 - Docker and Docker Compose v2
 - Git
-- Python 3.12+
+- Python 3.9 or newer, for the `./esmis` CLI and the scripts. Odoo runs on its
+  own interpreter inside the container, not this one
 
 ### Getting Started
 
@@ -92,11 +103,23 @@ Layer 2: DOMAIN CORE
     esmis_billing, esmis_financial_aid, esmis_faculty
         |
 Layer 1: FOUNDATION
-    esmis_security, esmis_vocabulary, esmis_student, esmis_academic_term
+    esmis_security*, esmis_vocabulary*, esmis_consent*, esmis_approval*,
+    esmis_address*, esmis_student*, esmis_ph*, esmis_starter_ph*,
+    esmis_academic_term
         |
-Layer 0: ODOO CORE
-    base, hr, account, calendar, documents
+Layer 0: BASE
+    esmis_base* -> base
 ```
+
+`*` marks a module that exists today; everything else is planned. `esmis_base`
+depends on `base` alone — the wider Odoo dependencies (`hr`, `account`,
+`calendar`, `documents`) arrive with the Layer 2 modules that need them.
+
+`esmis_address`, `esmis_ph` and `esmis_starter_ph` came out of Phase 1B, which
+kept the Philippine extensions in one module rather than scattering `_ph`
+modules across the foundation, and made `esmis_starter_ph` the only entry in
+the Apps menu. See [Phase 1B Plan](docs/architecture/phase-1b-plan.md) and
+[ADR-018](docs/architecture/decisions/ADR-018-menu-architecture.md).
 
 For details, see [Architecture Vision](docs/architecture/vision.md), [Integration Patterns](docs/architecture/integration-patterns.md), and [Architecture Decisions](docs/architecture/decisions/).
 

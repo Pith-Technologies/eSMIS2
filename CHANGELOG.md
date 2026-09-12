@@ -8,6 +8,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 
+#### Foundation Modules — Phase 1A
+
+- Base module (`esmis_base`) providing the shared configuration menu and common infrastructure every other module builds
+  on
+- Security module (`esmis_security`) with the three-tier group architecture — roles, functional privileges, data-scope
+  groups — and cross-cutting mixins (56 tests)
+- Consent module (`esmis_consent`) implementing RA 10173 per-partner, per-purpose consent with `esmis.consent`,
+  `esmis.consent.scope` and a mixin models opt into (40 tests)
+- Approval module (`esmis_approval`) with a reusable approval state machine, `esmis.approval.definition` and a mixin
+  carrying `approval_state` (30 tests)
+
+#### Student Profile Modules — Phase 1B
+
+- Address module (`esmis_address`) with a structured `esmis.address` linked to `res.partner`, a computed `address_text`
+  and address typing (21 tests)
+- Student module (`esmis_student`) extending `res.partner` with universal student demographics, education history, and
+  the `esmis.identifier` model that keeps government and institutional ID numbers off `res.partner` and out of the API
+  surface. Identifiers are encrypted with AES-256-GCM and indexed by an HMAC-SHA256 blind index (89 tests)
+- Philippine module (`esmis_ph`) holding every PH-specific extension in one place: the full PSGC hierarchy (region,
+  province, city/municipality, barangay), PH address formatting, PH vocabularies and PH partner fields such as
+  `middle_name_b4_marriage` (50 tests)
+- Starter module (`esmis_starter_ph`) — the single `application=True` module and therefore the only entry in the Apps
+  menu (ADR-018), aggregating the foundation into one installable product
+
 #### Vocabulary System
 
 - Vocabulary module (`esmis_vocabulary`) with `esmis.vocabulary` and `esmis.vocabulary.code` models

@@ -1,15 +1,17 @@
-# Odoo 19 Project Template Makefile
+# eSMIS security scanning targets.
 #
-# Local developer targets for security scanning.
-# CI uses .github/workflows/security.yml directly.
+# These are the scanners that do not belong in `./esmis`: they run against a
+# built image or a live server rather than the source tree, and CI invokes
+# them through .github/workflows/security.yml rather than through here.
+# Everything else — building, running, testing, linting, auditing — is
+# `./esmis`, which is the single entry point.
 
 .PHONY: help zap-scan trivy-scan gitleaks-scan dependency-scan
 
 # Default target
 help:
-	@echo "Odoo 19 Project Development Commands"
+	@echo "eSMIS security scanning (local use)"
 	@echo ""
-	@echo "Security Scanning (local use):"
 	@echo "  make zap-scan             Run OWASP ZAP baseline scan (requires running Odoo)"
 	@echo "  make trivy-scan           Run Trivy container image scan"
 	@echo "  make gitleaks-scan        Run Gitleaks secret detection"
