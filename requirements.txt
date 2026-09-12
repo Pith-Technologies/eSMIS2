@@ -30,7 +30,7 @@ python-magic
 python-multipart
 pytz
 qrcode
-requests>=2.25.1
+requests>=2.34.2
 schwifty
 shapely
 simplejson
