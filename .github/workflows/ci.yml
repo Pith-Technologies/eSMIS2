@@ -1,18 +1,15 @@
 name: CI
 
+# No paths-ignore on the pull_request and push triggers: every job here is a
+# required status check on 19.0, and a required check that never starts leaves
+# the pull request waiting forever. Docs-only changes cost a few idle minutes
+# of CI, which is the price of the gate being real.
+
 on:
   push:
     branches: ['19.0']
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'readme/**'
   pull_request:
     branches: ['19.0']
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
-      - 'readme/**'
   workflow_dispatch:
     inputs:
       modules:

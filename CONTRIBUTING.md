@@ -208,7 +208,14 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) in imperative m
 {body}
 ```
 
-Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
+Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`, `build`, `style`, `revert`, `deps`
+
+Every commit is checked by the `commit-policy` status check, which is required
+on `19.0`. It refuses a subject that is not a Conventional Commit, and it
+refuses any Claude Code or other AI-assistant attribution: no `Co-Authored-By`
+naming an assistant, no session trailer or link, no "Generated with" footer,
+in commits or in the pull request description. Reword the commits and edit
+the description; nothing else needs to change.
 
 Examples:
 
@@ -224,6 +231,12 @@ Examples:
 4. Run linters: `pre-commit run --files <changed_files>`
 5. Submit a PR using the template
 6. Address reviewer feedback, especially regulatory compliance checks
+
+A pull request is merged only when every status check passes: the private-file
+guard, `commit-policy`, `pre-commit`, the test suite, the security scans and
+CodeQL. All of them are required on `19.0` and the requirement applies to
+administrators too. A red check is not a note for the reviewer; it is the
+reason the merge button is disabled. Fix it in the branch.
 
 ### Running Tests and Linters
 

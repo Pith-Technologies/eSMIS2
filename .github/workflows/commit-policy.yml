@@ -1,0 +1,25 @@
+name: commit-policy
+
+# Calls the organisation's reusable commit-policy workflow, which fails when
+# any commit this pull request adds carries Claude Code attribution or has a
+# subject that is not a Conventional Commit, or when the pull request title or
+# body carries attribution.
+#
+# The workspace git hooks refuse the same things on a laptop, but hooks can be
+# skipped. This check is required on 19.0, so a violation cannot be merged.
+#
+# No paths-ignore: a required check that does not run leaves the pull request
+# waiting forever, and the policy applies to every commit regardless of what
+# it touches.
+
+on:
+  pull_request:
+  push:
+    branches: ["19.0"]
+
+permissions:
+  contents: read
+
+jobs:
+  policy:
+    uses: Pith-Technologies/.github/.github/workflows/commit-policy.yml@main
