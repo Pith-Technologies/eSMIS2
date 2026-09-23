@@ -70,9 +70,9 @@ DB_NAME="test_${MODULE_NAME}_$(awk 'BEGIN{srand();printf "%d", 1000000+int(rand(
 LOG_FILE="$LOG_DIR/${MODULE_NAME}_unittest_$(date +%Y%m%d_%H%M%S).log"
 BUILD_LOG_FILE="$LOG_DIR/${MODULE_NAME}_build_$(date +%Y%m%d_%H%M%S).log"
 
-# Note: COMPOSE_PROJECT_NAME is NOT set here - we use the default (directory name)
-# This ensures test and dev share the same images/containers within a clone
-# Different clones/worktrees naturally get different project names from their directory
+# Note: COMPOSE_PROJECT_NAME is NOT set here. docker-compose.yml pins the project name
+# (esmis2), so tests and the dev server share one stack across every worktree;
+# the test database itself is created fresh per run and dropped afterwards.
 
 # Configuration - local mode
 ODOO_DIR="/tmp/odoo-19"

@@ -57,6 +57,10 @@ Once the logs show Odoo is ready, open your browser:
 
 You should see the Odoo backend with the eSMIS modules available.
 
+The stack is shared by every git worktree of the repository: one database, one filestore, whichever worktree last ran
+`./esmis start`. Your users and data survive new worktrees and branch switches; only `resetdb`, `stop -v` and
+`start --wipe` discard them. See [One stack for every worktree](esmis-cli.md#one-stack-for-every-worktree).
+
 ## Explore What's Installed
 
 The `esmis_vocabulary` module is the first foundation module and ships with the base demo profile. To see it in action:

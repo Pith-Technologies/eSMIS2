@@ -148,6 +148,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 
+- One local development stack for every git worktree. `docker-compose.yml` pins the Compose project name to `esmis2`, so
+  every worktree shares the same containers, database and filestore; local users, configuration and data survive
+  creating a new worktree or switching between worktrees, and starting from scratch happens only through `resetdb`,
+  `stop -v` or `start --wipe`, whose confirmations now say the data is shared. Compose used to name the project after
+  the worktree directory, so every worktree started empty and two could not run at once on port 8069. The running Odoo
+  serves whichever worktree last ran `start`: `start` warns when it switches the stack and prints the worktree it
+  serves, `status` reports it, and `update` refuses to upgrade the database with another worktree's code. Nothing is
+  upgraded automatically. Volumes of the old per-directory projects are left in place; the CLI guide describes how to
+  copy one into the shared stack or start fresh
 - Renamed `tpl_*` namespace to `esmis_*` across the project
 - Renumbered ADRs to eliminate gaps (001-015)
 - Updated project documentation for Philippine SIS domain

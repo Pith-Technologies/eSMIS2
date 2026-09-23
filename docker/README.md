@@ -16,6 +16,12 @@ docker compose --profile ui up -d
 The credentials above, and the database password in `docker-compose.yml`, are throwaway local defaults. They are not
 used by the production stack, which reads every credential from `docker/.env.production`.
 
+`docker-compose.yml` pins the project name to `esmis2`, so every git worktree shares the same containers and volumes and
+the running Odoo serves whichever worktree last ran `up`. `down -v` therefore deletes the data of every worktree.
+`./esmis status` says which worktree is being served; the
+[CLI guide](../docs/guides/esmis-cli.md#one-stack-for-every-worktree) has the rest, including how to carry data over
+from the older per-directory projects.
+
 #### Apple Silicon
 
 The `db` service pins `platform: linux/amd64`. On an Apple Silicon Mac that means the database runs emulated. Enable

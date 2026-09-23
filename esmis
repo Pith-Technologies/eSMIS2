@@ -161,6 +161,19 @@ IS_REMOTE = os.environ.get("CLAUDE_CODE_REMOTE") == "true"
 # Global dry-run flag (set by --dry-run)
 DRY_RUN = False
 
+# docker-compose.yml pins the project name, so every worktree shares ONE
+# stack: one database, one filestore, one set of containers. Local users and
+# data survive creating or switching worktrees; starting from scratch is an
+# explicit `resetdb`, `stop -v` or `start --wipe`. COMPOSE_PROJECT_NAME still
+# overrides the name, which is the escape hatch for a deliberately separate
+# stack, so read it back the same way Compose does.
+COMPOSE_PROJECT = os.environ.get("COMPOSE_PROJECT_NAME") or "esmis2"
+
+# Where the worktree's addons are bind-mounted inside the Odoo container. The
+# source of that mount is, literally, the code the running Odoo serves.
+ADDONS_MOUNT = "/mnt/extra-addons/custom"
+ODOO_SERVICES = ("odoo-app", "odoo-dev")
+
 # Demo profiles available
 DEMO_PROFILES = {
     "base": "esmis_vocabulary",
@@ -184,6 +197,16 @@ def run(cmd: str | list, check: bool = True, capture: bool = False, **kwargs) ->
         return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
 
     return subprocess.run(cmd, check=check, **kwargs)
+
+
+def query(cmd: list) -> subprocess.CompletedProcess:
+    """Run a read-only command and capture its output, even in dry-run mode.
+
+    Dry-run replaces every command with a printed line and empty output, which
+    is right for anything that changes state and wrong for a question such as
+    "which worktree is the stack serving": the answer would always be "none".
+    """
+    return subprocess.run(cmd, capture_output=True, text=True, check=False, cwd=PROJECT_ROOT)
 
 
 def docker_compose(*args, profile: str = None) -> list:
@@ -306,6 +329,82 @@ def _find_running_odoo() -> tuple:
                 continue
 
     return None, None
+
+
+def _served_dir_from_inspect(inspect_json: str) -> Path | None:
+    """Source of the addons bind mount, parsed from `docker inspect` output.
+
+    The first container carrying the mount wins; callers pass only running,
+    non-one-off Odoo containers, of which the stack has at most one.
+    """
+    try:
+        containers = json.loads(inspect_json or "[]")
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(containers, list):
+        return None
+    for container in containers:
+        if not isinstance(container, dict):
+            continue
+        for mount in container.get("Mounts") or []:
+            if isinstance(mount, dict) and mount.get("Destination") == ADDONS_MOUNT and mount.get("Source"):
+                return Path(mount["Source"])
+    return None
+
+
+def _served_worktree() -> Path | None:
+    """Directory whose code the running Odoo serves, or None when no Odoo container runs.
+
+    Asks the container itself rather than `docker compose ls`: that listing
+    merges the labels of every container in the project, and the database
+    container keeps the label of whichever worktree first created it while a
+    one-off test container carries its own, so neither says what Odoo serves.
+    """
+    result = query(
+        [
+            "docker",
+            "ps",
+            "--filter",
+            f"label=com.docker.compose.project={COMPOSE_PROJECT}",
+            "--filter",
+            "label=com.docker.compose.oneoff=False",
+            "--format",
+            '{{.ID}} {{.Label "com.docker.compose.service"}}',
+        ]
+    )
+    if result.returncode != 0:
+        return None
+    ids = []
+    for line in result.stdout.splitlines():
+        parts = line.split()
+        if len(parts) == 2 and parts[1] in ODOO_SERVICES:
+            ids.append(parts[0])
+    if not ids:
+        return None
+    result = query(["docker", "inspect", *ids])
+    if result.returncode != 0:
+        return None
+    return _served_dir_from_inspect(result.stdout)
+
+
+def _is_this_worktree(path: Path) -> bool:
+    """True when `path` is this worktree, however it was spelled.
+
+    Compose records the directory as the shell spelled it, which may go
+    through a symlink or differ in case; PROJECT_ROOT is resolved. A path that
+    no longer exists (a worktree removed while the stack ran) is not this one.
+    """
+    try:
+        return path.samefile(PROJECT_ROOT)
+    except OSError:
+        return False
+
+
+def _describe_worktree(path: Path) -> str:
+    """Path plus its checked-out branch, for messages about which worktree is served."""
+    result = query(["git", "-C", str(path), "rev-parse", "--abbrev-ref", "HEAD"])
+    branch = result.stdout.strip() if result.returncode == 0 else ""
+    return f"{path} (branch {branch})" if branch else str(path)
 
 
 # ============================================================================
@@ -750,6 +849,20 @@ def cmd_start(args):
     # Determine profile: dev (dynamic port) vs ui (fixed 8069)
     profile = args.profile
 
+    # The stack is shared by every worktree and serves the code of whichever
+    # one last started it. Say so when this start switches it; `up` recreates
+    # the Odoo container with this worktree's bind mount and leaves the data
+    # alone. Nothing is upgraded automatically: modules the two worktrees
+    # disagree on need `./esmis update` (or `-u`) as a separate, deliberate step.
+    serving = _served_worktree()
+    if serving and not _is_this_worktree(serving):
+        warn(f"The shared '{COMPOSE_PROJECT}' stack is serving {_describe_worktree(serving)}")
+        if args.wipe:
+            info("Starting from here switches it to this worktree's code.")
+        else:
+            info("Starting from here switches it to this worktree's code; the database and filestore are kept.")
+            info("If the module set or versions differ, run './esmis update' afterwards. Nothing upgrades on its own.")
+
     # Check if Docker image needs rebuilding (unless --no-build)
     if not getattr(args, "no_build", False):
         _check_image_freshness(profile, auto_rebuild=args.yes)
@@ -762,10 +875,12 @@ def cmd_start(args):
     # Wipe volumes if requested (removes DB data, filestore, everything)
     is_fresh_start = False
     if args.wipe:
-        if not args.yes and not _confirm("This will DELETE all data (database, filestore). Continue?"):
+        if not args.yes and not _confirm(
+            "This will DELETE all data (database, filestore) shared by every worktree. Continue?"
+        ):
             print("Cancelled.")
             sys.exit(0)
-        print("Wiping all data (volumes)...")
+        print("Wiping all data (volumes shared by every worktree)...")
         run(docker_compose("down", "-v", profile=profile), check=False)
         is_fresh_start = True
 
@@ -823,6 +938,7 @@ def cmd_start(args):
     else:
         print("\nOdoo available at: http://localhost:8069")
         print("Credentials: admin / admin")
+    print(f"Serving code from: {_describe_worktree(PROJECT_ROOT)}")
 
 
 def cmd_stop(args):
@@ -831,11 +947,15 @@ def cmd_stop(args):
         print("Nothing to stop in Claude Code web environment")
         return
 
-    # Confirm if removing volumes (destructive)
+    # Confirm if removing volumes (destructive, and the volumes are shared by every worktree)
     if args.volumes and not args.yes:
-        if not _confirm("This will DELETE all data (database, filestore). Continue?"):
+        if not _confirm("This will DELETE all data (database, filestore) shared by every worktree. Continue?"):
             print("Cancelled.")
             sys.exit(0)
+
+    serving = _served_worktree()
+    if serving and not _is_this_worktree(serving):
+        info(f"The shared stack is serving {_describe_worktree(serving)}; stopping it stops it for every worktree.")
 
     print("Stopping all containers...")
     # Stop all profiles
@@ -846,7 +966,7 @@ def cmd_stop(args):
     run(docker_compose("down"), check=False)
 
     if args.volumes:
-        print("Removing volumes...")
+        print("Removing volumes shared by every worktree...")
         run(docker_compose("down", "-v"), check=False)
 
     print("Done.")
@@ -893,7 +1013,7 @@ def cmd_resetdb(args):
         modules = DEMO_PROFILES.get(demo_key, args.demo)
 
     # Confirm destructive operation
-    if not args.yes and not _confirm(f"This will DROP database '{db_name}'. Continue?"):
+    if not args.yes and not _confirm(f"This will DROP database '{db_name}', which every worktree shares. Continue?"):
         print("Cancelled.")
         sys.exit(0)
 
@@ -949,6 +1069,19 @@ def cmd_update(args):
     service, profile = _find_running_odoo()
     if not service:
         print("Error: No Odoo container running. Start with './esmis start' first.")
+        sys.exit(1)
+
+    # The container serves whichever worktree last started it. Upgrading the
+    # shared database with another worktree's code is the one mistake this
+    # layout makes easy, so refuse rather than warn.
+    serving = _served_worktree()
+    if serving is None:
+        error("Cannot tell which worktree the running Odoo serves; not upgrading.")
+        print("Run './esmis status' to see the containers, and './esmis start' here to serve this worktree.")
+        sys.exit(1)
+    if not _is_this_worktree(serving):
+        error(f"The running Odoo serves {_describe_worktree(serving)}, not this worktree.")
+        print("Run './esmis start' here first so the update applies this worktree's code.")
         sys.exit(1)
 
     # Warn if modules specified (click-odoo-update auto-detects)
@@ -1177,6 +1310,13 @@ def cmd_status(args):
             print("Run: ./scripts/setup_test_env.sh")
         return
 
+    serving = _served_worktree()
+    if serving:
+        print(f"Shared stack '{COMPOSE_PROJECT}' is serving: {_describe_worktree(serving)}")
+        if not _is_this_worktree(serving):
+            print("  (not this worktree; './esmis start' here switches it)")
+    else:
+        print(f"Shared stack '{COMPOSE_PROJECT}': Odoo is not running")
     print("Docker containers:")
     sys.stdout.flush()
     run(docker_compose("ps", "-a"), check=False)

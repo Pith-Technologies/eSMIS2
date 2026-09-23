@@ -8,6 +8,21 @@
 #
 # Unified compose file for development, E2E testing, and unit testing.
 #
+# ONE STACK FOR EVERY WORKTREE. The project name is fixed below, so every
+# git worktree of this repository shares the same containers, network and
+# volumes: one database, one filestore. Local users, configuration and data
+# survive creating a new worktree or switching between them. Without the
+# fixed name Compose names the project after the directory, and every
+# worktree started empty. Consequences worth knowing:
+#   - The Odoo container serves the code of whichever worktree last ran
+#     `up`; running it from another worktree recreates the container with
+#     that worktree's bind mount. `./esmis status` says which one it is.
+#   - `down -v` deletes the data every worktree uses. Starting from scratch
+#     is `./esmis resetdb` or `./esmis stop -v`, never a side effect.
+#   - Two worktrees cannot run the stack at the same time; that is the point.
+#   - COMPOSE_PROJECT_NAME still overrides the name, which is the escape hatch
+#     for a deliberately separate stack.
+#
 # Services:
 #   db        - PostgreSQL database (shared by all)
 #   odoo-app  - Web server for UI/E2E (fixed port 8069)
@@ -38,8 +53,10 @@
 #   # Stop everything (must specify same profile used to start)
 #   docker compose --profile dev down
 #
-#   # Clean up (removes volumes)
+#   # Clean up (removes the volumes shared by every worktree)
 #   docker compose --profile dev down -v
+
+name: esmis2
 
 services:
   # PostgreSQL Database - shared by all profiles
@@ -191,6 +208,8 @@ services:
     # Entrypoint will be overridden by test_single_module.sh
     entrypoint: ["echo", "Use ./scripts/test_single_module.sh to run tests"]
 
+# Shared by every worktree through the fixed project name above:
+# esmis2_postgres_data and esmis2_odoo_data on the Docker host.
 volumes:
   postgres_data:
   odoo_data:
