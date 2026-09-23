@@ -60,6 +60,87 @@ What gets replaced:
 
 Binary files and `.git/` are always skipped.
 
+## One stack for every worktree
+
+`docker-compose.yml` pins the Compose project name to `esmis2`, so every git worktree of this repository uses the same
+containers, network and volumes: one database (`esmis2_postgres_data`) and one filestore (`esmis2_odoo_data`). Local
+users, configuration and data survive creating a new worktree or switching between worktrees. Starting from scratch
+happens only when you ask for it: `./esmis resetdb`, `./esmis stop -v` or `./esmis start --wipe`, each behind a
+confirmation, and each one deletes the data every worktree uses.
+
+The addons are bind-mounted from the worktree you run the command in, so the running Odoo serves the code of whichever
+worktree last ran `./esmis start`. Two worktrees cannot run the stack at the same time, and nothing tells the others
+apart except that path:
+
+```bash
+./esmis status            # Shared stack 'esmis2' is serving: /path/to/worktree (branch feat/x)
+./esmis start             # prints "Serving code from: ..." once it is up
+```
+
+### Switching worktrees
+
+1. Run `./esmis start` in the worktree you are moving to. It warns that the stack is serving another worktree, then
+   recreates the Odoo container with this worktree's code. The database container keeps running and the data is kept.
+2. If the two worktrees differ in their module set or module versions, upgrade the changed modules yourself. Nothing
+   upgrades on its own. `./esmis update` (click-odoo-update, checksum based) refuses to run while Odoo serves a
+   different worktree, or when it cannot tell. To upgrade a named module instead, run `./esmis status` first, because
+   the raw command does not check and runs inside whatever the container serves:
+
+   ```bash
+   docker compose --profile ui exec odoo-app odoo -d odoo -u <module> --stop-after-init --no-http
+   # dev profile: docker compose --profile dev exec odoo-dev ...
+   ./esmis restart
+   ```
+3. A module that exists only in the worktree you left stays installed in the database with no code behind it.
+   Uninstall it before switching, or reset the database, if that gets in the way.
+
+Test databases are unaffected: `./esmis test` still creates a throwaway `test_<module>_<random>` database against the
+shared PostgreSQL and drops it afterwards.
+
+To run a deliberately separate stack, set `COMPOSE_PROJECT_NAME` for every command, and remember that it moves ports
+and volumes with it:
+
+```bash
+COMPOSE_PROJECT_NAME=esmis2-spike ./esmis start
+```
+
+### Moving data from an old per-worktree stack
+
+Before the project name was pinned, Compose named the project after the worktree directory, so each worktree had its
+own pair of volumes: `<dir>_postgres_data` and `<dir>_odoo_data`, where `<dir>` is the directory name lowercased with
+anything Compose does not accept removed (`19.0` became `190`; `feat-esmis-academic-term` stayed as it was). Those
+volumes, and the old projects' stopped containers, were not deleted. Either start fresh or copy one old project's data
+into the shared stack, once. `./esmis stop` only ever touches the `esmis2` project, so the old ones are yours to stop
+and remove by name.
+
+**Start fresh.** `./esmis start` creates the shared volumes empty and initialises the database. Remove each old project
+when you no longer want it (`down -v` deletes its containers, network and volumes):
+
+```bash
+docker volume ls                                  # find the old <dir>_postgres_data / <dir>_odoo_data pairs
+docker compose -p 190 down -v                     # for each old project you are done with
+```
+
+**Copy an old project's data.** The old and new stacks run the same PostgreSQL image, so a cluster that is stopped can
+be copied file for file. A running one cannot: stop the old project first. The shared volumes must not exist yet, or
+must hold nothing you want.
+
+```bash
+./esmis stop                                      # the shared stack must not be running
+docker compose -p 190 down                        # the old project too; without -v its volumes stay
+docker ps -a --filter label=com.docker.compose.project=190   # must print no containers
+docker volume ls --filter name=esmis2_            # must print nothing; `./esmis stop -v -y` clears an unwanted pair
+docker compose --profile ui create                # creates the shared volumes empty and labelled, starts nothing
+docker run --rm -v 190_postgres_data:/from -v esmis2_postgres_data:/to alpine cp -a /from/. /to/
+docker run --rm -v 190_odoo_data:/from -v esmis2_odoo_data:/to alpine cp -a /from/. /to/
+./esmis start                                     # check your users, settings and data are there
+docker compose -p 190 down -v                     # once satisfied
+```
+
+Replace `190` with the name of the project you are copying from. Let Compose create the shared volumes, as above,
+rather than `docker volume create`: a volume Compose did not create works but draws a warning on every later `up`.
+Copy one project only: merging two old databases into one is not a file copy, and the shared stack holds one database.
+
 ## Commands
 
 Every command has a short alias shown in parentheses.
@@ -101,7 +182,7 @@ Starts the Odoo development server. Defaults to the **ui** profile on port 8069.
 |---------------|----------------------------------------------------------|
 | `--profile`   | `ui` (fixed port 8069, default) or `dev` (dynamic port) |
 | `--demo`      | Demo data profile to install (see [Demo Profiles](#demo-profiles)) |
-| `--wipe`      | Delete all data (database + filestore) before starting   |
+| `--wipe`      | Delete all data (database + filestore, shared by every worktree) before starting |
 | `--no-watch`  | Disable auto-reload (dev profile enables it by default)  |
 | `--no-build`  | Skip Docker image freshness check                        |
 | `-y, --yes`   | Skip confirmation prompts                                |
@@ -119,7 +200,7 @@ Stops all Docker containers across all profiles.
 
 | Option        | Description                       |
 |---------------|-----------------------------------|
-| `-v, --volumes` | Also remove Docker volumes (destructive) |
+| `-v, --volumes` | Also remove Docker volumes (destructive; the volumes are shared by every worktree) |
 | `-y, --yes`     | Skip confirmation prompt           |
 
 ### restart (r) — Restart Odoo
@@ -257,7 +338,7 @@ Runs `ruff`, `ruff-format`, and `prettier` via pre-commit on specified files.
 
 ### status (st) — Show service status
 
-Shows running Docker containers.
+Shows which worktree the shared stack is serving, then the Docker containers.
 
 ```bash
 ./esmis status
@@ -494,6 +575,16 @@ Tests run in an isolated container with a temporary database. Check:
 ./esmis update                # auto-detect and upgrade changed modules
 ./esmis restart               # restart if update doesn't pick up changes
 ```
+
+### Odoo shows another worktree's code, or `update` refuses to run
+
+The stack is shared and serves the worktree that last started it. `./esmis status` names that worktree; `./esmis start`
+in the worktree you want switches it, keeping the data. See [One stack for every worktree](#one-stack-for-every-worktree).
+
+### A new worktree starts empty
+
+It should not: every worktree shares one database and filestore. If a worktree does start empty, check that
+`docker-compose.yml` still carries `name: esmis2` and that `COMPOSE_PROJECT_NAME` is not set in your shell.
 
 ### Database connection issues
 
