@@ -24,6 +24,13 @@ pdfminer.six
 # Pin specific versions for Docker builds
 Pillow==12.3.0
 fastapi==0.136.1
+# Every line in this file is a uv override, so this pin replaces Odoo's own
+# lxml pin (5.4.0 on Python 3.13), which sits inside GHSA-vfmq-68hx-4jfw: XXE
+# through iterparse() and ETCompatXMLParser(), fixed in 6.1.0. Odoo 19 itself
+# declares lxml 6.0.2 for Python 3.14, so a 6.x lxml is within what upstream
+# supports. Dependabot cannot see Odoo's pin, only this file, which is why the
+# pin is exact: it lets Dependabot alert on it.
+lxml==6.1.3
 # Note: requests/urllib3 versions constrained by Odoo's requirements.txt
 
 # Excel support

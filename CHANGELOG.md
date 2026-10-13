@@ -178,6 +178,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Security
 
+- The Docker image installs lxml 6.1.3 instead of the 5.4.0 that Odoo 19 pins for Python 3.13, which falls inside
+  GHSA-vfmq-68hx-4jfw (external entity injection through `iterparse()` and `ETCompatXMLParser()`, fixed in 6.1.0). The
+  pin lives in `docker/requirements.txt`, whose every line is a uv override and so replaces Odoo's. Dependabot had no
+  alert for it because it only reads this repository's `>=` floors, never the pin Odoo fetches at build time
 - Semgrep rules for Odoo-specific security patterns
 - Gitleaks configuration for secret detection
 - Trivy container scanning with ignore list
