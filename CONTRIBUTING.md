@@ -223,11 +223,15 @@ Examples:
 
 ### Pull Request Process
 
-1. Create a feature branch from `main`
+1. Start a branch of its own. Every change is a pull request from a `feat/`, `fix/`, `chore/` or `docs/` branch off
+   `19.0`, the default branch, and every branch is its own worktree: start with `ws new eSMIS2 <type>/<name>` (the
+   team's worktree tool, `ws`) and work there, never in the `19.0` checkout. The team guard refuses commits on `19.0`
+   and branches made with plain `git checkout -b` inside the clone.
 2. Make your changes following the principles and TDD workflow
 3. Write/update tests -- verify they pass with `./esmis test <module>`
 4. Run linters: `pre-commit run --files <changed_files>`
-5. Submit a PR using the template
+5. Open the pull request from that worktree, using the template. Every pull request also carries an entry in
+   `CHANGELOG.md` under `[Unreleased]`, in the same pull request as the change it describes.
 6. Address reviewer feedback, especially regulatory compliance checks
 
 A pull request is merged only when every status check passes: the private-file guard, `commit-policy`, `pre-commit`, the
