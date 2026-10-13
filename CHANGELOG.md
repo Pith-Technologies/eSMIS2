@@ -148,6 +148,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 
+- `CONTRIBUTING.md` and the README's Contributing section describe how work actually happens here: every change is a
+  pull request from a `feat/`, `fix/`, `chore/` or `docs/` branch off `19.0`, in a worktree of its own, opened from that
+  worktree and carrying a `CHANGELOG.md` entry. The pull request process used to say to branch from `main`, which this
+  repository does not have
 - One local development stack for every git worktree. `docker-compose.yml` pins the Compose project name to `esmis2`, so
   every worktree shares the same containers, database and filestore; local users, configuration and data survive
   creating a new worktree or switching between worktrees, and starting from scratch happens only through `resetdb`,

@@ -155,6 +155,8 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 Module requests and feature proposals are encouraged — open an issue to start a discussion.
 
+Every change is a pull request from a `feat/`, `fix/`, `chore/` or `docs/` branch off `19.0`, in a worktree of its own; the [Pull Request Process](CONTRIBUTING.md#pull-request-process) in CONTRIBUTING.md describes that flow.
+
 ## License
 
 This project is licensed under the [GNU Lesser General Public License v3 (LGPL-3)](LICENSE).
