@@ -42,7 +42,7 @@ python-stdnum>=1.18
 phonenumbers>=9.0.41
 
 # AWS integration (optional)
-boto3>=1.35.12
+boto3>=1.43.114
 
 # -----------------------------------------------------------------------------
 # CI/Testing tools (pre-installed to avoid per-job pip install)
